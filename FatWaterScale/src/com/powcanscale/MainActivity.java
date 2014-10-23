@@ -1,22 +1,21 @@
-package com.fatwaterscale;
+package com.powcanscale;
 
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.Gravity;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
+
+import com.powcanscale.adapter.SectionsPagerAdapter;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
@@ -106,6 +105,20 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		 * fragment.
 		 */
 		private static final String ARG_SECTION_NUMBER = "section_number";
+		
+		/**
+		 * The {@link android.support.v4.view.PagerAdapter} that will provide
+		 * fragments for each of the sections. We use a {@link FragmentPagerAdapter}
+		 * derivative, which will keep every loaded fragment in memory. If this
+		 * becomes too memory intensive, it may be best to switch to a
+		 * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+		 */
+		SectionsPagerAdapter mSectionsPagerAdapter;
+
+		/**
+		 * The {@link ViewPager} that will host the section contents.
+		 */
+		ViewPager mViewPager;
 
 		/**
 		 * Returns a new instance of this fragment for the given section number.
@@ -124,8 +137,17 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-			TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-			textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
+//			TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+//			textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
+			
+			// Create the adapter that will return a fragment for each of the three
+			// primary sections of the activity.
+			mSectionsPagerAdapter = new SectionsPagerAdapter(getActivity(), getActivity().getSupportFragmentManager());
+
+			// Set up the ViewPager with the sections adapter.
+			mViewPager = (ViewPager) rootView.findViewById(R.id.pager);
+			mViewPager.setAdapter(mSectionsPagerAdapter);
+			
 			return rootView;
 		}
 

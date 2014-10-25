@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -51,12 +52,15 @@ public class NavigationDrawerFragment extends Fragment {
     private ActionBarDrawerToggle mDrawerToggle;
 
     private DrawerLayout mDrawerLayout;
+	private View mDrawer;
     private ListView mDrawerListView;
     private View mFragmentContainerView;
 
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+
+	private View mBtnSettings;
 
     public NavigationDrawerFragment() {
     }
@@ -89,8 +93,10 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        mDrawerListView = (ListView) inflater.inflate(
+    	mDrawer = inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
+    	
+        mDrawerListView = (ListView) mDrawer.findViewById(R.id.listView);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -107,7 +113,22 @@ public class NavigationDrawerFragment extends Fragment {
                         getString(R.string.title_section3),
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-        return mDrawerListView;
+        
+        mBtnSettings = mDrawer.findViewById(R.id.btn_settings);
+        mBtnSettings.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				if (mDrawerLayout != null) {
+		            mDrawerLayout.closeDrawer(mFragmentContainerView);
+		        }
+		        if (mCallbacks != null) {
+		            mCallbacks.onNavigationDrawerItemSelected(R.id.btn_settings);
+		        }
+			}
+		});
+        
+        return mDrawer;
     }
 
     public boolean isDrawerOpen() {

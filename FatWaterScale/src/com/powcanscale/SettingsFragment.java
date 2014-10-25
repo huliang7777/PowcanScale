@@ -14,7 +14,7 @@ import android.widget.TextView;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class SettingFragment extends Fragment {
+public class SettingsFragment extends Fragment {
 	/**
 	 * The fragment argument representing the section number for this
 	 * fragment.
@@ -24,15 +24,15 @@ public class SettingFragment extends Fragment {
 	/**
 	 * Returns a new instance of this fragment for the given section number.
 	 */
-	public static SettingFragment newInstance(int sectionNumber) {
-		SettingFragment fragment = new SettingFragment();
+	public static SettingsFragment newInstance(int sectionNumber) {
+		SettingsFragment fragment = new SettingsFragment();
 		Bundle args = new Bundle();
 		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 		fragment.setArguments(args);
 		return fragment;
 	}
 
-	public SettingFragment() {
+	public SettingsFragment() {
 	}
 
 	@Override

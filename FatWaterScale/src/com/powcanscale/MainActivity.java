@@ -90,7 +90,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 	public void onNavigationDrawerItemSelected(int position) {
 		// update the main content by replacing fragments
 		FragmentManager fragmentManager = getSupportFragmentManager();
-		fragmentManager.beginTransaction().replace(R.id.container, PlaceholderFragment.newInstance(position + 1)).commit();
+		if (position != R.id.btn_settings) {
+			fragmentManager.beginTransaction().replace(R.id.container, PlaceholderFragment.newInstance(position + 1)).commit();
+		} else {
+			fragmentManager.beginTransaction().replace(R.id.container, SettingsFragment.newInstance(position + 1)).commit();
+		}
 	}
 
 	public void onSectionAttached(int number) {

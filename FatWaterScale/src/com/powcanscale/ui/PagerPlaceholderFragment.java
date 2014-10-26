@@ -1,12 +1,13 @@
-package com.powcanscale;
+package com.powcanscale.ui;
 
-import com.umeng.fb.FeedbackAgent;
+import com.powcanscale.R;
+import com.powcanscale.R.id;
+import com.powcanscale.R.layout;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -14,7 +15,7 @@ import android.widget.TextView;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class SettingsFragment extends Fragment {
+public class PagerPlaceholderFragment extends Fragment {
 	/**
 	 * The fragment argument representing the section number for this
 	 * fragment.
@@ -24,32 +25,22 @@ public class SettingsFragment extends Fragment {
 	/**
 	 * Returns a new instance of this fragment for the given section number.
 	 */
-	public static SettingsFragment newInstance(int sectionNumber) {
-		SettingsFragment fragment = new SettingsFragment();
+	public static PagerPlaceholderFragment newInstance(int sectionNumber) {
+		PagerPlaceholderFragment fragment = new PagerPlaceholderFragment();
 		Bundle args = new Bundle();
 		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 		fragment.setArguments(args);
 		return fragment;
 	}
 
-	public SettingsFragment() {
+	public PagerPlaceholderFragment() {
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		final FeedbackAgent agent = new FeedbackAgent(getActivity());
-		agent.sync();
-		
 		View rootView = inflater.inflate(R.layout.pager_fragment_main, container, false);
 		TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-		textView.setText("Setting" + Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
-		textView.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-			    agent.startFeedbackActivity();
-			}
-		});
+		textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
 		return rootView;
 	}
 }

@@ -8,7 +8,7 @@ import android.view.Window;
 
 public class SplashActivity extends Activity {
 
-	private final int SPLASH_DISPLAY_LENGHT = 3000; // ÑÓ³ÙÈýÃë
+	private final int SPLASH_DISPLAY_LENGHT = 3000; // ï¿½Ó³ï¿½ï¿½ï¿½ï¿½ï¿½
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

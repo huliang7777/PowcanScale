@@ -17,6 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.powcanscale.adapter.SectionsPagerAdapter;
+import com.powcanscale.ui.LoginActivity;
+import com.powcanscale.ui.settings.SettingsFragment;
+import com.powcanscale.util.SpUtil;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
@@ -51,33 +54,37 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		UmengUpdateAgent.update(this);
 		MobclickAgent.updateOnlineConfig(this);
 		
-
-		// Ê×ÏÈÔÚÄúµÄActivityÖĞÌí¼ÓÈçÏÂ³ÉÔ±±äÁ¿
+		// é¦–å…ˆåœ¨æ‚¨çš„Activityä¸­æ·»åŠ å¦‚ä¸‹æˆå‘˜å˜é‡
 		mController = UMServiceFactory.getUMSocialService("com.umeng.share");
-		// ÉèÖÃ·ÖÏíÄÚÈİ
-		mController.setShareContent("ÓÑÃËÉç»á»¯×é¼ş£¨SDK£©ÈÃÒÆ¶¯Ó¦ÓÃ¿ìËÙÕûºÏÉç½»·ÖÏí¹¦ÄÜ£¬http://www.umeng.com/social");
-		// ÉèÖÃ·ÖÏíÍ¼Æ¬, ²ÎÊı2ÎªÍ¼Æ¬µÄurlµØÖ·
+		// è®¾ç½®åˆ†äº«å†…å®¹
+		mController.setShareContent("å‹ç›Ÿç¤¾ä¼šåŒ–ç»„ä»¶ï¼ˆSDKï¼‰è®©ç§»åŠ¨åº”ç”¨å¿«é€Ÿæ•´åˆç¤¾äº¤åˆ†äº«åŠŸèƒ½ï¼Œhttp://www.umeng.com/social");
+		// è®¾ç½®åˆ†äº«å›¾ç‰‡, å‚æ•°2ä¸ºå›¾ç‰‡çš„urlåœ°å€
 		mController.setShareMedia(new UMImage(this, 
 		                                      "http://www.umeng.com/images/pic/banner_module_social.png"));
-		// wx967daebe835fbeacÊÇÄãÔÚÎ¢ĞÅ¿ª·¢Æ½Ì¨×¢²áÓ¦ÓÃµÄAppID, ÕâÀïĞèÒªÌæ»»³ÉÄã×¢²áµÄAppID
+		// wx967daebe835fbeacæ˜¯ä½ åœ¨å¾®ä¿¡å¼€å‘å¹³å°æ³¨å†Œåº”ç”¨çš„AppID, è¿™é‡Œéœ€è¦æ›¿æ¢æˆä½ æ³¨å†Œçš„AppID
 		String appID = "wx967daebe835fbeac";
-		// Ìí¼ÓÎ¢ĞÅÆ½Ì¨
+		// æ·»åŠ å¾®ä¿¡å¹³å°
 		UMWXHandler wxHandler = new UMWXHandler(this, appID);
 		wxHandler.addToSocialSDK();
-		// Ö§³ÖÎ¢ĞÅÅóÓÑÈ¦
+		// æ”¯æŒå¾®ä¿¡æœ‹å‹åœˆ
 		UMWXHandler wxCircleHandler = new UMWXHandler(this, appID);
 		wxCircleHandler.setToCircle(true);
 		wxCircleHandler.addToSocialSDK();
-		//ÉèÖÃĞÂÀËSSO handler
+		//è®¾ç½®æ–°æµªSSO handler
 		mController.getConfig().setSsoHandler(new SinaSsoHandler());
-		//²ÎÊı1Îªµ±Ç°Activity£¬²ÎÊı2Îª¿ª·¢ÕßÔÚQQ»¥ÁªÉêÇëµÄAPP ID£¬²ÎÊı3Îª¿ª·¢ÕßÔÚQQ»¥ÁªÉêÇëµÄAPP kEY.
+		//å‚æ•°1ä¸ºå½“å‰Activityï¼Œå‚æ•°2ä¸ºå¼€å‘è€…åœ¨QQäº’è”ç”³è¯·çš„APP IDï¼Œå‚æ•°3ä¸ºå¼€å‘è€…åœ¨QQäº’è”ç”³è¯·çš„APP kEY.
 		UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(this, "100424468",
 		                "c7394704798a158208a74ab60104f0ba");
 		qqSsoHandler.addToSocialSDK();  
-		//²ÎÊı1Îªµ±Ç°Activity£¬²ÎÊı2Îª¿ª·¢ÕßÔÚQQ»¥ÁªÉêÇëµÄAPP ID£¬²ÎÊı3Îª¿ª·¢ÕßÔÚQQ»¥ÁªÉêÇëµÄAPP kEY.
+		//å‚æ•°1ä¸ºå½“å‰Activityï¼Œå‚æ•°2ä¸ºå¼€å‘è€…åœ¨QQäº’è”ç”³è¯·çš„APP IDï¼Œå‚æ•°3ä¸ºå¼€å‘è€…åœ¨QQäº’è”ç”³è¯·çš„APP kEY.
 		QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(this, "100424468",
 		                "c7394704798a158208a74ab60104f0ba");
 		qZoneSsoHandler.addToSocialSDK();
+		
+		if (SpUtil.getInstance(this).isFirstLaunch()) {
+			Intent mainIntent = new Intent(this, LoginActivity.class);
+			startActivity(mainIntent);
+		}
 
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
@@ -138,7 +145,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
-			// ÊÇ·ñÖ»ÓĞÒÑµÇÂ¼ÓÃ»§²ÅÄÜ´ò¿ª·ÖÏíÑ¡ÔñÒ³
+			// æ˜¯å¦åªæœ‰å·²ç™»å½•ç”¨æˆ·æ‰èƒ½æ‰“å¼€åˆ†äº«é€‰æ‹©é¡µ
 	        mController.openShare(this, false);
 			return true;
 		}
@@ -222,7 +229,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 	@Override 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	    super.onActivityResult(requestCode, resultCode, data);
-	    /**Ê¹ÓÃSSOÊÚÈ¨±ØĞëÌí¼ÓÈçÏÂ´úÂë */
+	    /**ä½¿ç”¨SSOæˆæƒå¿…é¡»æ·»åŠ å¦‚ä¸‹ä»£ç  */
 	    UMSsoHandler ssoHandler = mController.getConfig().getSsoHandler(requestCode) ;
 	    if(ssoHandler != null){
 	       ssoHandler.authorizeCallBack(requestCode, resultCode, data);

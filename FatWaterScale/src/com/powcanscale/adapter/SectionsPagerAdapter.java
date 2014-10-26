@@ -7,8 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.powcanscale.PagerPlaceholderFragment;
 import com.powcanscale.R;
+import com.powcanscale.ui.PagerPlaceholderFragment;
 
 
 /**

@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
      <color name="theme">#9fc5e1</color>
+    
+    <color name="white">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="black">#000000</color>
+    <color name="red">#FF0000</color>
+    
+    <color name="list_item_pressed">#e4e4e4</color>
+    
+    <color name="login_btn">#f77f6c</color>
+    <color name="login_forget_password">#888888</color>
+    <color name="login_input">#999999</color>
+    <color name="login_hint">#999999</color>
+    
+    <color name="input_border">#dcdcdc</color>
 </resources>

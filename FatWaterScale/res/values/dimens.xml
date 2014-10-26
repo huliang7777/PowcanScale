@@ -24,5 +24,20 @@
     <dimen name="caption">12sp</dimen>
     <dimen name="menu">14sp</dimen>
     <dimen name="button">14sp</dimen>
+    
+    <dimen name="height_space">8dp</dimen>
+    <dimen name="height_header">56dp</dimen>
+    <dimen name="height_list_item">72dp</dimen>
+    <dimen name="height_subtitle">48dp</dimen>
+    <dimen name="height_notification_bar">24dp</dimen>
+    
+    <dimen name="height_image">48dp</dimen>
+    <dimen name="height_avater">40dp</dimen>
+    <dimen name="height_icon">24dp</dimen>
+    
+    <dimen name="edittext_width">480dp</dimen>
+    <dimen name="edittext_height">48dp</dimen>
+    
+    <dimen name="text_input">16sp</dimen>
 
 </resources>

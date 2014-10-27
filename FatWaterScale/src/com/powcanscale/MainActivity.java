@@ -16,6 +16,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.baidu.speechsynthesizer.SpeechSynthesizer;
+import com.baidu.speechsynthesizer.SpeechSynthesizerListener;
+import com.baidu.speechsynthesizer.publicutility.SpeechError;
 import com.powcanscale.adapter.SectionsPagerAdapter;
 import com.powcanscale.ui.LoginActivity;
 import com.powcanscale.ui.settings.SettingsFragment;
@@ -44,7 +47,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 	 * {@link #restoreActionBar()}.
 	 */
 	private CharSequence mTitle;
-	
+
 	private UMSocialService mController;
 
 	@Override
@@ -53,14 +56,13 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		setContentView(R.layout.activity_main);
 		UmengUpdateAgent.update(this);
 		MobclickAgent.updateOnlineConfig(this);
-		
+
 		// 首先在您的Activity中添加如下成员变量
 		mController = UMServiceFactory.getUMSocialService("com.umeng.share");
 		// 设置分享内容
 		mController.setShareContent("友盟社会化组件（SDK）让移动应用快速整合社交分享功能，http://www.umeng.com/social");
 		// 设置分享图片, 参数2为图片的url地址
-		mController.setShareMedia(new UMImage(this, 
-		                                      "http://www.umeng.com/images/pic/banner_module_social.png"));
+		mController.setShareMedia(new UMImage(this, "http://www.umeng.com/images/pic/banner_module_social.png"));
 		// wx967daebe835fbeac是你在微信开发平台注册应用的AppID, 这里需要替换成你注册的AppID
 		String appID = "wx967daebe835fbeac";
 		// 添加微信平台
@@ -70,17 +72,15 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		UMWXHandler wxCircleHandler = new UMWXHandler(this, appID);
 		wxCircleHandler.setToCircle(true);
 		wxCircleHandler.addToSocialSDK();
-		//设置新浪SSO handler
+		// 设置新浪SSO handler
 		mController.getConfig().setSsoHandler(new SinaSsoHandler());
-		//参数1为当前Activity，参数2为开发者在QQ互联申请的APP ID，参数3为开发者在QQ互联申请的APP kEY.
-		UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(this, "100424468",
-		                "c7394704798a158208a74ab60104f0ba");
-		qqSsoHandler.addToSocialSDK();  
-		//参数1为当前Activity，参数2为开发者在QQ互联申请的APP ID，参数3为开发者在QQ互联申请的APP kEY.
-		QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(this, "100424468",
-		                "c7394704798a158208a74ab60104f0ba");
+		// 参数1为当前Activity，参数2为开发者在QQ互联申请的APP ID，参数3为开发者在QQ互联申请的APP kEY.
+		UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(this, "100424468", "c7394704798a158208a74ab60104f0ba");
+		qqSsoHandler.addToSocialSDK();
+		// 参数1为当前Activity，参数2为开发者在QQ互联申请的APP ID，参数3为开发者在QQ互联申请的APP kEY.
+		QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(this, "100424468", "c7394704798a158208a74ab60104f0ba");
 		qZoneSsoHandler.addToSocialSDK();
-		
+
 		if (SpUtil.getInstance(this).isFirstLaunch()) {
 			Intent mainIntent = new Intent(this, LoginActivity.class);
 			startActivity(mainIntent);
@@ -91,6 +91,67 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+
+		SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer(getApplicationContext(), "holder", new SpeechSynthesizerListener() {
+
+			@Override
+			public void onBufferProgressChanged(SpeechSynthesizer arg0, int arg1) {
+
+			}
+
+			@Override
+			public void onCancel(SpeechSynthesizer arg0) {
+
+			}
+
+			@Override
+			public void onError(SpeechSynthesizer arg0, SpeechError arg1) {
+
+			}
+
+			@Override
+			public void onNewDataArrive(SpeechSynthesizer arg0, byte[] arg1, int arg2) {
+
+			}
+
+			@Override
+			public void onSpeechFinish(SpeechSynthesizer arg0) {
+
+			}
+
+			@Override
+			public void onSpeechPause(SpeechSynthesizer arg0) {
+
+			}
+
+			@Override
+			public void onSpeechProgressChanged(SpeechSynthesizer arg0, int arg1) {
+
+			}
+
+			@Override
+			public void onSpeechResume(SpeechSynthesizer arg0) {
+
+			}
+
+			@Override
+			public void onSpeechStart(SpeechSynthesizer arg0) {
+
+			}
+
+			@Override
+			public void onStartWorking(SpeechSynthesizer arg0) {
+
+			}
+		});
+		speechSynthesizer.setParam(SpeechSynthesizer.PARAM_SPEAKER, SpeechSynthesizer.SPEAKER_FEMALE);
+		speechSynthesizer.setParam(SpeechSynthesizer.PARAM_VOLUME, "5");
+		speechSynthesizer.setParam(SpeechSynthesizer.PARAM_SPEED, "5");
+		speechSynthesizer.setParam(SpeechSynthesizer.PARAM_PITCH, "5");
+		speechSynthesizer.setParam(SpeechSynthesizer.PARAM_AUDIO_ENCODE, SpeechSynthesizer.AUDIO_ENCODE_AMR);
+		speechSynthesizer.setParam(SpeechSynthesizer.PARAM_AUDIO_RATE, SpeechSynthesizer.AUDIO_BITRATE_AMR_15K85);
+		speechSynthesizer.setApiKey("your-apiKey", "your-secretKey");
+		speechSynthesizer.speak("欢迎使用保康脂肪秤");
 	}
 
 	@Override
@@ -146,18 +207,18 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			// 是否只有已登录用户才能打开分享选择页
-	        mController.openShare(this, false);
+			mController.openShare(this, false);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
 		MobclickAgent.onResume(this);
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -173,12 +234,13 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		 * fragment.
 		 */
 		private static final String ARG_SECTION_NUMBER = "section_number";
-		
+
 		/**
 		 * The {@link android.support.v4.view.PagerAdapter} that will provide
-		 * fragments for each of the sections. We use a {@link FragmentPagerAdapter}
-		 * derivative, which will keep every loaded fragment in memory. If this
-		 * becomes too memory intensive, it may be best to switch to a
+		 * fragments for each of the sections. We use a
+		 * {@link FragmentPagerAdapter} derivative, which will keep every loaded
+		 * fragment in memory. If this becomes too memory intensive, it may be
+		 * best to switch to a
 		 * {@link android.support.v4.app.FragmentStatePagerAdapter}.
 		 */
 		SectionsPagerAdapter mSectionsPagerAdapter;
@@ -205,17 +267,19 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-//			TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-//			textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
-			
-			// Create the adapter that will return a fragment for each of the three
+			// TextView textView = (TextView)
+			// rootView.findViewById(R.id.section_label);
+			// textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
+
+			// Create the adapter that will return a fragment for each of the
+			// three
 			// primary sections of the activity.
 			mSectionsPagerAdapter = new SectionsPagerAdapter(getActivity(), getActivity().getSupportFragmentManager());
 
 			// Set up the ViewPager with the sections adapter.
 			mViewPager = (ViewPager) rootView.findViewById(R.id.pager);
 			mViewPager.setAdapter(mSectionsPagerAdapter);
-			
+
 			return rootView;
 		}
 
@@ -225,15 +289,15 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 			((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
 		}
 	}
-	
-	@Override 
+
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    super.onActivityResult(requestCode, resultCode, data);
-	    /**使用SSO授权必须添加如下代码 */
-	    UMSsoHandler ssoHandler = mController.getConfig().getSsoHandler(requestCode) ;
-	    if(ssoHandler != null){
-	       ssoHandler.authorizeCallBack(requestCode, resultCode, data);
-	    }
+		super.onActivityResult(requestCode, resultCode, data);
+		/** 使用SSO授权必须添加如下代码 */
+		UMSsoHandler ssoHandler = mController.getConfig().getSsoHandler(requestCode);
+		if (ssoHandler != null) {
+			ssoHandler.authorizeCallBack(requestCode, resultCode, data);
+		}
 	}
 
 }

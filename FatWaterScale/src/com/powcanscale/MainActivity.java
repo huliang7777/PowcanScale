@@ -150,7 +150,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		speechSynthesizer.setParam(SpeechSynthesizer.PARAM_PITCH, "5");
 		speechSynthesizer.setParam(SpeechSynthesizer.PARAM_AUDIO_ENCODE, SpeechSynthesizer.AUDIO_ENCODE_AMR);
 		speechSynthesizer.setParam(SpeechSynthesizer.PARAM_AUDIO_RATE, SpeechSynthesizer.AUDIO_BITRATE_AMR_15K85);
-		speechSynthesizer.setApiKey("your-apiKey", "your-secretKey");
+		speechSynthesizer.setApiKey("GlYqGj4BWsDC6NVCtVv6OnZt", "tHYvPLQ2Ku6xiXeYGRqeeSCproCkleVh");
 		speechSynthesizer.speak("欢迎使用保康脂肪秤");
 	}
 

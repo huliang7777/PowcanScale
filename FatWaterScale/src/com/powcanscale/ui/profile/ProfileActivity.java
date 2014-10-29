@@ -3,31 +3,39 @@ package com.powcanscale.ui.profile;
 import android.animation.TimeInterpolator;
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.powcanscale.R;
+import com.powcanscale.MainActivity.PlaceholderFragment;
 
 /**
  * 动画参考：http://cyrilmottier.com/2014/05/20/custom-animations-with-fragments/
  * @author Administrator
  *
  */
-public class ProfileActivity extends Activity {
+public class ProfileActivity extends ActionBarActivity {
 
 	private static final int ANIMATION_DURATION = 500;
 	private static final TimeInterpolator ANIMATION_INTERPOLATOR = new AccelerateDecelerateInterpolator();
 	
-	private FrameLayout mMainContainer;
-	private FrameLayout mEditModeContainer;
+	private static FrameLayout mMainContainer;
+	private static FrameLayout mNormalModeContainer;
+	private static FrameLayout mEditModeContainer;
 	private int mHalfHeight;
+	
+	private static FragmentManager mFragmentManager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +43,12 @@ public class ProfileActivity extends Activity {
 		setContentView(R.layout.activity_profile);
 
 		mMainContainer = (FrameLayout) findViewById(R.id.main_container);
+		mNormalModeContainer = (FrameLayout) findViewById(R.id.normal_mode_container);
 		mEditModeContainer = (FrameLayout) findViewById(R.id.edit_mode_container);
-		mHalfHeight = mEditModeContainer.getMeasuredHeight() / 2;
+//		mHalfHeight = mEditModeContainer.getMeasuredHeight() / 2;
+		mHalfHeight = 540;
+		
+		mFragmentManager = getFragmentManager();
 
 		if (savedInstanceState == null) {
 			getFragmentManager().beginTransaction().add(R.id.form_container, new FormFragment()).commit();
@@ -67,14 +79,66 @@ public class ProfileActivity extends Activity {
 	 * A placeholder fragment containing a simple view.
 	 */
 	public static class FormFragment extends Fragment {
+		
+		private LinearLayout mMainContainer;
 
 		public FormFragment() {
 		}
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
+			final View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
+			
+			mMainContainer = (LinearLayout) rootView;
+			
+			final View height = rootView.findViewById(R.id.ll_height);
+			height.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					focusOn(height, rootView, true);
+					showEditModelPane();
+				}
+				
+			});
 			return rootView;
+		}
+
+		private final Rect mTmpRect = new Rect();
+
+		private void focusOn(View v, View movableView, boolean animated) {
+
+			v.getDrawingRect(mTmpRect);
+			mMainContainer.offsetDescendantRectToMyCoords(v, mTmpRect);
+
+			movableView.animate().translationY(-mTmpRect.top).setDuration(animated ? ANIMATION_DURATION : 0).setInterpolator(ANIMATION_INTERPOLATOR).start();
+		}
+
+	}
+	
+	public static void showEditModelPane() {
+//		FragmentManager fragmentManager = getFragmentManager();
+//		fragmentManager.beginTransaction().add(R.id.edit_mode_container, new HeightFragment()).commit();
+		mFragmentManager.beginTransaction().add(R.id.form_container, new HeightFragment()).commit();
+	}
+
+	/**
+	 * A placeholder fragment containing a simple view.
+	 */
+	public static class HeightFragment extends Fragment {
+
+		public HeightFragment() {
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+			View rootView = inflater.inflate(R.layout.fragment_height, container, false);
+//			slideInToTop(rootView, true);
+			return rootView;
+		}
+
+		private void slideInToTop(View v, boolean animated) {
+			v.animate().translationY(0).alpha(1).setDuration(animated ? ANIMATION_DURATION : 0).setInterpolator(ANIMATION_INTERPOLATOR).start();
 		}
 
 	}
@@ -94,7 +158,7 @@ public class ProfileActivity extends Activity {
 	}
 
 	private void slideInToTop(View v, boolean animated) {
-		v.animate().translationY(0).alpha(1).setDuration(animated ? ANIMATION_DURATION : 0).setInterpolator(ANIMATION_INTERPOLATOR);
+		v.animate().translationY(0).alpha(1).setDuration(animated ? ANIMATION_DURATION : 0).setInterpolator(ANIMATION_INTERPOLATOR).start();
 	}
 
 	private void stickTo(View v, View viewToStickTo, boolean animated) {

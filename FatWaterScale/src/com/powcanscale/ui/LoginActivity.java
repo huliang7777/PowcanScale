@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.powcanscale.BaseActivity;
 import com.powcanscale.MainActivity;
 import com.powcanscale.R;
+import com.powcanscale.ui.profile.ProfileActivity;
 
 public class LoginActivity extends BaseActivity implements OnClickListener {
 
@@ -57,9 +58,11 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_commit:
-			if (checkUsername() && checkPassword()) {
-				requestLogin();
-			}
+//			if (checkUsername() && checkPassword()) {
+//				requestLogin();
+//			}
+			Intent intent = new Intent(this, ProfileActivity.class);
+			startActivity(intent);
 			break;
 		case R.id.btn_forget_password:
 			break;

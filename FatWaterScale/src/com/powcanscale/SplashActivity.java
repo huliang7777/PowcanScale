@@ -1,5 +1,7 @@
 package com.powcanscale;
 
+import com.iflytek.speech.SpeechUtility;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +28,9 @@ public class SplashActivity extends Activity {
 			}
 
 		}, SPLASH_DISPLAY_LENGHT);
+
+		// 设置申请的应用的appid
+		SpeechUtility.getUtility(this).setAppid("54526821");// demo 4d6774d0, my 54526821
 	}
 
 }

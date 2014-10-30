@@ -2,7 +2,9 @@ package com.powcanscale;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -10,15 +12,24 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
-import com.baidu.speechsynthesizer.SpeechSynthesizer;
-import com.baidu.speechsynthesizer.SpeechSynthesizerListener;
-import com.baidu.speechsynthesizer.publicutility.SpeechError;
+//import com.baidu.speechsynthesizer.SpeechSynthesizer;
+//import com.baidu.speechsynthesizer.SpeechSynthesizerListener;
+//import com.baidu.speechsynthesizer.publicutility.SpeechError;
+import com.iflytek.speech.ErrorCode;
+import com.iflytek.speech.ISpeechModule;
+import com.iflytek.speech.InitListener;
+import com.iflytek.speech.SpeechConstant;
+import com.iflytek.speech.SpeechSynthesizer;
+import com.iflytek.speech.SpeechUtility;
+import com.iflytek.speech.SynthesizerListener;
 import com.powcanscale.adapter.SectionsPagerAdapter;
 import com.powcanscale.ui.LoginActivity;
 import com.powcanscale.ui.settings.SettingsFragment;
@@ -36,6 +47,8 @@ import com.umeng.update.UmengUpdateAgent;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
+	protected static final String TAG = MainActivity.class.getSimpleName();
+
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
@@ -50,6 +63,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
 	private UMSocialService mController;
 
+	// 语音合成对象
+	private SpeechSynthesizer mTts;
+
+	private SharedPreferences mSharedPreferences;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -57,34 +75,34 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		UmengUpdateAgent.update(this);
 		MobclickAgent.updateOnlineConfig(this);
 
-		// 首先在您的Activity中添加如下成员变量
-		mController = UMServiceFactory.getUMSocialService("com.umeng.share");
-		// 设置分享内容
-		mController.setShareContent("友盟社会化组件（SDK）让移动应用快速整合社交分享功能，http://www.umeng.com/social");
-		// 设置分享图片, 参数2为图片的url地址
-		mController.setShareMedia(new UMImage(this, "http://www.umeng.com/images/pic/banner_module_social.png"));
-		// wx967daebe835fbeac是你在微信开发平台注册应用的AppID, 这里需要替换成你注册的AppID
-		String appID = "wx967daebe835fbeac";
-		// 添加微信平台
-		UMWXHandler wxHandler = new UMWXHandler(this, appID);
-		wxHandler.addToSocialSDK();
-		// 支持微信朋友圈
-		UMWXHandler wxCircleHandler = new UMWXHandler(this, appID);
-		wxCircleHandler.setToCircle(true);
-		wxCircleHandler.addToSocialSDK();
-		// 设置新浪SSO handler
-		mController.getConfig().setSsoHandler(new SinaSsoHandler());
-		// 参数1为当前Activity，参数2为开发者在QQ互联申请的APP ID，参数3为开发者在QQ互联申请的APP kEY.
-		UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(this, "100424468", "c7394704798a158208a74ab60104f0ba");
-		qqSsoHandler.addToSocialSDK();
-		// 参数1为当前Activity，参数2为开发者在QQ互联申请的APP ID，参数3为开发者在QQ互联申请的APP kEY.
-		QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(this, "100424468", "c7394704798a158208a74ab60104f0ba");
-		qZoneSsoHandler.addToSocialSDK();
+//		// 首先在您的Activity中添加如下成员变量
+//		mController = UMServiceFactory.getUMSocialService("com.umeng.share");
+//		// 设置分享内容
+//		mController.setShareContent("友盟社会化组件（SDK）让移动应用快速整合社交分享功能，http://www.umeng.com/social");
+//		// 设置分享图片, 参数2为图片的url地址
+//		mController.setShareMedia(new UMImage(this, "http://www.umeng.com/images/pic/banner_module_social.png"));
+//		// wx967daebe835fbeac是你在微信开发平台注册应用的AppID, 这里需要替换成你注册的AppID
+//		String appID = "wx967daebe835fbeac";
+//		// 添加微信平台
+//		UMWXHandler wxHandler = new UMWXHandler(this, appID);
+//		wxHandler.addToSocialSDK();
+//		// 支持微信朋友圈
+//		UMWXHandler wxCircleHandler = new UMWXHandler(this, appID);
+//		wxCircleHandler.setToCircle(true);
+//		wxCircleHandler.addToSocialSDK();
+//		// 设置新浪SSO handler
+//		mController.getConfig().setSsoHandler(new SinaSsoHandler());
+//		// 参数1为当前Activity，参数2为开发者在QQ互联申请的APP ID，参数3为开发者在QQ互联申请的APP kEY.
+//		UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(this, "100424468", "c7394704798a158208a74ab60104f0ba");
+//		qqSsoHandler.addToSocialSDK();
+//		// 参数1为当前Activity，参数2为开发者在QQ互联申请的APP ID，参数3为开发者在QQ互联申请的APP kEY.
+//		QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(this, "100424468", "c7394704798a158208a74ab60104f0ba");
+//		qZoneSsoHandler.addToSocialSDK();
 
-		if (SpUtil.getInstance(this).isFirstLaunch()) {
-			Intent mainIntent = new Intent(this, LoginActivity.class);
-			startActivity(mainIntent);
-		}
+//		if (SpUtil.getInstance(this).isFirstLaunch()) {
+//			Intent mainIntent = new Intent(this, LoginActivity.class);
+//			startActivity(mainIntent);
+//		}
 
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
@@ -92,66 +110,104 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
-		SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer(getApplicationContext(), "holder", new SpeechSynthesizerListener() {
+		// SpeechSynthesizer speechSynthesizer = new
+		// SpeechSynthesizer(getApplicationContext(), "holder", new
+		// SpeechSynthesizerListener() {
+		//
+		// @Override
+		// public void onBufferProgressChanged(SpeechSynthesizer arg0, int arg1)
+		// {
+		//
+		// }
+		//
+		// @Override
+		// public void onCancel(SpeechSynthesizer arg0) {
+		//
+		// }
+		//
+		// @Override
+		// public void onError(SpeechSynthesizer arg0, SpeechError arg1) {
+		//
+		// }
+		//
+		// @Override
+		// public void onNewDataArrive(SpeechSynthesizer arg0, byte[] arg1, int
+		// arg2) {
+		//
+		// }
+		//
+		// @Override
+		// public void onSpeechFinish(SpeechSynthesizer arg0) {
+		//
+		// }
+		//
+		// @Override
+		// public void onSpeechPause(SpeechSynthesizer arg0) {
+		//
+		// }
+		//
+		// @Override
+		// public void onSpeechProgressChanged(SpeechSynthesizer arg0, int arg1)
+		// {
+		//
+		// }
+		//
+		// @Override
+		// public void onSpeechResume(SpeechSynthesizer arg0) {
+		//
+		// }
+		//
+		// @Override
+		// public void onSpeechStart(SpeechSynthesizer arg0) {
+		//
+		// }
+		//
+		// @Override
+		// public void onStartWorking(SpeechSynthesizer arg0) {
+		//
+		// }
+		// });
+		// speechSynthesizer.setParam(SpeechSynthesizer.PARAM_SPEAKER,
+		// SpeechSynthesizer.SPEAKER_FEMALE);
+		// speechSynthesizer.setParam(SpeechSynthesizer.PARAM_VOLUME, "5");
+		// speechSynthesizer.setParam(SpeechSynthesizer.PARAM_SPEED, "5");
+		// speechSynthesizer.setParam(SpeechSynthesizer.PARAM_PITCH, "5");
+		// speechSynthesizer.setParam(SpeechSynthesizer.PARAM_AUDIO_ENCODE,
+		// SpeechSynthesizer.AUDIO_ENCODE_AMR);
+		// speechSynthesizer.setParam(SpeechSynthesizer.PARAM_AUDIO_RATE,
+		// SpeechSynthesizer.AUDIO_BITRATE_AMR_15K85);
+		// speechSynthesizer.setApiKey("GlYqGj4BWsDC6NVCtVv6OnZt",
+		// "tHYvPLQ2Ku6xiXeYGRqeeSCproCkleVh");
+		// speechSynthesizer.speak("欢迎使用保康脂肪秤");
 
-			@Override
-			public void onBufferProgressChanged(SpeechSynthesizer arg0, int arg1) {
+		initSpeech();
+	}
 
-			}
-
-			@Override
-			public void onCancel(SpeechSynthesizer arg0) {
-
-			}
-
-			@Override
-			public void onError(SpeechSynthesizer arg0, SpeechError arg1) {
-
-			}
-
-			@Override
-			public void onNewDataArrive(SpeechSynthesizer arg0, byte[] arg1, int arg2) {
-
-			}
-
-			@Override
-			public void onSpeechFinish(SpeechSynthesizer arg0) {
-
-			}
-
-			@Override
-			public void onSpeechPause(SpeechSynthesizer arg0) {
-
-			}
-
-			@Override
-			public void onSpeechProgressChanged(SpeechSynthesizer arg0, int arg1) {
-
-			}
-
-			@Override
-			public void onSpeechResume(SpeechSynthesizer arg0) {
-
-			}
-
-			@Override
-			public void onSpeechStart(SpeechSynthesizer arg0) {
-
-			}
-
-			@Override
-			public void onStartWorking(SpeechSynthesizer arg0) {
-
-			}
-		});
-		speechSynthesizer.setParam(SpeechSynthesizer.PARAM_SPEAKER, SpeechSynthesizer.SPEAKER_FEMALE);
-		speechSynthesizer.setParam(SpeechSynthesizer.PARAM_VOLUME, "5");
-		speechSynthesizer.setParam(SpeechSynthesizer.PARAM_SPEED, "5");
-		speechSynthesizer.setParam(SpeechSynthesizer.PARAM_PITCH, "5");
-		speechSynthesizer.setParam(SpeechSynthesizer.PARAM_AUDIO_ENCODE, SpeechSynthesizer.AUDIO_ENCODE_AMR);
-		speechSynthesizer.setParam(SpeechSynthesizer.PARAM_AUDIO_RATE, SpeechSynthesizer.AUDIO_BITRATE_AMR_15K85);
-		speechSynthesizer.setApiKey("GlYqGj4BWsDC6NVCtVv6OnZt", "tHYvPLQ2Ku6xiXeYGRqeeSCproCkleVh");
-//		speechSynthesizer.speak("欢迎使用保康脂肪秤");
+	private void initSpeech() {
+		// 检测是否安装了讯飞语音服务
+		if (SpeechUtility.getUtility(this).queryAvailableEngines() == null || SpeechUtility.getUtility(this).queryAvailableEngines().length <= 0) {
+			// 下载安装或者本地安装，请参照demo代码
+		}
+		// 初始化合成对象
+		mTts = new SpeechSynthesizer(this, mTtsInitListener);
+		// 设置引擎类型
+		mTts.setParameter(SpeechConstant.ENGINE_TYPE, "local");
+		// 设置发音人
+		mTts.setParameter(SpeechSynthesizer.VOICE_NAME, "xiaoyan");
+		// 设置语速
+		mTts.setParameter(SpeechSynthesizer.SPEED, "50");
+		// 设置音调
+		mTts.setParameter(SpeechSynthesizer.PITCH, "50");
+		mTts.setParameter(SpeechSynthesizer.VOLUME, "50");
+		// 开始合成
+		int code = mTts.startSpeaking("欢迎使用保康脂肪秤", mTtsListener);
+		Log.d(TAG, "code:" + code);
+		// 停止
+//		mTts.stopSpeaking(mTtsListener);
+//		// 暂停播放
+//		mTts.pauseSpeaking(mTtsListener);
+//		// 恢复播放
+//		mTts.resumeSpeaking(mTtsListener);
 	}
 
 	@Override
@@ -298,6 +354,63 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		if (ssoHandler != null) {
 			ssoHandler.authorizeCallBack(requestCode, resultCode, data);
 		}
+	}
+
+	/**
+	 * 初期化监听。
+	 */
+	private InitListener mTtsInitListener = new InitListener() {
+
+		@Override
+		public void onInit(ISpeechModule arg0, int code) {
+			Log.d(TAG, "InitListener init() code = " + code);
+			if (code == ErrorCode.SUCCESS) {
+			}
+		}
+	};
+
+	/**
+	 * 合成回调监听。
+	 */
+	private SynthesizerListener mTtsListener = new SynthesizerListener.Stub() {
+		@Override
+		public void onBufferProgress(int progress) throws RemoteException {
+			Log.d(TAG, "onBufferProgress :" + progress);
+		}
+
+		@Override
+		public void onCompleted(int code) throws RemoteException {
+			Log.d(TAG, "onCompleted code =" + code);
+		}
+
+		@Override
+		public void onSpeakBegin() throws RemoteException {
+			Log.d(TAG, "onSpeakBegin");
+		}
+
+		@Override
+		public void onSpeakPaused() throws RemoteException {
+			Log.d(TAG, "onSpeakPaused.");
+		}
+
+		@Override
+		public void onSpeakProgress(int progress) throws RemoteException {
+			Log.d(TAG, "onSpeakProgress :" + progress);
+		}
+
+		@Override
+		public void onSpeakResumed() throws RemoteException {
+			Log.d(TAG, "onSpeakResumed.");
+		}
+	};
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+		mTts.stopSpeaking(mTtsListener);
+		// 退出时释放连接
+		mTts.destory();
 	}
 
 }

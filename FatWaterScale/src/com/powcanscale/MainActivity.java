@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -12,37 +11,17 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
-//import com.baidu.speechsynthesizer.SpeechSynthesizer;
-//import com.baidu.speechsynthesizer.SpeechSynthesizerListener;
-//import com.baidu.speechsynthesizer.publicutility.SpeechError;
-import com.iflytek.speech.ErrorCode;
-import com.iflytek.speech.ISpeechModule;
-import com.iflytek.speech.InitListener;
-import com.iflytek.speech.SpeechConstant;
-import com.iflytek.speech.SpeechSynthesizer;
-import com.iflytek.speech.SpeechUtility;
-import com.iflytek.speech.SynthesizerListener;
 import com.powcanscale.adapter.SectionsPagerAdapter;
-import com.powcanscale.ui.LoginActivity;
 import com.powcanscale.ui.settings.SettingsFragment;
-import com.powcanscale.util.SpUtil;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
-import com.umeng.socialize.media.UMImage;
-import com.umeng.socialize.sso.QZoneSsoHandler;
-import com.umeng.socialize.sso.SinaSsoHandler;
-import com.umeng.socialize.sso.UMQQSsoHandler;
 import com.umeng.socialize.sso.UMSsoHandler;
-import com.umeng.socialize.weixin.controller.UMWXHandler;
 import com.umeng.update.UmengUpdateAgent;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -62,9 +41,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 	private CharSequence mTitle;
 
 	private UMSocialService mController;
-
-	// 语音合成对象
-	private SpeechSynthesizer mTts;
 
 	private SharedPreferences mSharedPreferences;
 
@@ -109,105 +85,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
-
-		// SpeechSynthesizer speechSynthesizer = new
-		// SpeechSynthesizer(getApplicationContext(), "holder", new
-		// SpeechSynthesizerListener() {
-		//
-		// @Override
-		// public void onBufferProgressChanged(SpeechSynthesizer arg0, int arg1)
-		// {
-		//
-		// }
-		//
-		// @Override
-		// public void onCancel(SpeechSynthesizer arg0) {
-		//
-		// }
-		//
-		// @Override
-		// public void onError(SpeechSynthesizer arg0, SpeechError arg1) {
-		//
-		// }
-		//
-		// @Override
-		// public void onNewDataArrive(SpeechSynthesizer arg0, byte[] arg1, int
-		// arg2) {
-		//
-		// }
-		//
-		// @Override
-		// public void onSpeechFinish(SpeechSynthesizer arg0) {
-		//
-		// }
-		//
-		// @Override
-		// public void onSpeechPause(SpeechSynthesizer arg0) {
-		//
-		// }
-		//
-		// @Override
-		// public void onSpeechProgressChanged(SpeechSynthesizer arg0, int arg1)
-		// {
-		//
-		// }
-		//
-		// @Override
-		// public void onSpeechResume(SpeechSynthesizer arg0) {
-		//
-		// }
-		//
-		// @Override
-		// public void onSpeechStart(SpeechSynthesizer arg0) {
-		//
-		// }
-		//
-		// @Override
-		// public void onStartWorking(SpeechSynthesizer arg0) {
-		//
-		// }
-		// });
-		// speechSynthesizer.setParam(SpeechSynthesizer.PARAM_SPEAKER,
-		// SpeechSynthesizer.SPEAKER_FEMALE);
-		// speechSynthesizer.setParam(SpeechSynthesizer.PARAM_VOLUME, "5");
-		// speechSynthesizer.setParam(SpeechSynthesizer.PARAM_SPEED, "5");
-		// speechSynthesizer.setParam(SpeechSynthesizer.PARAM_PITCH, "5");
-		// speechSynthesizer.setParam(SpeechSynthesizer.PARAM_AUDIO_ENCODE,
-		// SpeechSynthesizer.AUDIO_ENCODE_AMR);
-		// speechSynthesizer.setParam(SpeechSynthesizer.PARAM_AUDIO_RATE,
-		// SpeechSynthesizer.AUDIO_BITRATE_AMR_15K85);
-		// speechSynthesizer.setApiKey("GlYqGj4BWsDC6NVCtVv6OnZt",
-		// "tHYvPLQ2Ku6xiXeYGRqeeSCproCkleVh");
-		// speechSynthesizer.speak("欢迎使用保康脂肪秤");
-
-		initSpeech();
-	}
-
-	private void initSpeech() {
-		// 检测是否安装了讯飞语音服务
-		if (SpeechUtility.getUtility(this).queryAvailableEngines() == null || SpeechUtility.getUtility(this).queryAvailableEngines().length <= 0) {
-			// 下载安装或者本地安装，请参照demo代码
-		}
-		// 初始化合成对象
-		mTts = new SpeechSynthesizer(this, mTtsInitListener);
-		// 设置引擎类型
-		mTts.setParameter(SpeechConstant.ENGINE_TYPE, "local");
-		// 设置发音人
-		mTts.setParameter(SpeechSynthesizer.VOICE_NAME, "xiaoyan");
-		// 设置语速
-		mTts.setParameter(SpeechSynthesizer.SPEED, "50");
-		// 设置音调
-		mTts.setParameter(SpeechSynthesizer.PITCH, "50");
-		mTts.setParameter(SpeechSynthesizer.VOLUME, "50");
-		// 开始合成
-		int code = mTts.startSpeaking("欢迎使用保康脂肪秤", mTtsListener);
-		Log.d(TAG, "code:" + code);
-		// 停止
-//		mTts.stopSpeaking(mTtsListener);
-//		// 暂停播放
-//		mTts.pauseSpeaking(mTtsListener);
-//		// 恢复播放
-//		mTts.resumeSpeaking(mTtsListener);
 	}
 
 	@Override
@@ -354,63 +231,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		if (ssoHandler != null) {
 			ssoHandler.authorizeCallBack(requestCode, resultCode, data);
 		}
-	}
-
-	/**
-	 * 初期化监听。
-	 */
-	private InitListener mTtsInitListener = new InitListener() {
-
-		@Override
-		public void onInit(ISpeechModule arg0, int code) {
-			Log.d(TAG, "InitListener init() code = " + code);
-			if (code == ErrorCode.SUCCESS) {
-			}
-		}
-	};
-
-	/**
-	 * 合成回调监听。
-	 */
-	private SynthesizerListener mTtsListener = new SynthesizerListener.Stub() {
-		@Override
-		public void onBufferProgress(int progress) throws RemoteException {
-			Log.d(TAG, "onBufferProgress :" + progress);
-		}
-
-		@Override
-		public void onCompleted(int code) throws RemoteException {
-			Log.d(TAG, "onCompleted code =" + code);
-		}
-
-		@Override
-		public void onSpeakBegin() throws RemoteException {
-			Log.d(TAG, "onSpeakBegin");
-		}
-
-		@Override
-		public void onSpeakPaused() throws RemoteException {
-			Log.d(TAG, "onSpeakPaused.");
-		}
-
-		@Override
-		public void onSpeakProgress(int progress) throws RemoteException {
-			Log.d(TAG, "onSpeakProgress :" + progress);
-		}
-
-		@Override
-		public void onSpeakResumed() throws RemoteException {
-			Log.d(TAG, "onSpeakResumed.");
-		}
-	};
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-
-		mTts.stopSpeaking(mTtsListener);
-		// 退出时释放连接
-		mTts.destory();
 	}
 
 }

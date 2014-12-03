@@ -20,6 +20,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -123,7 +124,7 @@ public class NavigationDrawerFragment extends Fragment {
 		            mDrawerLayout.closeDrawer(mFragmentContainerView);
 		        }
 		        if (mCallbacks != null) {
-		            mCallbacks.onNavigationDrawerItemSelected(R.id.btn_settings);
+		            mCallbacks.onNavigationDrawerItemSelected(R.id.btn_settings, null);
 		        }
 			}
 		});
@@ -211,14 +212,20 @@ public class NavigationDrawerFragment extends Fragment {
 
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;
+        
+        Object obj = null;
         if (mDrawerListView != null) {
+        	ListAdapter mAdapter = mDrawerListView.getAdapter();
+        	if (mAdapter != null) {
+        		obj = mAdapter.getItem(position);
+        	}
             mDrawerListView.setItemChecked(position, true);
         }
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
         if (mCallbacks != null) {
-            mCallbacks.onNavigationDrawerItemSelected(position);
+            mCallbacks.onNavigationDrawerItemSelected(position, obj);
         }
     }
 
@@ -298,6 +305,6 @@ public class NavigationDrawerFragment extends Fragment {
         /**
          * Called when an item in the navigation drawer is selected.
          */
-        void onNavigationDrawerItemSelected(int position);
+        void onNavigationDrawerItemSelected(int position, Object obj);
     }
 }

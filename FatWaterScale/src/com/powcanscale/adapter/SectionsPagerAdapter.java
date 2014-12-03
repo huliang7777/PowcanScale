@@ -19,7 +19,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
 	private Context context;
 
-	public SectionsPagerAdapter(Context context, FragmentManager fm) {
+	public SectionsPagerAdapter(Context context, FragmentManager fm, String user) {
 		super(fm);
 		this.context = context;
 	}
@@ -29,7 +29,21 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 		// getItem is called to instantiate the fragment for the given page.
 		// Return a PlaceholderFragment (defined as a static inner class
 		// below).
-		return PagerPlaceholderFragment.newInstance(position + 1);
+		Fragment fragment = null;
+		switch (position) {
+		case 0:
+			fragment = PagerPlaceholderFragment.newInstance(position + 1);
+			break;
+		case 1:
+			fragment = PagerPlaceholderFragment.newInstance(position + 1);
+			break;
+		case 2:
+			fragment = PagerPlaceholderFragment.newInstance(position + 1);
+			break;
+		default:
+			break;
+		}
+		return fragment;
 	}
 
 	@Override

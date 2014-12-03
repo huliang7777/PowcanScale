@@ -60,11 +60,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 	}
 
 	@Override
-	public void onNavigationDrawerItemSelected(int position) {
+	public void onNavigationDrawerItemSelected(int position, Object obj) {
 		// update the main content by replacing fragments
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		if (position != R.id.btn_settings) {
-			fragmentManager.beginTransaction().replace(R.id.container, PlaceholderFragment.newInstance(position + 1)).commit();
+			fragmentManager.beginTransaction().replace(R.id.container, PlaceholderFragment.newInstance(position + 1, String.valueOf(obj))).commit();
 		} else {
 			fragmentManager.beginTransaction().replace(R.id.container, SettingsFragment.newInstance(position + 1)).commit();
 		}
@@ -138,6 +138,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		 */
 		private static final String ARG_SECTION_NUMBER = "section_number";
 
+		private static final String ARG_SECTION_OBJ = "section_obj";
+
 		/**
 		 * The {@link android.support.v4.view.PagerAdapter} that will provide
 		 * fragments for each of the sections. We use a
@@ -156,10 +158,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		/**
 		 * Returns a new instance of this fragment for the given section number.
 		 */
-		public static PlaceholderFragment newInstance(int sectionNumber) {
+		public static PlaceholderFragment newInstance(int sectionNumber, String obj) {
 			PlaceholderFragment fragment = new PlaceholderFragment();
 			Bundle args = new Bundle();
 			args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+			args.putString(ARG_SECTION_OBJ, obj);
 			fragment.setArguments(args);
 			return fragment;
 		}
@@ -170,9 +173,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+			
+			String user = getArguments().getString(ARG_SECTION_OBJ);
 
 			// Create the adapter that will return a fragment for each of the three primary sections of the activity.
-			mSectionsPagerAdapter = new SectionsPagerAdapter(getActivity(), getActivity().getSupportFragmentManager());
+			mSectionsPagerAdapter = new SectionsPagerAdapter(getActivity(), getActivity().getSupportFragmentManager(), user);
 
 			// Set up the ViewPager with the sections adapter.
 			mViewPager = (ViewPager) rootView.findViewById(R.id.pager);

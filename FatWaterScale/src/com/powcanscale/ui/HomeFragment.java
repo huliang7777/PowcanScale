@@ -13,7 +13,7 @@ import com.powcanscale.R;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class PagerPlaceholderFragment extends Fragment {
+public class HomeFragment extends Fragment {
 	/**
 	 * The fragment argument representing the section number for this
 	 * fragment.
@@ -23,15 +23,15 @@ public class PagerPlaceholderFragment extends Fragment {
 	/**
 	 * Returns a new instance of this fragment for the given section number.
 	 */
-	public static PagerPlaceholderFragment newInstance(int sectionNumber) {
-		PagerPlaceholderFragment fragment = new PagerPlaceholderFragment();
+	public static HomeFragment newInstance(int sectionNumber) {
+		HomeFragment fragment = new HomeFragment();
 		Bundle args = new Bundle();
 		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 		fragment.setArguments(args);
 		return fragment;
 	}
 
-	public PagerPlaceholderFragment() {
+	public HomeFragment() {
 	}
 
 	@Override

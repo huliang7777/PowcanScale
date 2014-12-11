@@ -1,26 +1,26 @@
 package com.powcanscale;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.powcanscale.adapter.SectionsPagerAdapter;
+import com.powcanscale.ui.base.BaseActivity;
 import com.powcanscale.ui.settings.SettingsFragment;
+import com.powcanscale.widget.RibbonMenuCallback;
+import com.powcanscale.widget.RibbonMenuView;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 
-public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class MainActivity extends BaseActivity implements RibbonMenuCallback, OnClickListener {
 
 	protected static final String TAG = MainActivity.class.getSimpleName();
 
@@ -28,7 +28,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
 	 */
-	private NavigationDrawerFragment mNavigationDrawerFragment;
+	private RibbonMenuView rbmView;
 
 	/**
 	 * Used to store the last screen title. For use in
@@ -48,21 +48,41 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 //			startActivity(mainIntent);
 //		}
 
-		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
-
-		// Set up the drawer.
-		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 	}
 
 	@Override
-	public void onNavigationDrawerItemSelected(int position) {
+	public void onInit() {
+		setTitle("保康脂肪秤");
+		setUp();
+	}
+
+	@Override
+	public void onFindViews() {
+		// Set up the drawer.
+		rbmView = (RibbonMenuView) findViewById(R.id.ribbonMenuView1);
+		rbmView.setMenuClickCallback(this);
+		rbmView.setMenuItems(R.menu.ribbon_menu);
+	}
+
+	@Override
+	public void onInitViewData() {
+		
+	}
+
+	@Override
+	public void onBindListener() {
+		findViewById(R.id.iv_up).setOnClickListener(this);
+	}
+
+	@Override
+	public void onRibbonMenuItemClick(int itemId) {
 		// update the main content by replacing fragments
 		FragmentManager fragmentManager = getFragmentManager();
-		if (position != R.id.btn_settings) {
-			fragmentManager.beginTransaction().replace(R.id.container, PlaceholderFragment.newInstance(position + 1)).commit();
+		if (itemId != R.id.btn_settings) {
+			fragmentManager.beginTransaction().replace(R.id.container, PlaceholderFragment.newInstance(itemId + 1)).commit();
 		} else {
-			fragmentManager.beginTransaction().replace(R.id.container, SettingsFragment.newInstance(position + 1)).commit();
+			fragmentManager.beginTransaction().replace(R.id.container, SettingsFragment.newInstance(itemId + 1)).commit();
 		}
 	}
 
@@ -80,36 +100,16 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		}
 	}
 
-	public void restoreActionBar() {
-		ActionBar actionBar = getActionBar();
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-		actionBar.setDisplayShowTitleEnabled(true);
-		actionBar.setTitle(mTitle);
-	}
-
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		if (!mNavigationDrawerFragment.isDrawerOpen()) {
-			// Only show items in the action bar relevant to this screen
-			// if the drawer is not showing. Otherwise, let the drawer
-			// decide what to show in the action bar.
-			getMenuInflater().inflate(R.menu.main, menu);
-			restoreActionBar();
-			return true;
-		}
-		return super.onCreateOptionsMenu(menu);
-	}
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.iv_up:
+			rbmView.toggleMenu();
+			break;
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		default:
+			break;
 		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	@Override

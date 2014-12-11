@@ -2,10 +2,10 @@ package com.powcanscale.adapter;
 
 import java.util.Locale;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 
@@ -17,7 +17,7 @@ import com.powcanscale.ui.PagerPlaceholderFragment;
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-public class SectionsPagerAdapter extends PagerAdapter {
+public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
 	private Context context;
 

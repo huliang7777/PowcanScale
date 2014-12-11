@@ -15,8 +15,8 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.powcanscale.BaseActivity;
 import com.powcanscale.R;
+import com.powcanscale.ui.base.BaseActivity;
 
 /**
  * 动画参考：http://cyrilmottier.com/2014/05/20/custom-animations-with-fragments/

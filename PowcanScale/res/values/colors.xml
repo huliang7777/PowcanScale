@@ -16,4 +16,19 @@
     <color name="login_hint">#999999</color>
     
     <color name="input_border">#dcdcdc</color>
+    <color name="background">#f7f7f8</color>
+    <color name="title_color">#333333</color>
+    <color name="line">#EFEFED</color>
+    
+    <color name="orange">#f89520</color>
+    <color name="light_orange">#ff9520</color>
+    <color name="deep_gray">#58585a</color>
+    <color name="gray">#aaaaaa</color>
+    <color name="light_gray">#c2c2c3</color>
+    <color name="body">#999084</color>
+    <color name="green">#8eb32c</color>
+    <color name="app_gray">#EFEFED</color>
+    
+    <color name="rbm_menu_background">#303030</color>
+    <color name="rbm_item_text_color">#ffffff</color>
 </resources>

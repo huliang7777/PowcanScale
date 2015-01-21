@@ -1,4 +1,4 @@
-package com.powcanscale.db;
+package com.powcan.scale.db;
 
 import android.content.Context;
 import android.database.Cursor;

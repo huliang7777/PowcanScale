@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.powcanscale.ble;
+package com.powcan.scale.ble;
 
 import java.util.ArrayList;
 
@@ -38,7 +38,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.powcanscale.R;
+import com.powcan.scale.R;
 
 /**
  * Activity for scanning and displaying available Bluetooth LE devices.

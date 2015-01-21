@@ -1,4 +1,6 @@
-package com.powcanscale;
+package com.powcan.scale;
+
+import com.powcan.scale.R;
 
 import android.app.Activity;
 import android.content.Intent;

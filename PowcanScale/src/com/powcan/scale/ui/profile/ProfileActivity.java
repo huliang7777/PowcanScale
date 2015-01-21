@@ -1,4 +1,4 @@
-package com.powcanscale.ui.profile;
+package com.powcan.scale.ui.profile;
 
 import android.animation.TimeInterpolator;
 import android.app.Fragment;
@@ -15,8 +15,8 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.powcanscale.R;
-import com.powcanscale.ui.base.BaseActivity;
+import com.powcan.scale.R;
+import com.powcan.scale.ui.base.BaseActivity;
 
 /**
  * 动画参考：http://cyrilmottier.com/2014/05/20/custom-animations-with-fragments/

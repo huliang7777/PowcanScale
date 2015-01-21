@@ -1,4 +1,4 @@
-package com.powcanscale.ui.base;
+package com.powcan.scale.ui.base;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -15,8 +15,8 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.powcanscale.R;
-import com.powcanscale.util.SpUtil;
+import com.powcan.scale.R;
+import com.powcan.scale.util.SpUtil;
 import com.umeng.analytics.MobclickAgent;
 
 public abstract class BaseActivity extends FragmentActivity {

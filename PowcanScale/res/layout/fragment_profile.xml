@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/backgroud"
     android:orientation="vertical"
-    tools:context="com.powcanscale.ui.profile.ProfileActivity$FormFragment" >
+    tools:context="com.powcan.scale.ui.profile.ProfileActivity$FormFragment" >
 
     <LinearLayout 
         android:layout_width="match_parent"

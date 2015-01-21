@@ -1,4 +1,4 @@
-package com.powcanscale.ui;
+package com.powcan.scale.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,10 +9,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.powcanscale.MainActivity;
-import com.powcanscale.R;
-import com.powcanscale.ui.base.BaseActivity;
-import com.powcanscale.ui.profile.ProfileActivity;
+import com.powcan.scale.MainActivity;
+import com.powcan.scale.R;
+import com.powcan.scale.ui.base.BaseActivity;
+import com.powcan.scale.ui.profile.ProfileActivity;
 
 public class LoginActivity extends BaseActivity implements OnClickListener {
 

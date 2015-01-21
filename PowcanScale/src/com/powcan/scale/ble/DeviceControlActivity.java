@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.powcanscale.ble;
+package com.powcan.scale.ble;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +39,7 @@ import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
-import com.powcanscale.R;
+import com.powcan.scale.R;
 
 /**
  * For a given BLE device, this Activity provides the user interface to connect, display data,

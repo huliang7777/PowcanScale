@@ -1,4 +1,4 @@
-package com.powcanscale.util;
+package com.powcan.scale.util;
 import java.io.*;
 
 import java.net.*;

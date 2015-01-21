@@ -1,4 +1,4 @@
-package com.powcanscale.ble;
+package com.powcan.scale.ble;
 
 import java.util.Locale;
 

@@ -1,4 +1,4 @@
-package com.powcanscale.util;
+package com.powcan.scale.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;

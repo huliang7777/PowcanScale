@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.powcanscale.ble;
+package com.powcan.scale.ble;
 
 import java.util.Calendar;
 import java.util.List;

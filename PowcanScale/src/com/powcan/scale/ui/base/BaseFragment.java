@@ -1,4 +1,4 @@
-package com.powcanscale.ui.base;
+package com.powcan.scale.ui.base;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -17,9 +17,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.powcanscale.R;
-import com.powcanscale.util.SpUtil;
-import com.powcanscale.util.Utils;
+import com.powcan.scale.R;
+import com.powcan.scale.util.SpUtil;
+import com.powcan.scale.util.Utils;
 import com.umeng.analytics.MobclickAgent;
 
 public abstract class BaseFragment extends Fragment {

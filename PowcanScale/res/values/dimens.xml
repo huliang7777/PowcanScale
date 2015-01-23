@@ -19,13 +19,16 @@
     
     <dimen name="headline">24sp</dimen>
     <dimen name="title">20sp</dimen>
+    <dimen name="subtitle">18sp</dimen>
     <dimen name="subhead">16sp</dimen>
     <dimen name="body">14sp</dimen>
     <dimen name="caption">12sp</dimen>
     <dimen name="menu">14sp</dimen>
     <dimen name="button">14sp</dimen>
     
+    <dimen name="space">8dp</dimen>
     <dimen name="height_space">8dp</dimen>
+    <dimen name="height_line">1px</dimen>
     <dimen name="height_header">56dp</dimen>
     <dimen name="height_list_item">72dp</dimen>
     <dimen name="height_subtitle">48dp</dimen>
@@ -37,18 +40,12 @@
     
     <dimen name="edittext_width">480dp</dimen>
     <dimen name="edittext_height">48dp</dimen>
+    <dimen name="height_small_item">32dp</dimen>
     
     <dimen name="text_input">16sp</dimen>
-    
-    <dimen name="rbm_menu_width">200dp</dimen>
-  
-    <dimen name="rbm_item_padding_topbottom">16dp</dimen>
-    <dimen name="rbm_item_padding_leftright">8dp</dimen>
-    
-    <dimen name="rbm_item_image_height">24dp</dimen>
-    <dimen name="rbm_item_image_width">24dp</dimen>
-    
-    <dimen name="rbm_item_text_size">16sp</dimen>
-    <dimen name="rbm_item_text_padding_left">10dp</dimen>
+
+    <dimen name="header_height">60dp</dimen>
+    <dimen name="footer_height">90dp</dimen>
+    <dimen name="footer_padding">10dp</dimen>
 
 </resources>

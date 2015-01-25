@@ -38,8 +38,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 
 	@Override
 	public void onInitViewData() {
-		int width = UiHelper.getDisplayMetrics(this).widthPixels;
-		width = width > 250 ? (width / 2 > 250 ? width / 2 : width) : width;
+//		int width = UiHelper.getDisplayMetrics(this).widthPixels;
+//		width = width > 250 ? (width / 2 > 250 ? width / 2 : width) : width;
+		int width = 250;
 
 		View leftView = View.inflate(this, R.layout.frame_left, null);
 		View rightView = View.inflate(this, R.layout.frame_right, null);

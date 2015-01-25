@@ -128,11 +128,11 @@ public class SlidingMenu extends RelativeLayout {
 	 *            Width of the right view.
 	 */
 	public void setView(View leftView, View rightView, View centerView, int leftViewWidth, int rightViewWidth) {
-		RelativeLayout.LayoutParams leftParams = new LayoutParams(leftViewWidth, LayoutParams.MATCH_PARENT);
+		RelativeLayout.LayoutParams leftParams = new LayoutParams((int) convertDpToPixel(leftViewWidth, mContext), LayoutParams.MATCH_PARENT);
 		leftParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 		addView(leftView, leftParams);
 
-		RelativeLayout.LayoutParams rightParams = new LayoutParams(rightViewWidth, LayoutParams.MATCH_PARENT);
+		RelativeLayout.LayoutParams rightParams = new LayoutParams((int) convertDpToPixel(rightViewWidth, mContext), LayoutParams.MATCH_PARENT);
 		rightParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 		addView(rightView, rightParams);
 

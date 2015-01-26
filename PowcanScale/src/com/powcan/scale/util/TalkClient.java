@@ -1,52 +1,49 @@
 package com.powcan.scale.util;
+
 import java.io.*;
 
 import java.net.*;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 public class TalkClient {
 	public static void main(String args[]) {
 		try {
 			Socket socket = new Socket("120.24.60.164", 6010);
 
-			// �򱾻��4700�˿ڷ����ͻ����� {"cmd":"GAT","app":"zhifangcheng","amount":"6"}
-			BufferedReader sin = new BufferedReader(new InputStreamReader(System.in));
+			// 由Socket对象得到输出流
+			DataOutputStream os = new DataOutputStream(socket.getOutputStream());
 
-			// ��ϵͳ��׼�����豸����BufferedReader����
-			PrintWriter os = new PrintWriter(socket.getOutputStream());
-
-			// ��Socket����õ��������������PrintWriter����
+			// 由Socket对象得到输入流，并构造相应的BufferedReader对象
 			BufferedReader is = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-			// ��Socket����õ�����������������Ӧ��BufferedReader����
-			String readline;
+			String readline = "{\"cmd\":\"GAT\",\"app\":\"zhifangcheng\",\"amount\":\"6\"}";
 
-			readline = sin.readLine(); // ��ϵͳ��׼�������һ�ַ�
+			byte[] dataBuf = readline.getBytes();
+			int len = dataBuf.length;
 
-			while (!readline.equals("bye")) {
+			ByteBuffer dataLenBuf = ByteBuffer.allocate(4);
+			dataLenBuf.order(ByteOrder.LITTLE_ENDIAN);
+			dataLenBuf.putInt(0, len);
+			
+			ByteBuffer sendBuf = ByteBuffer.allocate(len + 4);
+			sendBuf.order(ByteOrder.LITTLE_ENDIAN);
+			sendBuf.put(dataLenBuf.array(), 0, 4);
+			sendBuf.put(dataBuf, 0, len);
+			
+			// 向120.24.60.164的6010端口发出客户请求
+			os.write(sendBuf.array(), 0, len + 4);
+			
+			// 刷新输出流，使Server马上收到该字符串
+			os.flush();
+			System.out.println("response:" + is.readLine());
 
-				// ���ӱ�׼���������ַ�Ϊ "bye"��ֹͣѭ��
-				os.println(readline);
-
-				// ����ϵͳ��׼���������ַ������Server
-				os.flush();
-
-				// ˢ���������ʹServer�����յ����ַ�
-				System.out.println("Client:" + readline);
-
-				// ��ϵͳ��׼����ϴ�ӡ������ַ�
-				System.out.println("Server:" + is.readLine());
-
-				// ��Server����һ�ַ�����ӡ����׼�����
-				readline = sin.readLine(); // ��ϵͳ��׼�������һ�ַ�
-
-			} // ����ѭ��
-			os.close(); // �ر�Socket�����
-			is.close(); // �ر�Socket������
-			socket.close(); // �ر�Socket
+			os.close(); // 关闭Socket输出流
+			is.close(); // 关闭Socket输入流
+			socket.close(); // 关闭Socket
 		} catch (Exception e) {
-			System.out.println("Error: " + e); // ���?���ӡ������Ϣ
+			System.out.println("Error: " + e); // 出错，则打印出错信息
 		}
-
 	}
 
 }

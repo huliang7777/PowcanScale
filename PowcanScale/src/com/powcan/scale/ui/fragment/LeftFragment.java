@@ -13,8 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.luckymonkey.ui.base.BaseFragment;
 import com.powcan.scale.R;
+import com.powcan.scale.ui.base.BaseFragment;
 
 public class LeftFragment extends BaseFragment {
 

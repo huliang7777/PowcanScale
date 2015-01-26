@@ -2,9 +2,11 @@ package com.powcan.scale;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 
-import com.luckymonkey.util.UiHelper;
+import com.powcan.scale.bean.GATRequest;
+import com.powcan.scale.net.NetRequest;
 import com.powcan.scale.ui.base.BaseActivity;
 import com.powcan.scale.ui.fragment.CenterFragment;
 import com.powcan.scale.ui.fragment.CenterFragment.OnViewPagerChangeListener;
@@ -14,6 +16,8 @@ import com.powcan.scale.ui.fragment.RightFragment;
 import com.powcan.scale.widget.SlidingMenu;
 
 public class MainActivity extends BaseActivity implements NavigationDrawerCallbacks {
+	
+	protected static final String TAG = MainActivity.class.getSimpleName();
 	
 	private SlidingMenu mSlidingMenu;
 	private LeftFragment mLeftFragment;
@@ -28,7 +32,14 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 
 	@Override
 	public void onInit() {
-
+		new Thread(){
+			public void run() {
+				GATRequest gat = new GATRequest(6);
+				String response = NetRequest.getInstance(getActivity()).send(gat);
+//				Log.d(TAG, response);
+//				System.out.println(response);
+			};
+		}.start();
 	}
 
 	@Override

@@ -1,11 +1,13 @@
 package com.powcan.scale;
 
+import java.util.List;
+
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 
 import com.powcan.scale.bean.GATRequest;
+import com.powcan.scale.bean.GATResponse;
 import com.powcan.scale.net.NetRequest;
 import com.powcan.scale.ui.base.BaseActivity;
 import com.powcan.scale.ui.fragment.CenterFragment;
@@ -35,7 +37,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 		new Thread(){
 			public void run() {
 				GATRequest gat = new GATRequest(6);
-				String response = NetRequest.getInstance(getActivity()).send(gat);
+//				String response = NetRequest.getInstance(getActivity()).send(gat);
+				GATResponse response = (GATResponse) NetRequest.getInstance(getActivity()).send(gat, GATResponse.class);
+				List<String> no = response.BKH;
 //				Log.d(TAG, response);
 //				System.out.println(response);
 			};

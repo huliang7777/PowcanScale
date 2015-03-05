@@ -2,43 +2,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-    
-    <RelativeLayout 
+    android:orientation="vertical" >
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:background="@color/theme">
-        
-        <TextView 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="罗洪"
-            android:textSize="@dimen/headline"
-            android:textColor="@android:color/black"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="@dimen/activity_margin"/>
-        
-        <ImageView 
-            android:id="@+id/btn_settings"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_settings"
-            android:scaleType="center"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="10dp"/>
-        
-    </RelativeLayout>
+        android:background="@color/theme" 
+        android:orientation="vertical">
 
-<ListView 
-    android:id="@+id/listView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#cccc"
-    android:choiceMode="singleChoice"
-    android:divider="@android:color/transparent"
-    android:dividerHeight="0dp"
-    tools:context="com.powcan.scale.NavigationDrawerFragment" />
+        <ImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:scaleType="centerCrop"
+            android:src="@color/theme" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_gravity="bottom">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_margin"
+                android:text="罗洪"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/headline" />
+
+            <ImageView
+                android:id="@+id/btn_settings"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_margin="10dp"
+                android:scaleType="center"
+                android:src="@drawable/ic_settings" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#cccc"
+        android:choiceMode="singleChoice"
+        android:divider="@color/gray"
+        android:dividerHeight="1px"
+        tools:context="com.powcan.scale.NavigationDrawerFragment" />
 
 </LinearLayout>

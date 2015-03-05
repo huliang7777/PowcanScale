@@ -5,7 +5,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="228dp"
+        android:layout_height="300dp"
         android:background="@color/white"
         android:orientation="vertical" 
         android:layout_gravity="top">
@@ -14,7 +14,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|top"
-            android:layout_margin="8dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="8dp"
             android:text="适中"
             android:textColor="@color/light_gray"
             android:textSize="@dimen/body" />
@@ -42,8 +43,8 @@
 
                 <ImageView
                     android:id="@+id/iv_circle"
-                    android:layout_width="144dp"
-                    android:layout_height="144dp"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
                     android:layout_gravity="center"
                     android:scaleType="centerCrop"
                     android:src="@drawable/btn_gray_circle" />
@@ -83,7 +84,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="您的体重已经超标，请控制饮食，多运动"
-                android:textColor="@color/gray"
+                android:textColor="@color/deep_gray"
                 android:textSize="@dimen/body" />
 
             <ImageView
@@ -105,6 +106,7 @@
         android:layout_height="match_parent"
         android:choiceMode="singleChoice"
         android:divider="@color/gray"
-        android:dividerHeight="1px" />
+        android:dividerHeight="1px"
+        android:visibility="gone" />
 
 </FrameLayout>

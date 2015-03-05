@@ -47,7 +47,7 @@ public class CenterFragment extends Fragment implements OnClickListener {
 		mLeftToogle.setOnClickListener(this);
 		mRightToogle.setOnClickListener(this);
 
-		pagerItemList.add(PagerFragment.getInstance(1));
+		pagerItemList.add(HomeFragment.getInstance(1));
 		pagerItemList.add(PagerFragment.getInstance(2));
 		pagerItemList.add(PagerFragment.getInstance(3));
 		pagerItemList.add(PagerFragment.getInstance(4));

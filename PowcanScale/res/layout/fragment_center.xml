@@ -10,19 +10,43 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/app_gray"
-        android:padding="5dip" >
+        android:padding="8dip" >
 
         <ImageView
             android:id="@+id/iv_center_left"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_alignParentLeft="true"
             android:src="@drawable/base_main_action_personal_normal" />
+        
+        <TextView 
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:text="罗洪"
+            android:textColor="@color/deep_gray"
+            android:textSize="@dimen/title"
+            android:layout_toRightOf="@+id/iv_center_left"/>
+        
+        <TextView 
+            android:id="@+id/tv_prompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:text="上称前摇一摇"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/subhead"
+            android:layout_alignParentRight="true"/>
 
         <ImageView
             android:id="@+id/iv_center_right"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_alignParentRight="true"
             android:src="@drawable/biz_news_main_back_normal"
             android:visibility="gone" />

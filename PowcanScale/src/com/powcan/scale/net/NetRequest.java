@@ -10,9 +10,12 @@ import java.nio.ByteOrder;
 import com.google.gson.Gson;
 
 import android.content.Context;
+import android.util.Log;
 
 public class NetRequest {
 	
+	public static final String TAG = NetRequest.class.getSimpleName();
+
 	public static final String HOST = "120.24.60.164";
 	public static final int PORT = 6010;
 	
@@ -39,12 +42,13 @@ public class NetRequest {
 		return send(mGson.toJson(obj));
 	}
 	
-	public Object send(Object obj, Class c) {
+	public <T> T send(Object obj, Class<T> c) {
 		String response = send(obj);
 		return mGson.fromJson(response, c);
 	}
 	
 	public String send(String content) {
+		Log.d(TAG, "send request - " + content);
 		String response = null;
 		try {
 			Socket socket = new Socket(HOST, PORT);
@@ -79,6 +83,7 @@ public class NetRequest {
 				responseBuf.append(line);				
 			}
 			response = responseBuf.toString();
+			Log.d(TAG, "send response - " + response);
 
 			os.close(); // 关闭Socket输出流
 			is.close(); // 关闭Socket输入流

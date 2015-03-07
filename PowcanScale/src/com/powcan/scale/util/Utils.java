@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.MediaColumns;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
@@ -91,6 +92,18 @@ public class Utils {
 		Editor editor = sp.edit();
 		editor.putString("bind_flag", flagStr);
 		editor.commit();
+	}
+
+	/**
+	 * 获取手机的imei.
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static String getDeviceId(Context context) {
+		TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+		String imei = telephonyManager.getDeviceId();
+		return imei;
 	}
 
 	public static List<String> getTagsList(String originalText) {

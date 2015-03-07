@@ -6,8 +6,12 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
-import com.powcan.scale.bean.GATRequest;
-import com.powcan.scale.bean.GATResponse;
+import com.powcan.scale.bean.http.BaseResponse;
+import com.powcan.scale.bean.http.GATRequest;
+import com.powcan.scale.bean.http.GATResponse;
+import com.powcan.scale.bean.http.LGNRequest;
+import com.powcan.scale.bean.http.LGNResponse;
+import com.powcan.scale.bean.http.REGRequest;
 import com.powcan.scale.net.NetRequest;
 import com.powcan.scale.ui.base.BaseActivity;
 import com.powcan.scale.ui.fragment.CenterFragment;
@@ -15,6 +19,8 @@ import com.powcan.scale.ui.fragment.CenterFragment.OnViewPagerChangeListener;
 import com.powcan.scale.ui.fragment.LeftFragment;
 import com.powcan.scale.ui.fragment.LeftFragment.NavigationDrawerCallbacks;
 import com.powcan.scale.ui.fragment.RightFragment;
+import com.powcan.scale.util.Md5Utils;
+import com.powcan.scale.util.Utils;
 import com.powcan.scale.widget.SlidingMenu;
 
 public class MainActivity extends BaseActivity implements NavigationDrawerCallbacks {
@@ -36,12 +42,49 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	public void onInit() {
 		new Thread(){
 			public void run() {
-				GATRequest gat = new GATRequest(6);
-//				String response = NetRequest.getInstance(getActivity()).send(gat);
-				GATResponse response = (GATResponse) NetRequest.getInstance(getActivity()).send(gat, GATResponse.class);
-				List<String> no = response.BKH;
-//				Log.d(TAG, response);
-//				System.out.println(response);
+				if (!mSpUtil.isLogin()) {
+					GATRequest gat = new GATRequest(6);
+					GATResponse response = (GATResponse) NetRequest.getInstance(getActivity()).send(gat, GATResponse.class);
+					if (response != null) {
+						List<Integer> noList = response.BKH;
+						if (noList != null && noList.size() > 0) {
+							Integer account = noList.get(1);
+							int height = 178;
+							
+							REGRequest reg = new REGRequest();
+							reg.account = account + "";
+							reg.pswd = Md5Utils.encryptMD5("123456");
+							reg.imei = Utils.getDeviceId(getActivity());
+							reg.gender = "M";
+							reg.birthday = "19880722";
+							reg.height = height + "";
+							reg.phone = "13424269212";
+							reg.qq = "442666876";
+							reg.email = "442666876@qq.com";
+							
+							BaseResponse regResponse = (BaseResponse) NetRequest.getInstance(getActivity()).send(reg, BaseResponse.class);
+							if (regResponse != null && regResponse.RES == 201) {
+								mSpUtil.setLogin(true);
+							}
+						}
+					}
+				} else {
+					LGNRequest request = new LGNRequest();
+					request.number = "2001978";
+					request.pswd = Md5Utils.encryptMD5("123456");
+					
+					LGNResponse response = NetRequest.getInstance(getActivity()).send(request, LGNResponse.class);
+					if (response != null && response.RES == 301) {
+						mSpUtil.setLogin(true);
+						mSpUtil.setAccount(response.ACT);
+						mSpUtil.setGender(response.GDR);
+						mSpUtil.setBirthday(response.GDR);
+						mSpUtil.setHeight(response.HET);
+						mSpUtil.setPhone(response.PHN);
+						mSpUtil.setQQ(response.QQN);
+						mSpUtil.setEmail(response.EML);
+					}
+				}
 			};
 		}.start();
 	}

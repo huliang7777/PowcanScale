@@ -156,22 +156,22 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 //					
 //					LGNResponse response = NetRequest.getInstance(getActivity()).send(request, LGNResponse.class);
 					
-					int account = mSpUtil.getAccount();
-					
-					RECRequest request = new RECRequest();
-					request.account = account + "";
-					request.weight = "11.1";
-					request.fat = "11.123456";
-					request.water = "11.1";
-					request.muscle = "11.1";
-					request.bone = "11.1";
-					request.bmr = "11.1";
-					request.sfat = "11.1";
-					request.infat = "11.1";
-					request.bodyage = "11.1";
-					request.amr = "11.1";
-					
-					LGNResponse response = NetRequest.getInstance(getActivity()).send(request, LGNResponse.class);
+//					int account = mSpUtil.getAccount();
+//					
+//					RECRequest request = new RECRequest();
+//					request.account = account + "";
+//					request.weight = "11.1";
+//					request.fat = "11.123456";
+//					request.water = "11.1";
+//					request.muscle = "11.1";
+//					request.bone = "11.1";
+//					request.bmr = "11.1";
+//					request.sfat = "11.1";
+//					request.infat = "11.1";
+//					request.bodyage = "11.1";
+//					request.amr = "11.1";
+//					
+//					LGNResponse response = NetRequest.getInstance(getActivity()).send(request, LGNResponse.class);
 				}
 			};
 		}.start();

@@ -1,12 +1,24 @@
 package com.powcan.scale;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Vibrator;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.powcan.scale.bean.http.LGNRequest;
 import com.powcan.scale.bean.http.LGNResponse;
-import com.powcan.scale.bean.http.RECRequest;
 import com.powcan.scale.net.NetRequest;
 import com.powcan.scale.ui.base.BaseActivity;
 import com.powcan.scale.ui.fragment.CenterFragment;
@@ -21,10 +33,17 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	
 	protected static final String TAG = MainActivity.class.getSimpleName();
 	
+	private static final int SENSOR_SHAKE = 10; 
+	
+    private BluetoothAdapter mBluetoothAdapter;
+	
 	private SlidingMenu mSlidingMenu;
 	private LeftFragment mLeftFragment;
 	private RightFragment mRightFragment;
 	private CenterFragment mCenterFragment;
+	
+	private Vibrator vibrator;
+	private SensorManager mSensorManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +53,29 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 
 	@Override
 	public void onInit() {
+		// Use this check to determine whether BLE is supported on the device.  Then you can
+        // selectively disable BLE-related features.
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
+        // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
+        // BluetoothAdapter through BluetoothManager.
+        final BluetoothManager bluetoothManager =
+                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        mBluetoothAdapter = bluetoothManager.getAdapter();
+
+        // Checks if Bluetooth is supported on the device.
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+		
+		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+		
 		new Thread(){
 			public void run() {
 				if (!mSpUtil.isLogin()) {
@@ -221,6 +263,22 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 			}
 		});
 	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		registerSensor();
+	}
+
+	private void registerSensor() {
+		mSensorManager.registerListener(sensorEventListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		mSensorManager.unregisterListener(sensorEventListener);
+	}
 
 	public void showLeftViewToogle() {
 		mSlidingMenu.showLeftViewToogle();
@@ -234,5 +292,48 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	public void onNavigationDrawerItemSelected(int position, Object obj) {
 		
 	}
+	
+	/**
+     * 动作执行
+     */ 
+    private Handler handler = new Handler() { 
+ 
+        @Override 
+        public void handleMessage(Message msg) { 
+            super.handleMessage(msg); 
+            switch (msg.what) { 
+            case SENSOR_SHAKE: 
+                Toast.makeText(MainActivity.this, "检测到摇晃，执行操作！", Toast.LENGTH_SHORT).show(); 
+                Log.i(TAG, "检测到摇晃，执行操作！"); 
+                break; 
+            } 
+        } 
+ 
+    }; 
+    
+    private SensorEventListener sensorEventListener = new SensorEventListener() {
+		
+		@Override
+		public void onSensorChanged(SensorEvent event) {
+			// 传感器信息改变时执行该方法 
+            float[] values = event.values; 
+            float x = values[0]; // x轴方向的重力加速度，向右为正 
+            float y = values[1]; // y轴方向的重力加速度，向前为正 
+            float z = values[2]; // z轴方向的重力加速度，向上为正 
+            // 一般在这三个方向的重力加速度达到40就达到了摇晃手机的状态。 
+            int medumValue = 12;// 三星 i9250、魅族怎么晃都不会超过15，没办法，只设置12了 
+            if (Math.abs(x) > medumValue || Math.abs(y) > medumValue || Math.abs(z) > medumValue) { 
+                Log.i(TAG, "x轴方向的重力加速度" + x +  "；y轴方向的重力加速度" + y +  "；z轴方向的重力加速度" + z); 
+                vibrator.vibrate(200); 
+                Message msg = new Message(); 
+                msg.what = SENSOR_SHAKE; 
+                handler.sendMessage(msg); 				
+            }
+		}
+		
+		@Override
+		public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		}
+	};
 
 }

@@ -1,13 +1,21 @@
 package com.powcan.scale;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -15,16 +23,19 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.os.Vibrator;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.powcan.scale.bean.http.LGNRequest;
 import com.powcan.scale.bean.http.LGNResponse;
-import com.powcan.scale.ble.DeviceControlActivity;
+import com.powcan.scale.ble.BluetoothLeService;
+import com.powcan.scale.ble.SampleGattAttributes;
 import com.powcan.scale.net.NetRequest;
 import com.powcan.scale.ui.base.BaseActivity;
 import com.powcan.scale.ui.fragment.CenterFragment;
@@ -55,6 +66,13 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     private BluetoothAdapter mBluetoothAdapter;
     private ArrayList<BluetoothDevice> mLeDevices;
     private boolean mScanning;
+    private BluetoothLeService mBluetoothLeService;
+    
+    private String mDeviceName;
+    private String mDeviceAddress;
+    
+    private boolean mConnected = false;
+    private BluetoothGattCharacteristic mNotifyCharacteristic;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -288,7 +306,22 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
                 startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             }
         }
+        
+        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        if (mBluetoothLeService != null) {
+            final boolean result = mBluetoothLeService.connect(mDeviceAddress);
+            Log.d(TAG, "Connect request result=" + result);
+        }
 	}
+
+    private static IntentFilter makeGattUpdateIntentFilter() {
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothLeService.ACTION_GATT_CONNECTED);
+        intentFilter.addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED);
+        intentFilter.addAction(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED);
+        intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
+        return intentFilter;
+    }
 
 	private void registerSensor() {
 		mSensorManager.registerListener(sensorEventListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
@@ -298,6 +331,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	protected void onPause() {
 		super.onPause();
 		mSensorManager.unregisterListener(sensorEventListener);
+        unregisterReceiver(mGattUpdateReceiver);
 	}
 
 	public void showLeftViewToogle() {
@@ -340,7 +374,6 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
                     public void run() {
                         mScanning = false;
                         mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                        invalidateOptionsMenu();
                     }
                 }, SCAN_PERIOD);
 
@@ -350,7 +383,6 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
                 mScanning = false;
                 mBluetoothAdapter.stopLeScan(mLeScanCallback);
             }
-            invalidateOptionsMenu();
         }
     }; 
 
@@ -363,16 +395,127 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                	if (device == null) return;
-                	mLeDevices.add(device);
-                    if (mScanning) {
-                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                        mScanning = false;
-                    }
+                	if (device == null || TextUtils.isEmpty(device.getName())) return;
+                	
+                	if ("Healthcare".equals(device.getName())) {
+                		mLeDevices.add(device);
+                		
+                        mDeviceName = device.getName();
+                        mDeviceAddress = device.getAddress();
+
+                        Intent gattServiceIntent = new Intent(getApplicationContext(), BluetoothLeService.class);
+                        bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+                        
+	                    if (mScanning) {
+	                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
+	                        mScanning = false;
+	                    }
+                	}
                 }
             });
         }
     };
+
+    // Code to manage Service lifecycle.
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service) {
+            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
+            if (!mBluetoothLeService.initialize()) {
+                Log.e(TAG, "Unable to initialize Bluetooth");
+                finish();
+            }
+            // Automatically connects to the device upon successful start-up initialization.
+            mBluetoothLeService.connect(mDeviceAddress);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mBluetoothLeService = null;
+        }
+    };
+
+    // Handles various events fired by the Service.
+    // ACTION_GATT_CONNECTED: connected to a GATT server.
+    // ACTION_GATT_DISCONNECTED: disconnected from a GATT server.
+    // ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
+    // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read
+    //                        or notification operations.
+    private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
+                mConnected = true;
+                updateConnectionState(R.string.connected);
+            } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
+                mConnected = false;
+                updateConnectionState(R.string.disconnected);
+            } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
+                // Show all the supported services and characteristics on the user interface.
+                displayGattServices(mBluetoothLeService.getSupportedGattServices());
+            } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
+                displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
+            }
+        }
+    };
+
+    private void displayData(String data) {
+        if (data != null) {
+        	Log.d(TAG, "displayData: " + data);
+        }
+    }
+
+    private void updateConnectionState(final int resourceId) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mCenterFragment.updateConnectionState(resourceId);
+//                BluetoothGattCharacteristic characteristic = new BluetoothGattCharacteristic(UUID.fromString(SampleGattAttributes.GATT_SERVICES), properties, permissions);
+//                mBluetoothLeService.writeCharacteristic(characteristic);
+//                mBluetoothLeService.writeCharacteristic(null);
+            }
+        });
+    }
+    
+    // Demonstrates how to iterate through the supported GATT Services/Characteristics.
+    // In this sample, we populate the data structure that is bound to the ExpandableListView
+    // on the UI.
+    private void displayGattServices(List<BluetoothGattService> gattServices) {
+        if (gattServices == null) return;
+        String uuid = null;
+
+        // Loops through available GATT Services.
+        for (BluetoothGattService gattService : gattServices) {
+            uuid = gattService.getUuid().toString();
+            if (SampleGattAttributes.isHealthcareServices(uuid)) {
+	            List<BluetoothGattCharacteristic> gattCharacteristics = gattService.getCharacteristics();
+	
+	            // Loops through available Characteristics.
+	            for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
+	                uuid = gattCharacteristic.getUuid().toString();
+	                if (SampleGattAttributes.isHealthcareMeasurement(uuid)) {
+	                	final int charaProp = gattCharacteristic.getProperties();
+                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
+                            // If there is an active notification on a characteristic, clear
+                            // it first so it doesn't update the data field on the user interface.
+                            if (mNotifyCharacteristic != null) {
+                                mBluetoothLeService.setCharacteristicNotification(mNotifyCharacteristic, false);
+                                mNotifyCharacteristic = null;
+                            }
+                            mBluetoothLeService.readCharacteristic(gattCharacteristic);
+                        }
+                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
+                            mNotifyCharacteristic = gattCharacteristic;
+                            mBluetoothLeService.setCharacteristicNotification(gattCharacteristic, true);
+                        }
+	                }
+	            }
+	        	break;
+	        }
+        }
+    }
     
     private SensorEventListener sensorEventListener = new SensorEventListener() {
 		

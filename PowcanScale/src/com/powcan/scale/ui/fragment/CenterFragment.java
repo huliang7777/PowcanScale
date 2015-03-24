@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.powcan.scale.MainActivity;
 import com.powcan.scale.R;
@@ -21,6 +22,7 @@ public class CenterFragment extends Fragment implements OnClickListener {
 	private ViewPager mViewPager;
 	private ImageView mLeftToogle;
 	private ImageView mRightToogle;
+    private TextView mConnectionState;
 
 	private OnViewPagerChangeListener listener;
 
@@ -41,6 +43,7 @@ public class CenterFragment extends Fragment implements OnClickListener {
 		mViewPager = (ViewPager) view.findViewById(R.id.vp);
 		mLeftToogle = (ImageView) view.findViewById(R.id.iv_center_left);
 		mRightToogle = (ImageView) view.findViewById(R.id.iv_center_right);
+        mConnectionState = (TextView) view.findViewById(R.id.connection_state);
 	}
 
 	private void initView(View view) {
@@ -127,6 +130,12 @@ public class CenterFragment extends Fragment implements OnClickListener {
 	 */
 	public interface OnViewPagerChangeListener {
 		void onPageChage(int position);
+	}
+
+	public void updateConnectionState(int resourceId) {
+		if (mConnectionState != null) {
+			mConnectionState.setText(resourceId);
+		}
 	}
 
 }

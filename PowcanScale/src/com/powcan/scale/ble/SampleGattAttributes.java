@@ -23,13 +23,13 @@ import java.util.HashMap;
  */
 public class SampleGattAttributes {
     private static HashMap<String, String> attributes = new HashMap();
-    public static String HEALTHCARE_SERVICES = "0000ffe0-0000-1000-8000-00805f9b34fb";
+    public static String HEALTHCARE_SERVICE = "0000ffe0-0000-1000-8000-00805f9b34fb";
     public static String HEALTHCARE_MEASUREMENT = "0000ffe1-0000-1000-8000-00805f9b34fb";//"00002a37-0000-1000-8000-00805f9b34fb";
     public static String CLIENT_CHARACTERISTIC_CONFIG = "00002902-0000-1000-8000-00805f9b34fb";
 
     static {
         // Sample Services.
-        attributes.put(HEALTHCARE_SERVICES, "Healthcare Service");
+        attributes.put(HEALTHCARE_SERVICE, "Healthcare Service");
         attributes.put("0000180a-0000-1000-8000-00805f9b34fb", "Device Information Service");
         // Sample Characteristics.
         attributes.put(HEALTHCARE_MEASUREMENT, "Healthcare Measurement");
@@ -39,5 +39,13 @@ public class SampleGattAttributes {
     public static String lookup(String uuid, String defaultName) {
         String name = attributes.get(uuid);
         return name == null ? defaultName : name;
+    }
+    
+    public static boolean isHealthcareServices(String uuid) {
+    	return HEALTHCARE_SERVICE.equals(uuid);
+    }
+    
+    public static boolean isHealthcareMeasurement(String uuid) {
+    	return HEALTHCARE_MEASUREMENT.equals(uuid);
     }
 }

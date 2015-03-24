@@ -1,8 +1,13 @@
 package com.powcan.scale;
 
+import java.util.ArrayList;
+
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -19,6 +24,7 @@ import android.widget.Toast;
 
 import com.powcan.scale.bean.http.LGNRequest;
 import com.powcan.scale.bean.http.LGNResponse;
+import com.powcan.scale.ble.DeviceControlActivity;
 import com.powcan.scale.net.NetRequest;
 import com.powcan.scale.ui.base.BaseActivity;
 import com.powcan.scale.ui.fragment.CenterFragment;
@@ -32,10 +38,11 @@ import com.powcan.scale.widget.SlidingMenu;
 public class MainActivity extends BaseActivity implements NavigationDrawerCallbacks {
 	
 	protected static final String TAG = MainActivity.class.getSimpleName();
-	
+
+    private static final int REQUEST_ENABLE_BT = 1;
+    // Stops scanning after 10 seconds.
+    private static final long SCAN_PERIOD = 10000;
 	private static final int SENSOR_SHAKE = 10; 
-	
-    private BluetoothAdapter mBluetoothAdapter;
 	
 	private SlidingMenu mSlidingMenu;
 	private LeftFragment mLeftFragment;
@@ -44,6 +51,10 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	
 	private Vibrator vibrator;
 	private SensorManager mSensorManager;
+	
+    private BluetoothAdapter mBluetoothAdapter;
+    private ArrayList<BluetoothDevice> mLeDevices;
+    private boolean mScanning;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -268,6 +279,15 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	protected void onResume() {
 		super.onResume();
 		registerSensor();
+
+        // Ensures Bluetooth is enabled on the device.  If Bluetooth is not currently enabled,
+        // fire an intent to display a dialog asking the user to grant permission to enable it.
+        if (!mBluetoothAdapter.isEnabled()) {
+            if (!mBluetoothAdapter.isEnabled()) {
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            }
+        }
 	}
 
 	private void registerSensor() {
@@ -296,7 +316,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	/**
      * 动作执行
      */ 
-    private Handler handler = new Handler() { 
+    private Handler mHandler = new Handler() { 
  
         @Override 
         public void handleMessage(Message msg) { 
@@ -305,11 +325,54 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
             case SENSOR_SHAKE: 
                 Toast.makeText(MainActivity.this, "检测到摇晃，执行操作！", Toast.LENGTH_SHORT).show(); 
                 Log.i(TAG, "检测到摇晃，执行操作！"); 
+
+                mLeDevices.clear();
+                scanLeDevice(true);
                 break; 
             } 
         } 
- 
+
+        private void scanLeDevice(final boolean enable) {
+            if (enable) {
+                // Stops scanning after a pre-defined scan period.
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mScanning = false;
+                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                        invalidateOptionsMenu();
+                    }
+                }, SCAN_PERIOD);
+
+                mScanning = true;
+                mBluetoothAdapter.startLeScan(mLeScanCallback);
+            } else {
+                mScanning = false;
+                mBluetoothAdapter.stopLeScan(mLeScanCallback);
+            }
+            invalidateOptionsMenu();
+        }
     }; 
+
+    // Device scan callback.
+    private BluetoothAdapter.LeScanCallback mLeScanCallback =
+            new BluetoothAdapter.LeScanCallback() {
+
+        @Override
+        public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                	if (device == null) return;
+                	mLeDevices.add(device);
+                    if (mScanning) {
+                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                        mScanning = false;
+                    }
+                }
+            });
+        }
+    };
     
     private SensorEventListener sensorEventListener = new SensorEventListener() {
 		
@@ -327,7 +390,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
                 vibrator.vibrate(200); 
                 Message msg = new Message(); 
                 msg.what = SENSOR_SHAKE; 
-                handler.sendMessage(msg); 				
+                mHandler.sendMessage(msg); 				
             }
 		}
 		
@@ -335,5 +398,15 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 		public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		}
 	};
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // User chose not to enable Bluetooth.
+        if (requestCode == REQUEST_ENABLE_BT && resultCode == Activity.RESULT_CANCELED) {
+            finish();
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
 }

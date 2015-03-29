@@ -64,7 +64,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	private SensorManager mSensorManager;
 	
     private BluetoothAdapter mBluetoothAdapter;
-    private ArrayList<BluetoothDevice> mLeDevices;
+    private ArrayList<BluetoothDevice> mLeDevices = new ArrayList<BluetoothDevice>();
     private boolean mScanning;
     private BluetoothLeService mBluetoothLeService;
     

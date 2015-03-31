@@ -15,6 +15,7 @@ import com.powcan.scale.R;
 import com.powcan.scale.bean.UserInfo;
 import com.powcan.scale.bean.http.LGNRequest;
 import com.powcan.scale.bean.http.LGNResponse;
+import com.powcan.scale.db.UserInfoDb;
 import com.powcan.scale.dialog.LoadingDialog;
 import com.powcan.scale.net.NetRequest;
 import com.powcan.scale.ui.base.BaseActivity;
@@ -29,7 +30,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	private TextView tvToRegister;
 	
 	private LoadingDialog loadingDialog;
+	private UserInfoDb dbUserInfo;
 
+	private String account;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -42,6 +46,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 //		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 //		actionBar.setDisplayShowTitleEnabled(true);
 //		actionBar.setTitle("登录");
+		
+		dbUserInfo = new UserInfoDb( this );
 	}
 
 	@Override
@@ -53,7 +59,13 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	}
 
 	@Override
-	public void onInitViewData() {
+	public void onInitViewData() 
+	{
+		account = getIntent().getStringExtra("account");
+		if( !TextUtils.isEmpty( account ) && !account.equals("0") )
+		{
+			etUsername.setText( account );
+		}
 	}
 
 	@Override
@@ -66,9 +78,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_commit:
-			if (checkUsername() && checkPassword()) {
-				requestLogin();
-			}
+			gotoMain(); 
+//			if (checkUsername() && checkPassword()) {
+//				requestLogin();
+//			}
 			break;
 		case R.id.tv_to_register:
 			Intent intent = new Intent(this, RegisterActivity.class);
@@ -141,8 +154,9 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				{
 					userInfo = new UserInfo();
 					userInfo.setAccount( String.valueOf( response.ACT ) );
+					userInfo.setUsername( response.NKN );
 					userInfo.setGender(response.GDR);
-					userInfo.setBirthday(response.GDR);
+					userInfo.setBirthday(response.AGE);
 					userInfo.setHeight( String.valueOf( response.HET ) );
 					userInfo.setPhone(response.PHN);
 					userInfo.setQq(response.QQN);
@@ -158,6 +172,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				if ( userInfo != null ) 
 				{
 					SpUtil.getInstance( LoginActivity.this ).saveCurrUser(userInfo);
+					dbUserInfo.insertOrUpdateUserInfo(userInfo);
 					gotoMain();
 				}
 				else

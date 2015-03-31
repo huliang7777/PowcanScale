@@ -4,6 +4,7 @@
     
     <color name="white">#FFFFFF</color>
     <color name="transparent">#00000000</color>
+    <color name="half_transparent">#AA000000</color>
     <color name="black">#000000</color>
     <color name="red">#FF0000</color>
     <color name="blue">#0066FF</color>

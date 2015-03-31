@@ -1,10 +1,14 @@
 package com.powcan.scale.ui.fragment;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
+import android.app.SearchManager.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,12 +17,20 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.powcan.scale.R;
+import com.powcan.scale.adapter.UserListAdapter;
+import com.powcan.scale.bean.UserInfo;
+import com.powcan.scale.db.UserInfoDb;
+import com.powcan.scale.dialog.LoadingDialog;
+import com.powcan.scale.ui.LoginActivity;
 import com.powcan.scale.ui.base.BaseFragment;
+import com.powcan.scale.ui.profile.UserInfoDetailActivity;
 import com.powcan.scale.ui.settings.SettingsActivity;
+import com.powcan.scale.util.SpUtil;
 
-public class LeftFragment extends BaseFragment {
+public class LeftFragment extends BaseFragment implements OnClickListener {
 
     /**
      * Remember the position of the selected item.
@@ -42,6 +54,12 @@ public class LeftFragment extends BaseFragment {
     private boolean mUserLearnedDrawer;
 
 	private View mBtnSettings;
+	private TextView tvUsername;
+
+	private UserInfoDb dbUserInfo;
+	private UserInfo curUser;
+	private ArrayList<UserInfo> users;
+	private UserListAdapter mAdapter;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,7 +78,12 @@ public class LeftFragment extends BaseFragment {
         mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
 
         // Select either the default item (0) or the last selected item.
-        selectItem(mCurrentSelectedPosition);
+//        selectItem(mCurrentSelectedPosition);
+        
+        curUser = SpUtil.getInstance(mContext).getCurrUser();
+		dbUserInfo = new UserInfoDb( mContext ); 
+		users = dbUserInfo.getUserInfoes();
+		mAdapter = new UserListAdapter(mContext, users);
 	}
 
 	@Override
@@ -69,20 +92,20 @@ public class LeftFragment extends BaseFragment {
     	
         mDrawerListView = (ListView) mDrawer.findViewById(R.id.listView);        
         mBtnSettings = mDrawer.findViewById(R.id.btn_settings);
+        tvUsername = (TextView) mDrawer.findViewById(R.id.tv_username);
 	}
 
 	@Override
 	public void onInitViewData() {
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
-                getActivity(),
-                android.R.layout.simple_list_item_1,
-                android.R.id.text1,
-                new String[]{
-                        getString(R.string.title_section1),
-                        getString(R.string.title_section2),
-                        getString(R.string.title_section3),
-                }));
+        mDrawerListView.setAdapter( mAdapter );
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+        
+        String username = curUser.getUsername();
+        if ( TextUtils.isEmpty(username) || username.equalsIgnoreCase("NULL") )
+        {
+        	username = curUser.getAccount();
+        }
+        tvUsername.setText(username);
 	}
 
 	@Override
@@ -104,6 +127,8 @@ public class LeftFragment extends BaseFragment {
 		        }
 			}
 		});
+        
+        tvUsername.setOnClickListener( this );
 	}
 
     @Override
@@ -133,10 +158,7 @@ public class LeftFragment extends BaseFragment {
         
         Object obj = null;
         if (mDrawerListView != null) {
-        	ListAdapter mAdapter = mDrawerListView.getAdapter();
-        	if (mAdapter != null) {
-        		obj = mAdapter.getItem(position);
-        	}
+        	obj = users.get( position ).getAccount();
             mDrawerListView.setItemChecked(position, true);
         }
         closeDrawer();
@@ -165,4 +187,16 @@ public class LeftFragment extends BaseFragment {
          */
         void onNavigationDrawerItemSelected(int position, Object obj);
     }
+
+	@Override
+	public void onClick(View view) 
+	{
+		switch ( view.getId() ) 
+		{
+			case R.id.tv_username:
+				Intent intent = new Intent(mContext, UserInfoDetailActivity.class);
+				startActivity(intent);
+				break;
+		}
+	}
 }

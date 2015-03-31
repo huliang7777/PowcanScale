@@ -128,6 +128,19 @@ public class UserInfoDb extends BaseDb {
 		
 		return userInfo;
 	}
+	
+	public void insertOrUpdateUserInfo( UserInfo userInfo )
+	{
+		UserInfo user = getUserInfo( userInfo.getAccount() );
+		if( user == null )
+		{
+			insertUserInfo(userInfo);
+		}
+		else
+		{
+			updateUserInfo(userInfo);
+		}
+	}
 
 	public ArrayList<UserInfo> getUserInfoes() 
 	{

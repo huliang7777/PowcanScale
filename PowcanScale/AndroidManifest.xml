@@ -7,7 +7,7 @@
     <uses-sdk
         android:minSdkVersion="18"
         android:targetSdkVersion="19" />
-    
+
     <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
@@ -21,10 +21,10 @@
     <!-- 访问网络，网络定位需要上网 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    
+
     <!-- 蓝牙访问权限 -->
-	<uses-permission android:name="android.permission.BLUETOOTH"/>
-	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
         android:allowBackup="true"
@@ -42,18 +42,19 @@
         </activity>
         <activity android:name="com.powcan.scale.MainActivity" />
         <activity android:name="com.powcan.scale.ui.profile.ProfileActivity" />
-		<activity android:name="com.powcan.scale.ui.RegisterActivity" />
-		<activity android:name="com.powcan.scale.ui.settings.SettingsActivity" />
-		<service android:name="com.powcan.scale.ble.BluetoothLeService" />
-		
-		<meta-data
+        <activity android:name="com.powcan.scale.ui.RegisterActivity" />
+        <activity android:name="com.powcan.scale.ui.settings.SettingsActivity" />
+        <activity android:name="com.powcan.scale.ui.profile.UserInfoDetailActivity" />
+
+        <service android:name="com.powcan.scale.ble.BluetoothLeService" />
+
+        <meta-data
             android:name="UMENG_APPKEY"
             android:value="54c398f9fd98c5a3c2000085" >
         </meta-data>
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="OFFICIAL" />
-
     </application>
 
     <supports-screens

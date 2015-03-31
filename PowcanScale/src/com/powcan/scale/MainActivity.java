@@ -36,6 +36,7 @@ import com.powcan.scale.bean.http.LGNResponse;
 import com.powcan.scale.ble.BluetoothLeService;
 import com.powcan.scale.ble.SampleGattAttributes;
 import com.powcan.scale.net.NetRequest;
+import com.powcan.scale.ui.LoginActivity;
 import com.powcan.scale.ui.base.BaseActivity;
 import com.powcan.scale.ui.fragment.CenterFragment;
 import com.powcan.scale.ui.fragment.CenterFragment.OnViewPagerChangeListener;
@@ -258,7 +259,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	public void onInitViewData() {
 //		int width = UiHelper.getDisplayMetrics(this).widthPixels;
 //		width = width > 250 ? (width / 2 > 250 ? width / 2 : width) : width;
-		int width = 250;
+		int width = 350;
 
 		View leftView = View.inflate(this, R.layout.frame_left, null);
 		View rightView = View.inflate(this, R.layout.frame_right, null);
@@ -346,6 +347,10 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	@Override
 	public void onNavigationDrawerItemSelected(int position, Object obj) 
 	{
+		Intent intent = new Intent( this, LoginActivity.class );
+        intent.putExtra( "account", (String)obj );
+        startActivity(intent);
+        finish();
 	}
 	
 	/**

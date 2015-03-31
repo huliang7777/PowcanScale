@@ -91,7 +91,6 @@ public class NetRequest {
 		} catch (Exception e) {
 			e.printStackTrace(); // 出错，则打印出错信息
 		}
-		
 		return response;
 	}
 

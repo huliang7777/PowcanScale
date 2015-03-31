@@ -1,6 +1,7 @@
 package com.powcan.scale;
 
 import com.powcan.scale.R;
+import com.powcan.scale.ui.LoginActivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,7 +11,7 @@ import android.view.Window;
 
 public class SplashActivity extends Activity {
 
-	private final int SPLASH_DISPLAY_LENGHT = 3000; // �ӳ�����
+	private final int SPLASH_DISPLAY_LENGHT = 2000; 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +23,7 @@ public class SplashActivity extends Activity {
 
 			@Override
 			public void run() {
-				Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
+				Intent mainIntent = new Intent(SplashActivity.this, LoginActivity.class);
 				startActivity(mainIntent);
 				finish();
 			}

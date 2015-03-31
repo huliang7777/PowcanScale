@@ -1,6 +1,7 @@
 package com.powcan.scale.ui.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -15,6 +16,7 @@ import android.widget.ListView;
 
 import com.powcan.scale.R;
 import com.powcan.scale.ui.base.BaseFragment;
+import com.powcan.scale.ui.settings.SettingsActivity;
 
 public class LeftFragment extends BaseFragment {
 
@@ -97,6 +99,8 @@ public class LeftFragment extends BaseFragment {
 			public void onClick(View arg0) {
 		        if (mCallbacks != null) {
 		            mCallbacks.onNavigationDrawerItemSelected(R.id.btn_settings, null);
+		    		Intent intent = new Intent(getActivity(), SettingsActivity.class);
+		    		startActivity(intent);
 		        }
 			}
 		});

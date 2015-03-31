@@ -1,9 +1,10 @@
 package com.powcan.scale.util;
 
+import com.powcan.scale.bean.UserInfo;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.text.TextUtils;
 
 public class SpUtil {
 	private static final String NAME = "preferences";
@@ -61,20 +62,28 @@ public class SpUtil {
 		getEdit().putBoolean("isLogin", isLogin).commit();
 	}
 	
-	public int getAccount() {
-		return getSp().getInt("account", 0);
+	public String getAccount() {
+		return getSp().getString("account", "0");
 	}
 
-	public void setAccount(int account) {
-		getEdit().putInt("account", account).commit();
+	public void setAccount(String account) {
+		getEdit().putString("account", account).commit();
 	}
 	
-	public int getHeight() {
-		return getSp().getInt("height", 0);
+	public String getUsername() {
+		return getSp().getString("username", "");
 	}
 
-	public void setHeight(int height) {
-		getEdit().putInt("height", height).commit();
+	public void setUsername(String username) {
+		getEdit().putString("username", username).commit();
+	}
+	
+	public String getHeight() {
+		return getSp().getString("height", "0");
+	}
+
+	public void setHeight(String height) {
+		getEdit().putString("height", height).commit();
 	}
 	
 	public String getPhone() {
@@ -115,5 +124,31 @@ public class SpUtil {
 
 	public void setGender(String gender) {
 		getEdit().putString("gender", gender).commit();
+	}
+	
+	public void saveCurrUser( UserInfo userInfo )
+	{
+		setAccount( userInfo.getAccount() );
+		setUsername( userInfo.getUsername() );
+		setBirthday( userInfo.getBirthday() );
+		setEmail( userInfo.getEmail() );
+		setGender( userInfo.getGender() );
+		setHeight( userInfo.getHeight() );
+		setPhone( userInfo.getPhone() );
+		setQQ( userInfo.getQq() );
+	}
+	
+	public UserInfo getCurrUser()
+	{
+		UserInfo userInfo = new UserInfo();
+		userInfo.setAccount( getAccount() );
+		userInfo.setUsername( getUsername() );
+		userInfo.setBirthday( getBirthday() );
+		userInfo.setEmail( getEmail() );
+		userInfo.setGender( getGender() );
+		userInfo.setHeight( getHeight() );
+		userInfo.setPhone( getPhone() );
+		userInfo.setQq( getQQ() );
+		return userInfo;
 	}
 }

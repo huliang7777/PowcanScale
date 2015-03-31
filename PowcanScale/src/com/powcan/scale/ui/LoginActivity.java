@@ -1,6 +1,7 @@
 package com.powcan.scale.ui;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -11,15 +12,23 @@ import android.widget.TextView;
 
 import com.powcan.scale.MainActivity;
 import com.powcan.scale.R;
+import com.powcan.scale.bean.UserInfo;
+import com.powcan.scale.bean.http.LGNRequest;
+import com.powcan.scale.bean.http.LGNResponse;
+import com.powcan.scale.dialog.LoadingDialog;
+import com.powcan.scale.net.NetRequest;
 import com.powcan.scale.ui.base.BaseActivity;
-import com.powcan.scale.ui.profile.ProfileActivity;
+import com.powcan.scale.util.Md5Utils;
+import com.powcan.scale.util.SpUtil;
 
 public class LoginActivity extends BaseActivity implements OnClickListener {
 
 	private Button btnCommit;
 	private EditText etUsername;
 	private EditText etPassword;
-	private TextView btnForgetPassword;
+	private TextView tvToRegister;
+	
+	private LoadingDialog loadingDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +49,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		etUsername = (EditText) findViewById(R.id.et_username);
 		etPassword = (EditText) findViewById(R.id.et_password);
 		btnCommit = (Button) findViewById(R.id.btn_commit);
-		btnForgetPassword = (TextView) findViewById(R.id.btn_forget_password);
+		tvToRegister = (TextView) findViewById(R.id.tv_to_register);
 	}
 
 	@Override
@@ -50,20 +59,21 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	@Override
 	public void onBindListener() {
 		btnCommit.setOnClickListener(this);
-		btnForgetPassword.setOnClickListener(this);
+		tvToRegister.setOnClickListener(this);
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_commit:
-//			if (checkUsername() && checkPassword()) {
-//				requestLogin();
-//			}
-			Intent intent = new Intent(this, ProfileActivity.class);
-			startActivity(intent);
+			if (checkUsername() && checkPassword()) {
+				requestLogin();
+			}
 			break;
-		case R.id.btn_forget_password:
+		case R.id.tv_to_register:
+			Intent intent = new Intent(this, RegisterActivity.class);
+			startActivity(intent);
+			finish();
 			break;
 		}
 	}
@@ -111,45 +121,55 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	}
 	
 	private void requestLogin() {
-		String username = getUsername();
-		String password = getPassword();
+		final String username = getUsername();
+		final String password = getPassword();
 		
-//		final TotalLoginRequest request = new TotalLoginRequest(username, password);
-//		Config.asynPost(this, "正在登录", request.getData(), new CallBack() {
-//			
-//			@Override
-//			public void onSuccess(String o) {
-//				TotalLoginResponse response = request.getObject(o);
-//				if (response != null) {
-//					if (response.isSuccess()) {
-//						showToastShort("登录成功");
-//						
-//						SpUtil sp = SpUtil.getInstance(getActivity());
-//						User user = sp.getUser();
-//						user.token = response.token;
-//						sp.setUser(user);
-//						
-//						gotoMain();
-//					} else {
-//						onFail(response.error_remark);
-//					}
-//				} else {
-//					onFail(null);
-//				}
-//			}
-//			
-//			@Override
-//			public void onFinish(Object obj) {
-//			}
-//			
-//			@Override
-//			public void onFail(String msg) {
-//				if (TextUtils.isEmpty(msg)) {
-//					msg = "用户名或密码错误";
-//				}
-//				showToastShort(msg);
-//			}
-//		});
+		loadingDialog = new LoadingDialog( this, "登录中..." );
+		loadingDialog.show();
+		new AsyncTask<Void, Void, UserInfo>() {
+
+			@Override
+			protected UserInfo doInBackground(Void... arg0) 
+			{
+				UserInfo userInfo = null;
+				LGNRequest request = new LGNRequest();
+				request.number = username;
+				request.pswd = Md5Utils.encryptMD5( password );
+				
+				LGNResponse response = NetRequest.getInstance(getActivity()).send(request, LGNResponse.class);
+				if (response != null && response.RES == 301) 
+				{
+					userInfo = new UserInfo();
+					userInfo.setAccount( String.valueOf( response.ACT ) );
+					userInfo.setGender(response.GDR);
+					userInfo.setBirthday(response.GDR);
+					userInfo.setHeight( String.valueOf( response.HET ) );
+					userInfo.setPhone(response.PHN);
+					userInfo.setQq(response.QQN);
+					userInfo.setEmail(response.EML);
+				}
+				return userInfo;
+			}
+			
+			@Override
+			protected void onPostExecute(UserInfo userInfo)
+			{
+				super.onPostExecute(userInfo);
+				if ( userInfo != null ) 
+				{
+					SpUtil.getInstance( LoginActivity.this ).saveCurrUser(userInfo);
+					gotoMain();
+				}
+				else
+				{
+					String msg = "登录失败,请检查您的账号或者密码是否正确！";
+					showToastShort( msg );
+				}
+				loadingDialog.dismiss();
+			}
+			
+		}.execute();
+		
 	}
 
 	protected void gotoMain() {

@@ -24,6 +24,7 @@
     <color name="input_border">#dcdcdc</color>
     <color name="background">#f7f7f8</color>
     <color name="title_color">#333333</color>
+    <color name="title_bg">#ff4cae4c</color>
     <color name="line">#EFEFED</color>
     
     <color name="orange">#f89520</color>
@@ -37,4 +38,6 @@
     
     <color name="rbm_menu_background">#303030</color>
     <color name="rbm_item_text_color">#ffffff</color>
+    
+    <color name="dialog_bg">#AAFFFFFF</color>
 </resources>

@@ -1,7 +1,6 @@
 package com.powcan.scale;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
@@ -43,6 +42,8 @@ import com.powcan.scale.ui.fragment.CenterFragment.OnViewPagerChangeListener;
 import com.powcan.scale.ui.fragment.LeftFragment;
 import com.powcan.scale.ui.fragment.LeftFragment.NavigationDrawerCallbacks;
 import com.powcan.scale.ui.fragment.RightFragment;
+import com.powcan.scale.ui.profile.ProfileActivity;
+import com.powcan.scale.ui.settings.SettingsActivity;
 import com.powcan.scale.util.Md5Utils;
 import com.powcan.scale.widget.SlidingMenu;
 
@@ -64,7 +65,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	private SensorManager mSensorManager;
 	
     private BluetoothAdapter mBluetoothAdapter;
-    private ArrayList<BluetoothDevice> mLeDevices = new ArrayList<BluetoothDevice>();
+    private ArrayList<BluetoothDevice> mLeDevices;
     private boolean mScanning;
     private BluetoothLeService mBluetoothLeService;
     
@@ -84,23 +85,23 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	public void onInit() {
 		// Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
-        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
-            finish();
-        }
+//        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+//            Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
+//            finish();
+//        }
 
         // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
         // BluetoothAdapter through BluetoothManager.
-        final BluetoothManager bluetoothManager =
-                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        mBluetoothAdapter = bluetoothManager.getAdapter();
+//        final BluetoothManager bluetoothManager =
+//                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+//        mBluetoothAdapter = bluetoothManager.getAdapter();
 
         // Checks if Bluetooth is supported on the device.
-        if (mBluetoothAdapter == null) {
-            Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
+//        if (mBluetoothAdapter == null) {
+//            Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
+//            finish();
+//            return;
+//        }
 		
 		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -141,10 +142,10 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 					LGNResponse response = NetRequest.getInstance(getActivity()).send(request, LGNResponse.class);
 					if (response != null && response.RES == 301) {
 						mSpUtil.setLogin(true);
-						mSpUtil.setAccount(response.ACT);
+						//mSpUtil.setAccount(response.ACT);
 						mSpUtil.setGender(response.GDR);
 						mSpUtil.setBirthday(response.GDR);
-						mSpUtil.setHeight(response.HET);
+						//mSpUtil.setHeight(response.HET);
 						mSpUtil.setPhone(response.PHN);
 						mSpUtil.setQQ(response.QQN);
 						mSpUtil.setEmail(response.EML);
@@ -300,18 +301,18 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 
         // Ensures Bluetooth is enabled on the device.  If Bluetooth is not currently enabled,
         // fire an intent to display a dialog asking the user to grant permission to enable it.
-        if (!mBluetoothAdapter.isEnabled()) {
-            if (!mBluetoothAdapter.isEnabled()) {
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-            }
-        }
+//        if (!mBluetoothAdapter.isEnabled()) {
+//            if (!mBluetoothAdapter.isEnabled()) {
+//                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+//            }
+//        }
         
-        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-        if (mBluetoothLeService != null) {
-            final boolean result = mBluetoothLeService.connect(mDeviceAddress);
-            Log.d(TAG, "Connect request result=" + result);
-        }
+//        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+//        if (mBluetoothLeService != null) {
+//            final boolean result = mBluetoothLeService.connect(mDeviceAddress);
+//            Log.d(TAG, "Connect request result=" + result);
+//        }
 	}
 
     private static IntentFilter makeGattUpdateIntentFilter() {
@@ -331,7 +332,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	protected void onPause() {
 		super.onPause();
 		mSensorManager.unregisterListener(sensorEventListener);
-        unregisterReceiver(mGattUpdateReceiver);
+//        unregisterReceiver(mGattUpdateReceiver);
 	}
 
 	public void showLeftViewToogle() {
@@ -343,98 +344,98 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	}
 
 	@Override
-	public void onNavigationDrawerItemSelected(int position, Object obj) {
-		
+	public void onNavigationDrawerItemSelected(int position, Object obj) 
+	{
 	}
 	
 	/**
      * 动作执行
      */ 
-    private Handler mHandler = new Handler() { 
- 
-        @Override 
-        public void handleMessage(Message msg) { 
-            super.handleMessage(msg); 
-            switch (msg.what) { 
-            case SENSOR_SHAKE: 
-                Toast.makeText(MainActivity.this, "检测到摇晃，执行操作！", Toast.LENGTH_SHORT).show(); 
-                Log.i(TAG, "检测到摇晃，执行操作！"); 
+//    private Handler mHandler = new Handler() { 
+// 
+//        @Override 
+//        public void handleMessage(Message msg) { 
+//            super.handleMessage(msg); 
+//            switch (msg.what) { 
+//            case SENSOR_SHAKE: 
+//                Toast.makeText(MainActivity.this, "检测到摇晃，执行操作！", Toast.LENGTH_SHORT).show(); 
+//                Log.i(TAG, "检测到摇晃，执行操作！"); 
+//
+//                mLeDevices.clear();
+//                scanLeDevice(true);
+//                break; 
+//            } 
+//        } 
+//
+//        private void scanLeDevice(final boolean enable) {
+//            if (enable) {
+//                // Stops scanning after a pre-defined scan period.
+//                mHandler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        mScanning = false;
+//                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
+//                    }
+//                }, SCAN_PERIOD);
+//
+//                mScanning = true;
+//                mBluetoothAdapter.startLeScan(mLeScanCallback);
+//            } else {
+//                mScanning = false;
+//                mBluetoothAdapter.stopLeScan(mLeScanCallback);
+//            }
+//        }
+//    }; 
 
-                mLeDevices.clear();
-                scanLeDevice(true);
-                break; 
-            } 
-        } 
-
-        private void scanLeDevice(final boolean enable) {
-            if (enable) {
-                // Stops scanning after a pre-defined scan period.
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mScanning = false;
-                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                    }
-                }, SCAN_PERIOD);
-
-                mScanning = true;
-                mBluetoothAdapter.startLeScan(mLeScanCallback);
-            } else {
-                mScanning = false;
-                mBluetoothAdapter.stopLeScan(mLeScanCallback);
-            }
-        }
-    }; 
-
-    // Device scan callback.
-    private BluetoothAdapter.LeScanCallback mLeScanCallback =
-            new BluetoothAdapter.LeScanCallback() {
-
-        @Override
-        public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                	if (device == null || TextUtils.isEmpty(device.getName())) return;
-                	
-                	if ("Healthcare".equals(device.getName())) {
-                		mLeDevices.add(device);
-                		
-                        mDeviceName = device.getName();
-                        mDeviceAddress = device.getAddress();
-
-                        Intent gattServiceIntent = new Intent(getApplicationContext(), BluetoothLeService.class);
-                        bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-                        
-	                    if (mScanning) {
-	                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
-	                        mScanning = false;
-	                    }
-                	}
-                }
-            });
-        }
-    };
+//    // Device scan callback.
+//    private BluetoothAdapter.LeScanCallback mLeScanCallback =
+//            new BluetoothAdapter.LeScanCallback() {
+//
+//        @Override
+//        public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                	if (device == null || TextUtils.isEmpty(device.getName())) return;
+//                	
+//                	if ("Healthcare".equals(device.getName())) {
+//                		mLeDevices.add(device);
+//                		
+//                        mDeviceName = device.getName();
+//                        mDeviceAddress = device.getAddress();
+//
+//                        Intent gattServiceIntent = new Intent(getApplicationContext(), BluetoothLeService.class);
+//                        bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+//                        
+//	                    if (mScanning) {
+//	                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
+//	                        mScanning = false;
+//	                    }
+//                	}
+//                }
+//            });
+//        }
+//    };
 
     // Code to manage Service lifecycle.
-    private final ServiceConnection mServiceConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder service) {
-            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
-            if (!mBluetoothLeService.initialize()) {
-                Log.e(TAG, "Unable to initialize Bluetooth");
-                finish();
-            }
-            // Automatically connects to the device upon successful start-up initialization.
-            mBluetoothLeService.connect(mDeviceAddress);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            mBluetoothLeService = null;
-        }
-    };
+//    private final ServiceConnection mServiceConnection = new ServiceConnection() {
+//
+//        @Override
+//        public void onServiceConnected(ComponentName componentName, IBinder service) {
+//            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
+//            if (!mBluetoothLeService.initialize()) {
+//                Log.e(TAG, "Unable to initialize Bluetooth");
+//                finish();
+//            }
+//            // Automatically connects to the device upon successful start-up initialization.
+//            mBluetoothLeService.connect(mDeviceAddress);
+//        }
+//
+//        @Override
+//        public void onServiceDisconnected(ComponentName componentName) {
+//            mBluetoothLeService = null;
+//        }
+//    };
 
     // Handles various events fired by the Service.
     // ACTION_GATT_CONNECTED: connected to a GATT server.
@@ -533,7 +534,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
                 vibrator.vibrate(200); 
                 Message msg = new Message(); 
                 msg.what = SENSOR_SHAKE; 
-                mHandler.sendMessage(msg); 				
+//                mHandler.sendMessage(msg); 				
             }
 		}
 		

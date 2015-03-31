@@ -33,7 +33,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		Log.i(getTag(), "onUpgrade");
-//		db.execSQL("DROP TABLE IF EXISTS " + CityDb.TABLE_NAME);
+		db.execSQL( UserInfoDb.DROP_TABLE );
 //		db.execSQL("DROP TABLE IF EXISTS " + SaleEvaluateDb.TABLE_NAME);
 //		db.execSQL("DROP TABLE IF EXISTS " + QueryCacheDB.TABLE_NAME);
 //		db.execSQL("DROP TABLE IF EXISTS " + RegionInfoDB.TABLE_NAME);
@@ -43,7 +43,8 @@ public class DbHelper extends SQLiteOpenHelper {
 	}
 
 	private void createTable(SQLiteDatabase db) {
-//		db.execSQL(CityDb.CREATE_TABLE);
+		Log.i(getTag(), "createTable : " + UserInfoDb.CREATE_TABLE);
+		db.execSQL( UserInfoDb.CREATE_TABLE );
 //		db.execSQL(SaleEvaluateDb.CREATE_TABLE);
 //		db.execSQL(QueryCacheDB.CREATE_TABLE);
 //		db.execSQL(RegionInfoDB.CREATE_TABLE);

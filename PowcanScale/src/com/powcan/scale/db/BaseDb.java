@@ -90,9 +90,9 @@ public abstract class BaseDb {
 		return false;
 	}
 
-    protected abstract String getTableName();
-    
-    protected abstract String getCreateTableSQL();
-    
-    protected abstract String getDropTableSQL();
+    public abstract String getTableName();
+//    
+//    public abstract String getCreateTableSQL();
+//    
+//    public abstract String getDropTableSQL();
 }

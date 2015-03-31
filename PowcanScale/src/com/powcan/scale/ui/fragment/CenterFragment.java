@@ -129,7 +129,7 @@ public class CenterFragment extends Fragment implements OnClickListener {
 
 		@Override
 		public int getCount() {
-			return 4;
+			return 3;
 		}
 
 	}

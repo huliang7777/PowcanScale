@@ -19,6 +19,7 @@ import com.powcan.scale.db.UserInfoDb;
 import com.powcan.scale.dialog.LoadingDialog;
 import com.powcan.scale.net.NetRequest;
 import com.powcan.scale.ui.base.BaseActivity;
+import com.powcan.scale.ui.profile.ProfileActivity;
 import com.powcan.scale.util.Md5Utils;
 import com.powcan.scale.util.SpUtil;
 
@@ -78,10 +79,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_commit:
-			gotoMain(); 
-//			if (checkUsername() && checkPassword()) {
-//				requestLogin();
-//			}
+//			gotoMain(); 
+			if (checkUsername() && checkPassword()) {
+				requestLogin();
+			}
 			break;
 		case R.id.tv_to_register:
 			Intent intent = new Intent(this, RegisterActivity.class);
@@ -154,6 +155,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				{
 					userInfo = new UserInfo();
 					userInfo.setAccount( String.valueOf( response.ACT ) );
+					userInfo.setPassword( Md5Utils.encryptMD5( password ) );
 					userInfo.setUsername( response.NKN );
 					userInfo.setGender(response.GDR);
 					userInfo.setBirthday(response.AGE);
@@ -173,7 +175,16 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				{
 					SpUtil.getInstance( LoginActivity.this ).saveCurrUser(userInfo);
 					dbUserInfo.insertOrUpdateUserInfo(userInfo);
-					gotoMain();
+					if ( userInfo.getBirthday().equals("0000-00-00") 
+							|| TextUtils.isEmpty( userInfo.getGender() )
+							|| userInfo.getHeight().equals("0") )
+					{
+						gotoProfile();
+					}
+					else
+					{
+						gotoMain();
+					}
 				}
 				else
 				{
@@ -189,6 +200,14 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
 	protected void gotoMain() {
 		Intent intent = new Intent(this, MainActivity.class);
+		startActivity(intent);
+		
+		finish();
+	}
+	
+	protected void gotoProfile() 
+	{
+		Intent intent = new Intent(this, ProfileActivity.class);
 		startActivity(intent);
 		
 		finish();

@@ -62,6 +62,8 @@ public class BluetoothLeService extends Service {
             "com.example.bluetooth.le.ACTION_DATA_AVAILABLE";
     public final static String EXTRA_DATA =
             "com.example.bluetooth.le.EXTRA_DATA";
+    public final static String EXTRA_DATA2 =
+            "com.example.bluetooth.le.EXTRA_DATA2";
 
     public final static UUID UUID_HEALTH_CARE_MEASUREMENT =
             UUID.fromString(SampleGattAttributes.HEALTHCARE_MEASUREMENT);
@@ -151,14 +153,12 @@ public class BluetoothLeService extends Service {
                 boolean isNeedWrite = true;
     			boolean writeResult = false;
             	if (data[0] == 0x08 && data.length > 1) {
-            		if (data[1] == 0x05) {// ���ѳ���ѡ����û�����ʼ���� ACK CMD
+            		if (data[1] == 0x05) {
             			if (data.length >4 && data[2] == 0x01 && data[3] == (byte)0xA5 && data[4] == 0x01) {
             				isNeedWrite = false;
-            				// APP���·������������壬���ڻ��ѳ���ѡ����û�����ʼ������
             			}
             		} else if (data[1] == 0x11 || data[1] == 0x12) {
             			if (data.length >=4 && data[2] == 0x01 && data[3] == (byte)0xB1) {
-//            				����˲�����Ϻ󣬻��ϴ���������ݽ��
             				byte[] value = new byte[5];
             				value[0] = 0x09;
             				value[1] = 0x04;
@@ -182,7 +182,6 @@ public class BluetoothLeService extends Service {
             			}
             		} else if (data[1] == 0x07) {
             			if (data.length >=4 && data[2] == 0x01 && data[3] == (byte)0xB0) {
-//            				���ع���У������ʵʱ���䵱ǰ��������ݣ�APP����Ҫ���ղ���ʾ�ڲ������������ϡ�
             				byte[] value = new byte[4];
             				value[0] = 0x09;
             				value[1] = 0x04;
@@ -194,7 +193,6 @@ public class BluetoothLeService extends Service {
             		}
             	} else if (data[0] == 0x06) {
          			if (data.length >= 4 && data[1] == 0x04 && data[2] == (byte)0x01 && data[3] == (byte)0xA1) {
-         				// APP����彨�����Ӻ󣬳������������������ȡһ��ϵͳʱ��
          				
          				Calendar c = Calendar.getInstance();
          		    	c.set(2000, 0, 1, 0, 0, 0);
@@ -226,7 +224,9 @@ public class BluetoothLeService extends Service {
             		Log.d(TAG, "received data: " + hex);
             	}
             	
-                intent.putExtra(EXTRA_DATA, new String(data) + "\n" + hex);
+//                intent.putExtra(EXTRA_DATA, new String(data) + "\n" + hex);
+                intent.putExtra(EXTRA_DATA, data);
+                intent.putExtra(EXTRA_DATA2, hex);
             }
         }
         sendBroadcast(intent);

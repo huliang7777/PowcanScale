@@ -74,6 +74,14 @@ public class SpUtil {
 		return getSp().getString("username", "");
 	}
 
+	public void setPassword(String password) {
+		getEdit().putString("password", password).commit();
+	}
+	
+	public String getPassword() {
+		return getSp().getString("password", "");
+	}
+
 	public void setUsername(String username) {
 		getEdit().putString("username", username).commit();
 	}
@@ -130,6 +138,7 @@ public class SpUtil {
 	{
 		setAccount( userInfo.getAccount() );
 		setUsername( userInfo.getUsername() );
+		setPassword( userInfo.getPassword() );
 		setBirthday( userInfo.getBirthday() );
 		setEmail( userInfo.getEmail() );
 		setGender( userInfo.getGender() );
@@ -143,6 +152,7 @@ public class SpUtil {
 		UserInfo userInfo = new UserInfo();
 		userInfo.setAccount( getAccount() );
 		userInfo.setUsername( getUsername() );
+		userInfo.setPassword( getPassword() );
 		userInfo.setBirthday( getBirthday() );
 		userInfo.setEmail( getEmail() );
 		userInfo.setGender( getGender() );

@@ -32,7 +32,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.powcan.scale.ui.LoginActivity"
+            android:name="com.powcan.scale.SplashActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,6 +43,7 @@
         <activity android:name="com.powcan.scale.MainActivity" />
         <activity android:name="com.powcan.scale.ui.profile.ProfileActivity" />
         <activity android:name="com.powcan.scale.ui.RegisterActivity" />
+         <activity android:name="com.powcan.scale.ui.LoginActivity" />
         <activity android:name="com.powcan.scale.ui.settings.SettingsActivity" />
         <activity android:name="com.powcan.scale.ui.profile.UserInfoDetailActivity" />
 

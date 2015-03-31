@@ -18,6 +18,7 @@ public class HomeFragment extends BaseFragment {
 	private int index;
 	private ListView mListView;
 	private HomeAdapter mAdapter;
+	List<Measure> list = new ArrayList<Measure>();
 
 	public HomeFragment() {
 		super();
@@ -60,18 +61,17 @@ public class HomeFragment extends BaseFragment {
 	public void onInitViewData() {
 		mListView.setVisibility(View.VISIBLE);
 		
-		List<Measure> list = new ArrayList<Measure>();
-		list.add(new Measure("体重", "75KG"));
-		list.add(new Measure("BMI", "75KG"));
-		list.add(new Measure("体脂率", "75KG"));
-		list.add(new Measure("肌肉比例", "75KG"));
-		list.add(new Measure("身体年龄", "75KG"));
-		list.add(new Measure("皮下脂肪", "75KG"));
-		list.add(new Measure("内脏脂肪", "75KG"));
-		list.add(new Measure("基础代谢(亚)", "75KG"));
-		list.add(new Measure("基础代谢(欧)", "75KG"));
-		list.add(new Measure("骨量", "75KG"));
-		list.add(new Measure("水含量", "75KG"));
+		list.add(new Measure("体重", "0KG"));
+		list.add(new Measure("BMI", "0KG"));
+		list.add(new Measure("体脂率", "0KG"));
+		list.add(new Measure("肌肉比例", "0KG"));
+		list.add(new Measure("身体年龄", "0KG"));
+		list.add(new Measure("皮下脂肪", "0KG"));
+		list.add(new Measure("内脏脂肪", "0KG"));
+		list.add(new Measure("基础代谢(亚)", "0KG"));
+		list.add(new Measure("基础代谢(欧)", "0KG"));
+		list.add(new Measure("骨量", "0KG"));
+		list.add(new Measure("水含量", "0KG"));
 		
 		mAdapter = new HomeAdapter(mContext, list);
 		mListView.setAdapter(mAdapter);
@@ -80,5 +80,11 @@ public class HomeFragment extends BaseFragment {
 	@Override
 	public void onBindListener() {
 		
+	}
+	
+	public void setWeightData( int weight )
+	{
+		list.get( 0 ).data = weight + "KG";
+		mAdapter.notifyDataSetChanged();
 	}
 }

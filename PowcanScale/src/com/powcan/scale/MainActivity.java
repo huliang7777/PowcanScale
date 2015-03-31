@@ -1,6 +1,7 @@
 package com.powcan.scale;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
@@ -66,7 +67,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	private SensorManager mSensorManager;
 	
     private BluetoothAdapter mBluetoothAdapter;
-    private ArrayList<BluetoothDevice> mLeDevices;
+    private ArrayList<BluetoothDevice> mLeDevices = new ArrayList<BluetoothDevice>();
     private boolean mScanning;
     private BluetoothLeService mBluetoothLeService;
     
@@ -86,168 +87,26 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	public void onInit() {
 		// Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
-//        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-//            Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
-//            finish();
-//        }
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
         // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
         // BluetoothAdapter through BluetoothManager.
-//        final BluetoothManager bluetoothManager =
-//                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-//        mBluetoothAdapter = bluetoothManager.getAdapter();
+        final BluetoothManager bluetoothManager =
+                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        mBluetoothAdapter = bluetoothManager.getAdapter();
 
         // Checks if Bluetooth is supported on the device.
-//        if (mBluetoothAdapter == null) {
-//            Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
-//            finish();
-//            return;
-//        }
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 		
 		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-		
-		new Thread(){
-			public void run() {
-				if (!mSpUtil.isLogin()) {
-//					GATRequest gat = new GATRequest(6);
-//					GATResponse response = (GATResponse) NetRequest.getInstance(getActivity()).send(gat, GATResponse.class);
-//					if (response != null) {
-//						List<Integer> noList = response.BKH;
-//						if (noList != null && noList.size() > 0) {
-//							Integer account = noList.get(1);
-//							int height = 178;
-//							
-//							REGRequest reg = new REGRequest();
-//							reg.account = account + "";
-//							reg.pswd = Md5Utils.encryptMD5("123456");
-//							reg.imei = Utils.getDeviceId(getActivity());
-//							reg.gender = "M";
-//							reg.birthday = "19880722";
-//							reg.height = height + "";
-//							reg.phone = "13424269212";
-//							reg.qq = "442666876";
-//							reg.email = "442666876@qq.com";
-//							
-//							BaseResponse regResponse = (BaseResponse) NetRequest.getInstance(getActivity()).send(reg, BaseResponse.class);
-//							if (regResponse != null && regResponse.RES == 201) {
-//								mSpUtil.setLogin(true);
-//							}
-//						}
-//					}
-//				} else {
-					LGNRequest request = new LGNRequest();
-					request.number = "2001978";
-					request.pswd = Md5Utils.encryptMD5("123456");
-					
-					LGNResponse response = NetRequest.getInstance(getActivity()).send(request, LGNResponse.class);
-					if (response != null && response.RES == 301) {
-						mSpUtil.setLogin(true);
-						//mSpUtil.setAccount(response.ACT);
-						mSpUtil.setGender(response.GDR);
-						mSpUtil.setBirthday(response.GDR);
-						//mSpUtil.setHeight(response.HET);
-						mSpUtil.setPhone(response.PHN);
-						mSpUtil.setQQ(response.QQN);
-						mSpUtil.setEmail(response.EML);
-					}
-				} else {
-//					int account = mSpUtil.getAccount();
-//					int height = 180;
-//					
-//					UTURequest utu = new UTURequest();
-//					utu.account = account + "";
-//					utu.pswd = Md5Utils.encryptMD5("123456");
-//					utu.imei = Utils.getDeviceId(getActivity());
-//					utu.gender = "M";
-//					utu.birthday = "19880722";
-//					utu.height = height + "";
-//					utu.phone = "13424269212";
-//					utu.qq = "442666876";
-//					utu.email = "442666876@qq.com";
-//					
-//					BaseResponse regResponse = (BaseResponse) NetRequest.getInstance(getActivity()).send(utu, BaseResponse.class);
-//					if (regResponse != null && regResponse.RES == 401) {
-//						showToast("更新资料成功");
-//					}
-					
-//					GTNRequest gtn = new GTNRequest();
-////					gtn.number = "13424269212";
-////					gtn.type = "phone";
-//					gtn.number = "442666876";
-//					gtn.type = "qq";
-////					gtn.number = "442666876@qq.com";
-////					gtn.type = "email";
-//					
-//					GTNResponse gtnResponse = (GTNResponse) NetRequest.getInstance(getActivity()).send(gtn, GTNResponse.class);
-//					if (gtnResponse != null && gtnResponse.RES == 501) {
-//						showToast("获取成功");
-//					}
-					
-//					int account = mSpUtil.getAccount();
-//					
-//					FBPRequest fbp = new FBPRequest();
-//					fbp.account = account + "";
-//					fbp.number = "442666876";
-//					fbp.type = "qq";
-//					
-//					BaseResponse fbpResponse = (BaseResponse) NetRequest.getInstance(getActivity()).send(fbp, BaseResponse.class);
-//					if (fbpResponse != null && fbpResponse.RES == 601) {
-////						showToast("验证成功，允许修改密码");
-//					}
-					
-//					int account = mSpUtil.getAccount();
-//					
-//					UPPRequest upp = new UPPRequest();
-//					upp.account = account + "";
-//					upp.password = Md5Utils.encryptMD5("654321");
-//					
-//					BaseResponse uppResponse = (BaseResponse) NetRequest.getInstance(getActivity()).send(upp, BaseResponse.class);
-					
-//					int account = mSpUtil.getAccount();
-//					
-//					LGNRequest request = new LGNRequest();
-//					request.number = account + "";
-//					request.pswd = Md5Utils.encryptMD5("654321");
-//					
-//					LGNResponse response = NetRequest.getInstance(getActivity()).send(request, LGNResponse.class);
-					
-//					int account = mSpUtil.getAccount();
-//					
-//					CHPRequest chp = new CHPRequest();
-//					chp.account = account + "";
-//					chp.oldpsw = Md5Utils.encryptMD5("654321");
-//					chp.newpsw = Md5Utils.encryptMD5("123456");
-//					
-//					BaseResponse chpResponse = (BaseResponse) NetRequest.getInstance(getActivity()).send(chp, BaseResponse.class);
-					
-//					int account = mSpUtil.getAccount();
-//					
-//					LGNRequest request = new LGNRequest();
-//					request.number = account + "";
-//					request.pswd = Md5Utils.encryptMD5("123456");
-//					
-//					LGNResponse response = NetRequest.getInstance(getActivity()).send(request, LGNResponse.class);
-					
-//					int account = mSpUtil.getAccount();
-//					
-//					RECRequest request = new RECRequest();
-//					request.account = account + "";
-//					request.weight = "11.1";
-//					request.fat = "11.123456";
-//					request.water = "11.1";
-//					request.muscle = "11.1";
-//					request.bone = "11.1";
-//					request.bmr = "11.1";
-//					request.sfat = "11.1";
-//					request.infat = "11.1";
-//					request.bodyage = "11.1";
-//					request.amr = "11.1";
-//					
-//					LGNResponse response = NetRequest.getInstance(getActivity()).send(request, LGNResponse.class);
-				}
-			};
-		}.start();
 	}
 
 	@Override
@@ -302,18 +161,18 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 
         // Ensures Bluetooth is enabled on the device.  If Bluetooth is not currently enabled,
         // fire an intent to display a dialog asking the user to grant permission to enable it.
-//        if (!mBluetoothAdapter.isEnabled()) {
-//            if (!mBluetoothAdapter.isEnabled()) {
-//                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-//            }
-//        }
+        if (!mBluetoothAdapter.isEnabled()) {
+            if (!mBluetoothAdapter.isEnabled()) {
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            }
+        }
         
-//        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-//        if (mBluetoothLeService != null) {
-//            final boolean result = mBluetoothLeService.connect(mDeviceAddress);
-//            Log.d(TAG, "Connect request result=" + result);
-//        }
+        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        if (mBluetoothLeService != null) {
+            final boolean result = mBluetoothLeService.connect(mDeviceAddress);
+            Log.d(TAG, "Connect request result=" + result);
+        }
 	}
 
     private static IntentFilter makeGattUpdateIntentFilter() {
@@ -333,7 +192,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	protected void onPause() {
 		super.onPause();
 		mSensorManager.unregisterListener(sensorEventListener);
-//        unregisterReceiver(mGattUpdateReceiver);
+        unregisterReceiver(mGattUpdateReceiver);
 	}
 
 	public void showLeftViewToogle() {
@@ -347,100 +206,103 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	@Override
 	public void onNavigationDrawerItemSelected(int position, Object obj) 
 	{
-		Intent intent = new Intent( this, LoginActivity.class );
-        intent.putExtra( "account", (String)obj );
-        startActivity(intent);
-        finish();
+		if( obj != null )
+		{
+			Intent intent = new Intent( this, LoginActivity.class );
+	        intent.putExtra( "account", (String)obj );
+	        startActivity(intent);
+	        finish();
+		}
 	}
 	
 	/**
      * 动作执行
      */ 
-//    private Handler mHandler = new Handler() { 
-// 
-//        @Override 
-//        public void handleMessage(Message msg) { 
-//            super.handleMessage(msg); 
-//            switch (msg.what) { 
-//            case SENSOR_SHAKE: 
-//                Toast.makeText(MainActivity.this, "检测到摇晃，执行操作！", Toast.LENGTH_SHORT).show(); 
-//                Log.i(TAG, "检测到摇晃，执行操作！"); 
-//
-//                mLeDevices.clear();
-//                scanLeDevice(true);
-//                break; 
-//            } 
-//        } 
-//
-//        private void scanLeDevice(final boolean enable) {
-//            if (enable) {
-//                // Stops scanning after a pre-defined scan period.
-//                mHandler.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        mScanning = false;
-//                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
-//                    }
-//                }, SCAN_PERIOD);
-//
-//                mScanning = true;
-//                mBluetoothAdapter.startLeScan(mLeScanCallback);
-//            } else {
-//                mScanning = false;
-//                mBluetoothAdapter.stopLeScan(mLeScanCallback);
-//            }
-//        }
-//    }; 
+    private Handler mHandler = new Handler() { 
+ 
+        @Override 
+        public void handleMessage(Message msg) { 
+            super.handleMessage(msg); 
+            switch (msg.what) { 
+            case SENSOR_SHAKE: 
+                Toast.makeText(MainActivity.this, "检测到摇晃，执行操作！", Toast.LENGTH_SHORT).show(); 
+                Log.i(TAG, "检测到摇晃，执行操作！"); 
 
-//    // Device scan callback.
-//    private BluetoothAdapter.LeScanCallback mLeScanCallback =
-//            new BluetoothAdapter.LeScanCallback() {
-//
-//        @Override
-//        public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                	if (device == null || TextUtils.isEmpty(device.getName())) return;
-//                	
-//                	if ("Healthcare".equals(device.getName())) {
-//                		mLeDevices.add(device);
-//                		
-//                        mDeviceName = device.getName();
-//                        mDeviceAddress = device.getAddress();
-//
-//                        Intent gattServiceIntent = new Intent(getApplicationContext(), BluetoothLeService.class);
-//                        bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-//                        
-//	                    if (mScanning) {
-//	                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
-//	                        mScanning = false;
-//	                    }
-//                	}
-//                }
-//            });
-//        }
-//    };
+                mLeDevices.clear();
+                scanLeDevice(true);
+                break; 
+            } 
+        } 
+
+        private void scanLeDevice(final boolean enable) {
+            if (enable) {
+                // Stops scanning after a pre-defined scan period.
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mScanning = false;
+                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                    }
+                }, SCAN_PERIOD);
+
+                mScanning = true;
+                mBluetoothAdapter.startLeScan(mLeScanCallback);
+            } else {
+                mScanning = false;
+                mBluetoothAdapter.stopLeScan(mLeScanCallback);
+            }
+        }
+    }; 
+
+    // Device scan callback.
+    private BluetoothAdapter.LeScanCallback mLeScanCallback =
+            new BluetoothAdapter.LeScanCallback() {
+
+        @Override
+        public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                	if (device == null || TextUtils.isEmpty(device.getName())) return;
+                	
+                	if ("Healthcare".equals(device.getName())) {
+                		mLeDevices.add(device);
+                		
+                        mDeviceName = device.getName();
+                        mDeviceAddress = device.getAddress();
+
+                        Intent gattServiceIntent = new Intent(getApplicationContext(), BluetoothLeService.class);
+                        bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+                        
+	                    if (mScanning) {
+	                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
+	                        mScanning = false;
+	                    }
+                	}
+                }
+            });
+        }
+    };
 
     // Code to manage Service lifecycle.
-//    private final ServiceConnection mServiceConnection = new ServiceConnection() {
-//
-//        @Override
-//        public void onServiceConnected(ComponentName componentName, IBinder service) {
-//            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
-//            if (!mBluetoothLeService.initialize()) {
-//                Log.e(TAG, "Unable to initialize Bluetooth");
-//                finish();
-//            }
-//            // Automatically connects to the device upon successful start-up initialization.
-//            mBluetoothLeService.connect(mDeviceAddress);
-//        }
-//
-//        @Override
-//        public void onServiceDisconnected(ComponentName componentName) {
-//            mBluetoothLeService = null;
-//        }
-//    };
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service) {
+            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
+            if (!mBluetoothLeService.initialize()) {
+                Log.e(TAG, "Unable to initialize Bluetooth");
+                finish();
+            }
+            // Automatically connects to the device upon successful start-up initialization.
+            mBluetoothLeService.connect(mDeviceAddress);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mBluetoothLeService = null;
+        }
+    };
 
     // Handles various events fired by the Service.
     // ACTION_GATT_CONNECTED: connected to a GATT server.
@@ -462,14 +324,26 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
                 // Show all the supported services and characteristics on the user interface.
                 displayGattServices(mBluetoothLeService.getSupportedGattServices());
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
+                displayData(intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA),
+                		intent.getStringExtra(BluetoothLeService.EXTRA_DATA2));
             }
         }
     };
 
-    private void displayData(String data) {
-        if (data != null) {
-        	Log.d(TAG, "displayData: " + data);
+    private void displayData(byte[] data, String hex) {
+    	for( int i=0;i<data.length;i++ )
+    	{
+    		Log.d(TAG, "display Data: " + data[i]);
+    	}
+        if (hex != null) {
+        	Log.d(TAG, "display hex: " + hex);
+        }
+        
+        if ( data.length >=6 && data[4] == 0 )
+        {
+        	// 换算成KG
+        	int weight = ( data[5] * 100 + data[6] ) / 40;
+        	mCenterFragment.setWeightData( weight );
         }
     }
 
@@ -539,7 +413,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
                 vibrator.vibrate(200); 
                 Message msg = new Message(); 
                 msg.what = SENSOR_SHAKE; 
-//                mHandler.sendMessage(msg); 				
+                mHandler.sendMessage(msg); 				
             }
 		}
 		

@@ -18,7 +18,8 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/space"
             android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_back" />
+            android:src="@drawable/ic_back"
+            android:visibility="gone" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -94,7 +95,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center_vertical|right" />
+            android:gravity="center_vertical|right"
+            android:editable="false" />
     </LinearLayout>
 
     <LinearLayout

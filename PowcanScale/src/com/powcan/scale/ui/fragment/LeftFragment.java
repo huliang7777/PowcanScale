@@ -82,8 +82,6 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
         
         curUser = SpUtil.getInstance(mContext).getCurrUser();
 		dbUserInfo = new UserInfoDb( mContext ); 
-		users = dbUserInfo.getUserInfoes();
-		mAdapter = new UserListAdapter(mContext, users);
 	}
 
 	@Override
@@ -97,7 +95,6 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
 
 	@Override
 	public void onInitViewData() {
-        mDrawerListView.setAdapter( mAdapter );
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         
         String username = curUser.getUsername();
@@ -186,6 +183,15 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(int position, Object obj);
+    }
+    
+    @Override
+    public void onResume() {
+    	super.onResume();
+    	
+    	users = dbUserInfo.getUserInfoes();
+		mAdapter = new UserListAdapter(mContext, users);
+		mDrawerListView.setAdapter( mAdapter );
     }
 
 	@Override

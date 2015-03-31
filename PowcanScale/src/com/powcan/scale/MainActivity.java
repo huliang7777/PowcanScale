@@ -343,6 +343,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
         {
         	// 换算成KG
         	int weight = ( data[5] * 100 + data[6] ) / 40;
+        	
+        	String weightHexStr = Byte.toString(data[8]) + Byte.toString(data[9]);
+        	weight = Integer.parseInt(weightHexStr, 16);
         	mCenterFragment.setWeightData( weight );
         }
     }

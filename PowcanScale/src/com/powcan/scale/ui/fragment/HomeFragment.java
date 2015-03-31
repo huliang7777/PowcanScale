@@ -61,17 +61,17 @@ public class HomeFragment extends BaseFragment {
 	public void onInitViewData() {
 		mListView.setVisibility(View.VISIBLE);
 		
-		list.add(new Measure("体重", "0KG"));
-		list.add(new Measure("BMI", "0KG"));
-		list.add(new Measure("体脂率", "0KG"));
-		list.add(new Measure("肌肉比例", "0KG"));
-		list.add(new Measure("身体年龄", "0KG"));
-		list.add(new Measure("皮下脂肪", "0KG"));
-		list.add(new Measure("内脏脂肪", "0KG"));
-		list.add(new Measure("基础代谢(亚)", "0KG"));
-		list.add(new Measure("基础代谢(欧)", "0KG"));
-		list.add(new Measure("骨量", "0KG"));
-		list.add(new Measure("水含量", "0KG"));
+		list.add(new Measure("体重", ""));
+		list.add(new Measure("BMI", ""));
+		list.add(new Measure("体脂率", ""));
+		list.add(new Measure("肌肉比例", ""));
+		list.add(new Measure("身体年龄", ""));
+		list.add(new Measure("皮下脂肪", ""));
+		list.add(new Measure("内脏脂肪", ""));
+		list.add(new Measure("基础代谢(亚)", ""));
+		list.add(new Measure("基础代谢(欧)", ""));
+		list.add(new Measure("骨量", ""));
+		list.add(new Measure("水含量", ""));
 		
 		mAdapter = new HomeAdapter(mContext, list);
 		mListView.setAdapter(mAdapter);

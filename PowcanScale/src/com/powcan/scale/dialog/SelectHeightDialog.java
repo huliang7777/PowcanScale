@@ -1,0 +1,179 @@
+package com.powcan.scale.dialog;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.powcan.scale.R;
+import com.powcan.scale.adapter.AccountAdapter;
+
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.ListView;
+import android.widget.TextView;
+
+public class SelectHeightDialog extends Dialog
+{
+	private Context mContext;
+	private ListView listHeight;
+	private List<Integer> list;
+	private AccountAdapter mAdapter;
+	private int curHeight;
+	private TextView tvHeight;
+	
+	private int genderRes;
+	
+	private static final int MAX_HEIGHT = 230;
+	
+	private ItemClickEvent mItemClickEvent;
+	
+	public SelectHeightDialog( Context context, String height, String gender, ItemClickEvent mItemClickEvent ) 
+	{
+		super( context, R.style.Dialog );
+		
+		this.mContext = context;
+		this.mItemClickEvent = mItemClickEvent;
+		if( TextUtils.isEmpty( height ) || height.equals( "0" ) )
+		{
+			curHeight = 30;
+		}
+		else
+		{
+			curHeight = Integer.valueOf( height );
+		}
+		if ( gender.equals("") || gender.equalsIgnoreCase( "O" ) || gender.equalsIgnoreCase( "M" ) )
+		{
+			this.genderRes = R.drawable.icon_male;
+		}
+		else
+		{
+			this.genderRes = R.drawable.icon_female;
+		}
+	 	
+		init();
+	}
+	
+	private void init()
+	{
+		LayoutInflater inflater = LayoutInflater.from( mContext );
+        View view = inflater.inflate( R.layout.dialog_select_height, null );
+        setContentView(view);
+        
+        this.list = new ArrayList<Integer>();
+        int length = MAX_HEIGHT + 3;
+        for( int i=29; i<=length; i++ )
+        {
+        	if ( i == 29 || i > MAX_HEIGHT  )
+        	{
+        		list.add( 0 );
+        	}	
+        	else
+        	{	
+        		list.add( i );
+        	}
+        }
+        
+        listHeight = (ListView) view.findViewById(R.id.list_height);
+        tvHeight =  (TextView) view.findViewById(R.id.tv_height);
+        
+        mAdapter = new AccountAdapter( mContext, list );
+        listHeight.setAdapter(mAdapter);
+        
+        listHeight.setSelection( curHeight - 30 );
+        
+        tvHeight.setText( curHeight + "CM" );
+        
+        tvHeight.setCompoundDrawablesWithIntrinsicBounds( 0, 0, 0, this.genderRes );
+        
+        Window dialogWindow = getWindow();
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        DisplayMetrics d = mContext.getResources().getDisplayMetrics(); // 获取屏幕宽、高用
+        lp.width = (int) (d.widthPixels * 0.8); // 高度设置为屏幕的0.6
+        
+        dialogWindow.setAttributes(lp);
+        
+        setListener();
+	}
+
+	private void setListener()
+	{
+//		listHeight.setOnItemClickListener( new OnItemClickListener() {
+//
+//			@Override
+//			public void onItemClick(AdapterView<?> parentView, View view, int position,
+//					long arg3) 
+//			{
+//				if( mItemClickEvent != null )
+//				{
+//					mItemClickEvent.onItemClick( position + 30 );
+//				}
+//			}
+//		});
+		
+		this.setOnCancelListener( new OnCancelListener() {
+			
+			@Override
+			public void onCancel( DialogInterface dialog ) 
+			{
+				if ( mItemClickEvent != null )
+				{
+					mItemClickEvent.onItemClick( curHeight );
+				}
+			}
+		});
+		
+		listHeight.setOnScrollListener( new OnScrollListener() 
+		{
+			@Override  
+            public void onScrollStateChanged(AbsListView view, int scrollState) 
+			{  
+				
+            }  
+              
+            @Override  
+            public void onScroll(AbsListView view, int firstVisibleItem,  
+                    int visibleItemCount, int totalItemCount) 
+            { 
+            	View c = listHeight.getChildAt(0);
+            	if( c == null )
+            	{
+            		return;
+            	}
+            	int top = c.getTop();
+            	
+            	int h = -top + firstVisibleItem * dip2px(mContext, 60);
+            	Log.d("SelectHeightDialog", "height : " + h );
+//            	curHeight = firstVisibleItem + 30;
+            	curHeight = ( h + dip2px(mContext, 15) ) / dip2px(mContext, 60)  + 30;
+            	if ( curHeight > MAX_HEIGHT )
+            	{
+            		curHeight = MAX_HEIGHT;
+            	}
+            	tvHeight.setText( curHeight + "CM" );
+            }
+		});
+	}
+	
+	 /** 
+     * 根据手机的分辨率从 dp 的单位 转成为 px(像素) 
+     */  
+    public int dip2px(Context context, float dpValue) 
+    {  
+        final float scale = context.getResources().getDisplayMetrics().density;  
+        return (int) (dpValue * scale + 0.5f);  
+    }  
+	
+	public interface ItemClickEvent
+	{
+		public void onItemClick( int height );
+	}
+}

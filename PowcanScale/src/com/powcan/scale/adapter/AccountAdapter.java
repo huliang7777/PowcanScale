@@ -43,7 +43,8 @@ public class AccountAdapter extends BaseAdapter {
 				.findViewById(R.id.tv_account);
 
 		Integer account = items.get(position);
-		tvAccount.setText(String.valueOf(account));
+		
+		tvAccount.setText( account == 0 ? "" : String.valueOf(account));
 
 		return convertView;
 	}

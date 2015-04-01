@@ -13,14 +13,16 @@ public class SelectGenderDialog extends Dialog implements android.view.View.OnCl
 	private Context mContext;
 	private GenderSelectEvent mGenderSelectEvent;
 	
+	private String gender;
 	private ImageView ivMale;
 	private ImageView ivFemale;
 	
-	public SelectGenderDialog( Context context, GenderSelectEvent mGenderSelectEvent ) 
+	public SelectGenderDialog( Context context, String gender, GenderSelectEvent mGenderSelectEvent ) 
 	{
 		super( context, R.style.LoadDialogStyle );
 		
 		this.mContext = context;
+		this.gender = gender;
 		this.mGenderSelectEvent = mGenderSelectEvent;
 
 		init();
@@ -37,6 +39,15 @@ public class SelectGenderDialog extends Dialog implements android.view.View.OnCl
         
         ivMale.setOnClickListener( this );
         ivFemale.setOnClickListener( this );
+        
+        if ( gender.equals("M") )
+        {
+        	ivMale.setImageResource(R.drawable.icon_frame);
+        }
+        else if ( gender.equals("F") )
+        {
+        	ivFemale.setImageResource(R.drawable.icon_frame);
+        }
 	}
 	
 	public interface GenderSelectEvent

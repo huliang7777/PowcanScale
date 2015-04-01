@@ -40,5 +40,5 @@
     <color name="rbm_menu_background">#303030</color>
     <color name="rbm_item_text_color">#ffffff</color>
     
-    <color name="dialog_bg">#AAFFFFFF</color>
+    <color name="dialog_bg">#FFFFFFFF</color>
 </resources>

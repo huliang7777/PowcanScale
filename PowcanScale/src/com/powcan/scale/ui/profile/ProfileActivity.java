@@ -1,12 +1,18 @@
 package com.powcan.scale.ui.profile;
 
+import java.util.Date;
+
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
 import com.powcan.scale.MainActivity;
@@ -17,7 +23,9 @@ import com.powcan.scale.bean.http.UTURequest;
 import com.powcan.scale.db.UserInfoDb;
 import com.powcan.scale.dialog.LoadingDialog;
 import com.powcan.scale.dialog.SelectGenderDialog;
+import com.powcan.scale.dialog.SelectHeightDialog;
 import com.powcan.scale.dialog.SelectGenderDialog.GenderSelectEvent;
+import com.powcan.scale.dialog.SelectHeightDialog.ItemClickEvent;
 import com.powcan.scale.net.NetRequest;
 import com.powcan.scale.ui.RegisterActivity;
 import com.powcan.scale.ui.base.BaseActivity;
@@ -27,7 +35,7 @@ import com.powcan.scale.util.SpUtil;
  * 动画参考：http://cyrilmottier.com/2014/05/20/custom-animations-with-fragments/
  * @author Administrator
  */
-public class ProfileActivity extends BaseActivity implements OnClickListener, GenderSelectEvent
+public class ProfileActivity extends BaseActivity implements OnClickListener, GenderSelectEvent, ItemClickEvent
 {
 	private static final String TAG = RegisterActivity.class.getSimpleName();
 
@@ -37,8 +45,13 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 	private EditText etBirthday;
 	private EditText etHeight;
 	
+	private String gender;
+	private String birthday;
+	private String height;
+	
 	private LoadingDialog loadingDialog;
 	private SelectGenderDialog genderDialog;
+	private SelectHeightDialog heightDialog;
 	private UserInfoDb dbUserInfo;
 	private UserInfo userInfo;
 	
@@ -53,6 +66,10 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 	{
 		userInfo = SpUtil.getInstance( this ).getCurrUser();
 		dbUserInfo = new UserInfoDb( this ); 
+		
+		gender = userInfo.getGender();
+		birthday = userInfo.getBirthday();
+		height = userInfo.getHeight();
 	}
 
 	@Override
@@ -66,7 +83,15 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 	}
 
 	@Override
-	public void onInitViewData() {
+	public void onInitViewData() 
+	{
+		etUsername.setText( userInfo.getUsername() );
+		etGender.setText( gender );
+		etBirthday.setText( birthday );
+		if( !TextUtils.isEmpty( height ) && !height.equals( "0" ) )
+		{
+			etHeight.setText( height + "CM" );
+		}
 		
 	}
 
@@ -74,6 +99,8 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 	public void onBindListener() {
 		btnSave.setOnClickListener( this );
 		etGender.setOnClickListener( this );
+		etBirthday.setOnClickListener( this );
+		etHeight.setOnClickListener( this );
 	}
 
 	@Override
@@ -84,8 +111,33 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 			reqSaveUserInfo();			
 			break;
 		case R.id.et_gender:
-			genderDialog = new SelectGenderDialog( this, this );
+			genderDialog = new SelectGenderDialog( this, gender, this );
 			genderDialog.show();
+			break;
+		case R.id.et_birthday:
+			if ( birthday.equals("0000-00-00") )
+			{
+				Date date = new Date();
+				birthday = date.getYear() + "-" + date.getMonth() + "-" + date.getDay();
+			}
+			String []datas = birthday.split("-");
+			int year = Integer.valueOf( datas[0] );
+			int month = Integer.valueOf( datas[1] );
+			int day = Integer.valueOf( datas[2] );
+			
+			new DatePickerDialog( this, new OnDateSetListener() {
+				
+				@Override
+				public void onDateSet(DatePicker picker, int year, int month, int day) 
+				{
+					birthday = year + "-" + ( month + 1 ) + "-" + day;
+					etBirthday.setText( birthday );
+				}
+			}, year, month - 1, day).show();
+			break;
+		case R.id.et_height:
+			heightDialog = new SelectHeightDialog( this, height, gender, this );
+			heightDialog.show();
 			break;
 		}
 	}
@@ -160,12 +212,21 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 	{
 		if ( which == 1 )
 		{
-			etGender.setText("M");
+			gender = "M";
 		}
 		else if ( which == 2 )
 		{
-			etGender.setText("F");
+			gender = "F";
 		}
+		etGender.setText( gender);
 		genderDialog.dismiss();
+	}
+
+	@Override
+	public void onItemClick(int iHeight) 
+	{
+		height = String.valueOf( iHeight );
+		etHeight.setText( height + "CM" );
+		heightDialog.dismiss();
 	}
 }

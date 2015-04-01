@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/app_gray"
-        android:padding="8dp" >
+        android:padding="@dimen/activity_margin" >
 
         <ImageView
             android:id="@+id/img_back"
@@ -30,7 +30,7 @@
             android:singleLine="true"
             android:text="设置"
             android:textColor="@color/deep_gray"
-            android:textSize="@dimen/title" />
+            android:textSize="@dimen/headline" />
     </LinearLayout>
 
     <View
@@ -42,7 +42,7 @@
         android:id="@+id/rl_set_goal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp" >
+        android:padding="@dimen/activity_margin" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -74,7 +74,7 @@
         android:id="@+id/rl_measure_remind"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp" >
+        android:padding="@dimen/activity_margin" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -100,13 +100,15 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_line"
-        android:background="@color/gray" />
+        android:background="@color/gray"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/rl_voice_broadcast"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp" >
+        android:padding="@dimen/activity_margin"
+        android:visibility="gone" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -136,7 +138,7 @@
        android:id="@+id/rl_version_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp" >
+        android:padding="@dimen/activity_margin" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -182,7 +184,7 @@
            	android:id="@+id/rl_about_us"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:padding="8dp" >
+	        android:padding="@dimen/activity_margin" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -214,7 +216,7 @@
            android:id="@+id/rl_suggest"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:padding="8dp" >
+	        android:padding="@dimen/activity_margin" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -246,7 +248,7 @@
    	        android:id="@+id/rl_help"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:padding="8dp" >
+	        android:padding="@dimen/activity_margin" >
 
         <TextView
             android:layout_width="wrap_content"

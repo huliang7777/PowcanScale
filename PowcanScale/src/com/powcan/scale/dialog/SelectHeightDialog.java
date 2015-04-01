@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.powcan.scale.R;
 import com.powcan.scale.adapter.AccountAdapter;
+import com.powcan.scale.util.Utils;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -106,19 +107,6 @@ public class SelectHeightDialog extends Dialog
 
 	private void setListener()
 	{
-//		listHeight.setOnItemClickListener( new OnItemClickListener() {
-//
-//			@Override
-//			public void onItemClick(AdapterView<?> parentView, View view, int position,
-//					long arg3) 
-//			{
-//				if( mItemClickEvent != null )
-//				{
-//					mItemClickEvent.onItemClick( position + 30 );
-//				}
-//			}
-//		});
-		
 		this.setOnCancelListener( new OnCancelListener() {
 			
 			@Override
@@ -150,10 +138,10 @@ public class SelectHeightDialog extends Dialog
             	}
             	int top = c.getTop();
             	
-            	int h = -top + firstVisibleItem * dip2px(mContext, 60);
+            	int h = -top + firstVisibleItem * Utils.dip2px(mContext, 60);
             	Log.d("SelectHeightDialog", "height : " + h );
 //            	curHeight = firstVisibleItem + 30;
-            	curHeight = ( h + dip2px(mContext, 15) ) / dip2px(mContext, 60)  + 30;
+            	curHeight = ( h + Utils.dip2px(mContext, 15) ) / Utils.dip2px(mContext, 60)  + 30;
             	if ( curHeight > MAX_HEIGHT )
             	{
             		curHeight = MAX_HEIGHT;
@@ -162,15 +150,6 @@ public class SelectHeightDialog extends Dialog
             }
 		});
 	}
-	
-	 /** 
-     * 根据手机的分辨率从 dp 的单位 转成为 px(像素) 
-     */  
-    public int dip2px(Context context, float dpValue) 
-    {  
-        final float scale = context.getResources().getDisplayMetrics().density;  
-        return (int) (dpValue * scale + 0.5f);  
-    }  
 	
 	public interface ItemClickEvent
 	{

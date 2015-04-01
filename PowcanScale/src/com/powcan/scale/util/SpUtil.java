@@ -118,6 +118,14 @@ public class SpUtil {
 		getEdit().putString("email", email).commit();
 	}
 	
+	public String getGoalWeight() {
+		return getSp().getString("goalWeight", "0");
+	}
+
+	public void setGoalWeight(String goalWeight) {
+		getEdit().putString("goalWeight", goalWeight).commit();
+	}
+	
 	public String getBirthday() {
 		return getSp().getString("birthday", "");
 	}
@@ -145,6 +153,7 @@ public class SpUtil {
 		setHeight( userInfo.getHeight() );
 		setPhone( userInfo.getPhone() );
 		setQQ( userInfo.getQq() );
+		setGoalWeight( userInfo.getGoalWeight() );
 	}
 	
 	public UserInfo getCurrUser()
@@ -159,6 +168,21 @@ public class SpUtil {
 		userInfo.setHeight( getHeight() );
 		userInfo.setPhone( getPhone() );
 		userInfo.setQq( getQQ() );
+		userInfo.setGoalWeight( getGoalWeight() );
 		return userInfo;
+	}
+	
+	public void reset()
+	{
+		setAccount( "" );
+		setUsername( "" );
+		setPassword( "" );
+		setBirthday( "" );
+		setEmail( "" );
+		setGender( "" );
+		setHeight( "" );
+		setPhone( "" );
+		setQQ( "" );
+		setGoalWeight( "" );
 	}
 }

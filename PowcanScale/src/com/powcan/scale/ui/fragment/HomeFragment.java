@@ -43,16 +43,16 @@ public class HomeFragment extends BaseFragment {
 
 	@Override
 	public void onInit() {
-		
+
 	}
 
 	@Override
 	public void onFindViews() {
 		View v = getView();
-		
+
 		LayoutInflater inflater = LayoutInflater.from(mContext);
 		View header = inflater.inflate(R.layout.item_home_header, null);
-		
+
 		mListView = (ListView) v.findViewById(R.id.list_view);
 		mListView.addHeaderView(header);
 	}
@@ -60,31 +60,33 @@ public class HomeFragment extends BaseFragment {
 	@Override
 	public void onInitViewData() {
 		mListView.setVisibility(View.VISIBLE);
-		
-		list.add(new Measure("体重", ""));
-		list.add(new Measure("BMI", ""));
-		list.add(new Measure("体脂率", ""));
-		list.add(new Measure("肌肉比例", ""));
-		list.add(new Measure("身体年龄", ""));
-		list.add(new Measure("皮下脂肪", ""));
-		list.add(new Measure("内脏脂肪", ""));
-		list.add(new Measure("基础代谢(亚)", ""));
-		list.add(new Measure("基础代谢(欧)", ""));
-		list.add(new Measure("骨量", ""));
-		list.add(new Measure("水含量", ""));
-		
+
+		if (list.isEmpty()) 
+		{
+			list.add(new Measure("体重", ""));
+			list.add(new Measure("BMI", ""));
+			list.add(new Measure("体脂率", ""));
+			list.add(new Measure("肌肉比例", ""));
+			list.add(new Measure("身体年龄", ""));
+			list.add(new Measure("皮下脂肪", ""));
+			list.add(new Measure("内脏脂肪", ""));
+			list.add(new Measure("基础代谢(亚)", ""));
+			list.add(new Measure("基础代谢(欧)", ""));
+			list.add(new Measure("骨量", ""));
+			list.add(new Measure("水含量", ""));
+		}
+
 		mAdapter = new HomeAdapter(mContext, list);
 		mListView.setAdapter(mAdapter);
 	}
 
 	@Override
 	public void onBindListener() {
-		
+
 	}
-	
-	public void setWeightData( int weight )
-	{
-		list.get( 0 ).data = weight + "KG";
+
+	public void setWeightData(int weight) {
+		list.get(0).data = weight + "KG";
 		mAdapter.notifyDataSetChanged();
 	}
 }

@@ -250,6 +250,7 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, I
 		userInfo.setHeight("");
 		userInfo.setPhone( etPhone.getText().toString() );
 		userInfo.setQq( etQQ.getText().toString() );
+		userInfo.setGoalWeight("0");
 		
 		loadingDialog = new LoadingDialog( RegisterActivity.this, "处理中..." );
 		loadingDialog.show();

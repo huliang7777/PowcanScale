@@ -27,6 +27,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
+        android:name="com.powcan.scale.PowcanScaleApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -40,13 +41,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.powcan.scale.MainActivity" />
+        <activity
+            android:name="com.powcan.scale.MainActivity"
+            android:launchMode="singleTask" />
         <activity android:name="com.powcan.scale.ui.profile.ProfileActivity" />
         <activity android:name="com.powcan.scale.ui.RegisterActivity" />
-         <activity android:name="com.powcan.scale.ui.LoginActivity" />
+        <activity android:name="com.powcan.scale.ui.LoginActivity" />
         <activity android:name="com.powcan.scale.ui.settings.SettingsActivity" />
         <activity android:name="com.powcan.scale.ui.profile.UserInfoDetailActivity" />
-
+		<activity android:name="com.powcan.scale.ui.settings.SetGoalActivity" />
+		
         <service android:name="com.powcan.scale.ble.BluetoothLeService" />
 
         <meta-data

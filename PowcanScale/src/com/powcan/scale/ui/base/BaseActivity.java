@@ -15,6 +15,7 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.powcan.scale.PowcanScaleApplication;
 import com.powcan.scale.R;
 import com.powcan.scale.util.SpUtil;
 import com.umeng.analytics.MobclickAgent;
@@ -42,6 +43,8 @@ public abstract class BaseActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		mSpUtil = SpUtil.getInstance(this);
+		
+		PowcanScaleApplication.getInstance().addActivity(this);
 	}
 
 	@Override
@@ -304,6 +307,7 @@ public abstract class BaseActivity extends FragmentActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		PowcanScaleApplication.getInstance().removeActivity(this);
 	}
 
 }

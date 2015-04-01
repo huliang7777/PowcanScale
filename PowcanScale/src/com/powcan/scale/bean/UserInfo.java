@@ -12,6 +12,7 @@ public class UserInfo {
 	private String phone;
 	private String qq;
 	private String email;
+	private String goalWeight;
 
 	public Integer getId() {
 		return id;
@@ -100,12 +101,21 @@ public class UserInfo {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	public String getGoalWeight() {
+		return goalWeight;
+	}
+
+	public void setGoalWeight(String goalWeight) {
+		this.goalWeight = goalWeight;
+	}
 
 	@Override
 	public String toString() {
-		return "UserInfo [id=" + id + ", account=" + account + ", imei=" + imei
-				+ ", gender=" + gender + ", birthday=" + birthday + ", height="
-				+ height + ", phone=" + phone + ", qq=" + qq + ", email="
-				+ email + "]";
+		return "UserInfo [id=" + id + ", account=" + account + ", username="
+				+ username + ", imei=" + imei + ", gender=" + gender
+				+ ", birthday=" + birthday + ", height=" + height + ", phone="
+				+ phone + ", qq=" + qq + ", email=" + email + ", goalWeight="
+				+ goalWeight + "]";
 	}
 }

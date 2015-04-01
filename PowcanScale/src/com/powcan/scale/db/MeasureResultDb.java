@@ -8,9 +8,10 @@ import android.content.Context;
 import android.database.SQLException;
 import android.util.Log;
 
-public class UserInfoDb extends BaseDb {
-	private static final String TAG = UserInfoDb.class.getSimpleName();
-	private static final String TABLE_NAME = "UserInfo ";
+public class MeasureResultDb extends BaseDb 
+{
+	private static final String TAG = MeasureResultDb.class.getSimpleName();
+	private static final String TABLE_NAME = "MeasureResult ";
 	public static final String COLUMN_ID = "ID ";
 	public static final String COLUMN_ACCOUNT = "ACCOUNT ";
 	public static final String COLUMN_USERNAME = "USERNAME ";
@@ -48,7 +49,7 @@ public class UserInfoDb extends BaseDb {
 			+ COLUMN_PHONE + COMMA + COLUMN_QQ + COMMA + COLUMN_EMAIL
 			+ COMMA + COLUMN_WEIGHT;
 
-	public UserInfoDb(Context context) {
+	public MeasureResultDb(Context context) {
 		super(context);
 	}
 

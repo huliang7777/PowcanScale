@@ -25,8 +25,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/img_back"
             android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/img_back"
             android:ellipsize="end"
             android:singleLine="true"
             android:text="设置目标"
@@ -38,12 +38,13 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/edittext_height"
             android:layout_alignParentRight="true"
-            android:padding="@dimen/space"
             android:background="@color/gray"
             android:minWidth="@dimen/button"
+            android:padding="@dimen/space"
             android:text="语音"
             android:textColor="@color/white"
-            android:textSize="@dimen/subtitle" />
+            android:textSize="@dimen/subtitle"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <View
@@ -54,10 +55,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp" >
+        android:layout_margin="@dimen/activity_margin"
+        android:orientation="vertical" >
 
         <TextView
+            android:id="@+id/tv_curweight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -67,6 +69,7 @@
             android:textSize="@dimen/title" />
 
         <TextView
+            android:id="@+id/tv_curweight_suggestion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="4"
@@ -83,10 +86,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp" >
+        android:layout_margin="@dimen/activity_margin"
+        android:orientation="vertical" >
 
         <TextView
+            android:id="@+id/tv_goalweight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -97,6 +101,7 @@
             android:textSize="@dimen/title" />
 
         <TextView
+            android:id="@+id/tv_goalweight_suggestion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="2"
@@ -112,7 +117,7 @@
         android:layout_marginLeft="@dimen/activity_margin"
         android:layout_marginRight="@dimen/activity_margin"
         android:layout_marginTop="@dimen/activity_margin"
-        android:background="@color/gray"
+        android:background="@color/login_btn"
         android:minWidth="@dimen/edittext_width"
         android:text="设置目标体重"
         android:textColor="@color/white"

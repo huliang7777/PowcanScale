@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -59,7 +60,16 @@ public class Utils {
     {  
         final float scale = context.getResources().getDisplayMetrics().density;  
         return (int) (dpValue * scale + 0.5f);  
-    }  
+    }
+    
+    public static String getCurDate()
+    {
+    	Calendar calendar = Calendar.getInstance();
+    	int year = calendar.get( Calendar.YEAR );
+    	int month = calendar.get( Calendar.MONTH ) + 1;
+    	int day = calendar.get( Calendar.DAY_OF_MONTH );
+    	return year + "-" + String.format("%02d", month) + "-" + String.format("%02d", day);
+    }
 
 	// 获取ApiKey
 	public static String getMetaValue(Context context, String metaKey) {

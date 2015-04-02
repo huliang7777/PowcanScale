@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.powcan.scale.R;
+import com.powcan.scale.bean.MeasureResult;
 import com.powcan.scale.bean.UserInfo;
+import com.powcan.scale.db.MeasureResultDb;
 import com.powcan.scale.db.UserInfoDb;
 import com.powcan.scale.dialog.SelectDataDialog;
 import com.powcan.scale.dialog.SelectDataDialog.ItemClickEvent;
@@ -33,8 +35,11 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 	
 	private UserInfo curUser;
 	private UserInfoDb dbUserInfo;
-	private int curWeight = 0;
-	private int goalWeight = 0;
+	private MeasureResult measureResult;
+	private MeasureResultDb dbMeasureResult;
+	
+	private float curWeight;
+	private int goalWeight;
 	private List<Integer> list;
 	
 	private SelectDataDialog dialog;
@@ -52,6 +57,8 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 		String account = SpUtil.getInstance(this).getAccount();
 		dbUserInfo = new UserInfoDb(this);
 		curUser = dbUserInfo.getUserInfo( account );
+		dbMeasureResult = new MeasureResultDb( this );
+		measureResult = dbMeasureResult.getLastMeasureResult( account );
 		
 		list = new ArrayList<Integer>();
 		for( int i = 5; i <= 500; i += 5 )
@@ -64,6 +71,7 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 			strGoalWeight = "0";
 		}
 		goalWeight = Integer.valueOf( curUser.getGoalWeight() );
+		curWeight = measureResult.getWeight();
 	}
 
 	@Override

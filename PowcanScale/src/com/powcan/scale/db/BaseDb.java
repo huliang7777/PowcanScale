@@ -15,6 +15,7 @@ public abstract class BaseDb {
 		public static final String INTEGER = " INTEGER ";
 		public static final String LONG = " LONG ";
 		public static final String TEXT = " TEXT ";
+		public static final String FLOAT = " FLOAT ";
 	}
 	
 	public static final String PRIMARY_KEY = " PRIMARY KEY ";

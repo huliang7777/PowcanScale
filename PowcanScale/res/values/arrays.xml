@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="bmi_standard">
+        <item>18.5</item>
+        <item>24.9</item>
+        <item>34.9</item>
+        <item>39.9</item>
+    </string-array>
+    <string-array name="bmi_result">
+        <item>偏瘦</item>
+        <item>正常</item>
+        <item>肥胖</item>
+        <item>重度肥胖</item>
+        <item>极度肥胖</item>
+    </string-array>
+    
+    <!-- 脂肪率 -->
+    <string-array name="bodyFatRate_male_less_thirty_standard">
+        <item>12.0</item>
+        <item>17.0</item>
+        <item>22.0</item>
+        <item>27.0</item>
+        <item>45.5</item>
+    </string-array>
+    <string-array name="bodyFatRate_female_less_thirty_standard">
+        <item>18.0</item>
+        <item>23.0</item>
+        <item>28.0</item>
+        <item>33.0</item>
+        <item>45.0</item>
+    </string-array>
+    <string-array name="bodyFatRate_male_more_thirty_standard">
+        <item>14.0</item>
+        <item>19.0</item>
+        <item>24.0</item>
+        <item>29.0</item>
+        <item>45.0</item>
+    </string-array>
+    <string-array name="bodyFatRate_female_more_thirty_standard">
+        <item>20.0</item>
+        <item>25.0</item>
+        <item>30.0</item>
+        <item>35.5</item>
+        <item>45.0</item>
+    </string-array>
+    <string-array name="bodyFatRate_result">
+        <item>瘦</item>
+        <item>偏瘦</item>
+        <item>标准</item>
+        <item>偏胖</item>
+        <item>胖</item>
+    </string-array>
+    
+    <!-- waterContent 水含量 -->
+    <string-array name="waterContent_male_less_thirty_standard">
+        <item>60.5</item>
+        <item>57.1</item>
+        <item>53.6</item>
+        <item>50.2</item>
+        <item>37.8</item>
+    </string-array>
+    <string-array name="waterContent_female_less_thirty_standard">
+        <item>56.4</item>
+        <item>53.0</item>
+        <item>49.5</item>
+        <item>46.1</item>
+        <item>37.8</item>
+    </string-array>
+    <string-array name="waterContent_male_more_thirty_standard">
+        <item>59.1</item>
+        <item>55.7</item>
+        <item>52.3</item>
+        <item>48.8</item>
+        <item>37.8</item>
+    </string-array>
+    <string-array name="waterContent_female_more_thirty_standard">
+        <item>55.0</item>
+        <item>51.6</item>
+        <item>48.1</item>
+        <item>44.7</item>
+        <item>37.8</item>
+    </string-array>
+    <string-array name="waterContent_result">
+        <item>瘦</item>
+        <item>偏瘦</item>
+        <item>标准</item>
+        <item>偏胖</item>
+        <item>胖</item>
+    </string-array>
+
+   <!-- 肌肉率 --> 
+   <string-array name="muscleProportion_male_standard">
+        <item>25.0</item>
+        <item>27.0</item>
+        <item>29.0</item>
+    </string-array>
+    <string-array name="muscleProportion_female_standard">
+        <item>30.0</item>
+        <item>34.0</item>
+        <item>38.0</item>
+    </string-array>
+    <string-array name="muscleProportion_result">
+        <item>低</item>
+        <item>标准</item>
+        <item>偏高</item>
+        <item>高</item>
+    </string-array>
+    
+    <!-- 骨骼 -->
+    <string-array name="boneMass_male_standard">
+        <item>39,1.7</item>
+        <item>60,2.1</item>
+        <item>200,2.4</item>
+    </string-array>
+    <string-array name="boneMass_female_standard">
+        <item>54,2.4</item>
+        <item>75,2.8</item>
+        <item>200,3.1</item>
+    </string-array>
+    <string-array name="boneMass_result">
+        <item>低</item>
+        <item>标准</item>
+        <item>高</item>
+    </string-array>
+    
+    <!-- 基础代谢BasalMetabolism -->
+    <string-array name="basalMetabolism_male_standard">
+        <item>2,700</item>
+        <item>5,900</item>
+        <item>8,1090</item>
+        <item>11,1290</item>
+        <item>14,1480</item>
+        <item>17,1610</item>
+        <item>29,1550</item>
+        <item>49,1500</item>
+        <item>69,1350</item>
+        <item>200,1220</item>
+    </string-array>
+    <string-array name="basalMetabolism_female_standard">
+        <item>2,700</item>
+        <item>5,860</item>
+        <item>8,1000</item>
+        <item>11,1180</item>
+        <item>14,1340</item>
+        <item>17,1300</item>
+        <item>29,1210</item>
+        <item>49,1170</item>
+        <item>69,1110</item>
+        <item>200,1010</item>
+    </string-array>
+    <string-array name="basalMetabolism_result">
+        <item>低</item>
+        <item>标准</item>
+        <item>高</item>
+    </string-array>
+</resources>

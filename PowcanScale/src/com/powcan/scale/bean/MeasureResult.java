@@ -7,26 +7,26 @@ package com.powcan.scale.bean;
  */
 public class MeasureResult 
 {
-	private Integer id;
+	private int id;
 	private String account;
-	private String weight; 
-	private String bmi; 
-	private String bodyFatRate; // 体脂率
-	private String muscleProportion; // 肌肉比例
-	private String physicalAge; // 身体年龄
-	private String subcutaneousFat; // 皮下脂肪
-	private String visceralFat; // 内脏脂肪
-	private String subBasalMetabolism; // 基础代谢(亚)
-	private String europeBasalMetabolism; // 基础代谢(欧)
-	private String boneMass; // 骨量
-	private String waterContent; // 水含量
+	private float weight; 
+	private float bmi; 
+	private float bodyFatRate; // 体脂率
+	private float muscleProportion; // 肌肉比例
+	private float physicalAge; // 身体年龄
+	private float subcutaneousFat; // 皮下脂肪
+	private float visceralFat; // 内脏脂肪
+	private float subBasalMetabolism; // 基础代谢(亚)
+	private float europeBasalMetabolism; // 基础代谢(欧)
+	private float boneMass; // 骨量
+	private float waterContent; // 水含量
 	private String date;
 
-	public Integer getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -38,91 +38,91 @@ public class MeasureResult
 		this.account = account;
 	}
 
-	public String getWeight() {
+	public float getWeight() {
 		return weight;
 	}
 
-	public void setWeight(String weight) {
+	public void setWeight(float weight) {
 		this.weight = weight;
 	}
 
-	public String getBmi() {
+	public float getBmi() {
 		return bmi;
 	}
 
-	public void setBmi(String bmi) {
+	public void setBmi(float bmi) {
 		this.bmi = bmi;
 	}
 
-	public String getBodyFatRate() {
+	public float getBodyFatRate() {
 		return bodyFatRate;
 	}
 
-	public void setBodyFatRate(String bodyFatRate) {
+	public void setBodyFatRate(float bodyFatRate) {
 		this.bodyFatRate = bodyFatRate;
 	}
 
-	public String getMuscleProportion() {
+	public float getMuscleProportion() {
 		return muscleProportion;
 	}
 
-	public void setMuscleProportion(String muscleProportion) {
+	public void setMuscleProportion(float muscleProportion) {
 		this.muscleProportion = muscleProportion;
 	}
 
-	public String getPhysicalAge() {
+	public float getPhysicalAge() {
 		return physicalAge;
 	}
 
-	public void setPhysicalAge(String physicalAge) {
+	public void setPhysicalAge(float physicalAge) {
 		this.physicalAge = physicalAge;
 	}
 
-	public String getSubcutaneousFat() {
+	public float getSubcutaneousFat() {
 		return subcutaneousFat;
 	}
 
-	public void setSubcutaneousFat(String subcutaneousFat) {
+	public void setSubcutaneousFat(float subcutaneousFat) {
 		this.subcutaneousFat = subcutaneousFat;
 	}
 
-	public String getVisceralFat() {
+	public float getVisceralFat() {
 		return visceralFat;
 	}
 
-	public void setVisceralFat(String visceralFat) {
+	public void setVisceralFat(float visceralFat) {
 		this.visceralFat = visceralFat;
 	}
 
-	public String getSubBasalMetabolism() {
+	public float getSubBasalMetabolism() {
 		return subBasalMetabolism;
 	}
 
-	public void setSubBasalMetabolism(String subBasalMetabolism) {
+	public void setSubBasalMetabolism(float subBasalMetabolism) {
 		this.subBasalMetabolism = subBasalMetabolism;
 	}
 
-	public String getEuropeBasalMetabolism() {
+	public float getEuropeBasalMetabolism() {
 		return europeBasalMetabolism;
 	}
 
-	public void setEuropeBasalMetabolism(String europeBasalMetabolism) {
+	public void setEuropeBasalMetabolism(float europeBasalMetabolism) {
 		this.europeBasalMetabolism = europeBasalMetabolism;
 	}
 
-	public String getBoneMass() {
+	public float getBoneMass() {
 		return boneMass;
 	}
 
-	public void setBoneMass(String boneMass) {
+	public void setBoneMass(float boneMass) {
 		this.boneMass = boneMass;
 	}
 
-	public String getWaterContent() {
+	public float getWaterContent() {
 		return waterContent;
 	}
 
-	public void setWaterContent(String waterContent) {
+	public void setWaterContent(float waterContent) {
 		this.waterContent = waterContent;
 	}
 

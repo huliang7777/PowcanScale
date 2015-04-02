@@ -2,52 +2,72 @@ package com.powcan.scale.db;
 
 import java.util.ArrayList;
 
-import com.powcan.scale.bean.UserInfo;
-
+import com.powcan.scale.bean.MeasureResult;
 import android.content.Context;
 import android.database.SQLException;
 import android.util.Log;
 
+/**
+ * 正则替换
+ * COLUMN_([^, & ^$]*);
+ * COLUMN_$1 = "$1 ";
+ * @author Administrator
+ *
+ */
 public class MeasureResultDb extends BaseDb 
 {
 	private static final String TAG = MeasureResultDb.class.getSimpleName();
 	private static final String TABLE_NAME = "MeasureResult ";
-	public static final String COLUMN_ID = "ID ";
-	public static final String COLUMN_ACCOUNT = "ACCOUNT ";
-	public static final String COLUMN_USERNAME = "USERNAME ";
-	public static final String COLUMN_IMEI = "IMEI ";
-	public static final String COLUMN_GENDER = "GENDER ";
-	public static final String COLUMN_BIRTHDAY = "BIRTHDAY ";
-	public static final String COLUMN_HEIGHT = "HEIGHT ";
-	public static final String COLUMN_PHONE = "PHONE ";
-	public static final String COLUMN_QQ = "QQ ";
-	public static final String COLUMN_EMAIL = "EMAIL ";
-	public static final String COLUMN_WEIGHT = "GOALWEIGHT  ";
+	private static final String COLUMN_ID = "ID ";
+	private static final String COLUMN_ACCOUNT = "ACCOUNT ";
+	private static final String COLUMN_WEIGHT = "WEIGHT "; 
+	private static final String COLUMN_BMI = "BMI "; 
+	private static final String COLUMN_BODYFATRATE = "BODYFATRATE "; // 体脂率
+	private static final String COLUMN_MUSCLEPROPORTION = "MUSCLEPROPORTION "; // 肌肉比例
+	private static final String COLUMN_PHYSICALAGE = "PHYSICALAGE "; // 身体年龄
+	private static final String COLUMN_SUBCUTANEOUSFAT = "SUBCUTANEOUSFAT "; // 皮下脂肪
+	private static final String COLUMN_VISCERALFAT = "VISCERALFAT "; // 内脏脂肪
+	private static final String COLUMN_SUBBASALMETABOLISM = "SUBBASALMETABOLISM "; // 基础代谢(亚)
+	private static final String COLUMN_EUROPEBASALMETABOLISM = "EUROPEBASALMETABOLISM "; // 基础代谢(欧)
+	private static final String COLUMN_BONEMASS = "BONEMASS "; // 骨量
+	private static final String COLUMN_WATERCONTENT = "WATERCONTENT "; // 水含量
+	private static final String COLUMN_DATE = "DATE ";
 
 	public static final String DROP_TABLE = DROP_TABLE_PREFIX + TABLE_NAME;
-	public static final String CREATE_TABLE = CREATE_TABLE_PREFIX + TABLE_NAME
-			+ BRACKET_LEFT + COLUMN_ID + COLUMN_TYPE.INTEGER
-			+ PRIMARY_KEY_AUTOINCREMENT + COMMA + COLUMN_ACCOUNT
-			+ COLUMN_TYPE.TEXT + COMMA + COLUMN_USERNAME + COLUMN_TYPE.TEXT + COMMA
-			+ COLUMN_IMEI + COLUMN_TYPE.TEXT + COMMA
-			+ COLUMN_GENDER + COLUMN_TYPE.TEXT + COMMA + COLUMN_BIRTHDAY
-			+ COLUMN_TYPE.TEXT + COMMA + COLUMN_HEIGHT + COLUMN_TYPE.TEXT
-			+ COMMA + COLUMN_PHONE + COLUMN_TYPE.TEXT + COMMA + COLUMN_QQ
-			+ COLUMN_TYPE.TEXT + COMMA + COLUMN_EMAIL + COLUMN_TYPE.TEXT + COMMA
-			+ COLUMN_WEIGHT + COLUMN_TYPE.TEXT
+	public static final String CREATE_TABLE = CREATE_TABLE_PREFIX + TABLE_NAME + BRACKET_LEFT
+			+ COLUMN_ID + COLUMN_TYPE.INTEGER + PRIMARY_KEY_AUTOINCREMENT + COMMA
+			+ COLUMN_ACCOUNT + COLUMN_TYPE.TEXT + COMMA 
+			+ COLUMN_WEIGHT + COLUMN_TYPE.FLOAT + COMMA
+			+ COLUMN_BMI + COLUMN_TYPE.FLOAT + COMMA 
+			+ COLUMN_BODYFATRATE + COLUMN_TYPE.FLOAT + COMMA 
+			+ COLUMN_MUSCLEPROPORTION + COLUMN_TYPE.FLOAT + COMMA 
+			+ COLUMN_PHYSICALAGE + COLUMN_TYPE.FLOAT + COMMA
+			+ COLUMN_SUBCUTANEOUSFAT + COLUMN_TYPE.FLOAT + COMMA 
+			+ COLUMN_VISCERALFAT + COLUMN_TYPE.FLOAT + COMMA
+			+ COLUMN_SUBBASALMETABOLISM + COLUMN_TYPE.FLOAT + COMMA 
+			+ COLUMN_EUROPEBASALMETABOLISM + COLUMN_TYPE.FLOAT + COMMA
+			+ COLUMN_BONEMASS + COLUMN_TYPE.FLOAT + COMMA 
+			+ COLUMN_WATERCONTENT + COLUMN_TYPE.FLOAT + COMMA
+			+ COLUMN_DATE + COLUMN_TYPE.TEXT
 			+ BRACKET_RIGHT;
-	public static final String TABLE_COLUMNS = COLUMN_ID + COMMA
-			+ COLUMN_ACCOUNT + COMMA + COLUMN_USERNAME + COMMA 
-			+ COLUMN_IMEI + COMMA + COLUMN_GENDER
-			+ COMMA + COLUMN_BIRTHDAY + COMMA + COLUMN_HEIGHT + COMMA
-			+ COLUMN_PHONE + COMMA + COLUMN_QQ + COMMA + COLUMN_EMAIL
-			+ COMMA + COLUMN_WEIGHT;
 	
-	public static final String TABLE_COLUMNS_WITHOUT_ID = COLUMN_ACCOUNT + COMMA + COLUMN_USERNAME + COMMA
-			+ COLUMN_IMEI + COMMA + COLUMN_GENDER
-			+ COMMA + COLUMN_BIRTHDAY + COMMA + COLUMN_HEIGHT + COMMA
-			+ COLUMN_PHONE + COMMA + COLUMN_QQ + COMMA + COLUMN_EMAIL
-			+ COMMA + COLUMN_WEIGHT;
+	public static final String TABLE_COLUMNS_WITHOUT_ID = COLUMN_ACCOUNT + COMMA 
+			+ COLUMN_WEIGHT + COMMA 
+			+ COLUMN_BMI + COMMA 
+			+ COLUMN_BODYFATRATE + COMMA 
+			+ COLUMN_MUSCLEPROPORTION + COMMA 
+			+ COLUMN_PHYSICALAGE + COMMA
+			+ COLUMN_SUBCUTANEOUSFAT + COMMA 
+			+ COLUMN_VISCERALFAT + COMMA 
+			+ COLUMN_SUBBASALMETABOLISM + COMMA 
+			+ COLUMN_EUROPEBASALMETABOLISM + COMMA 
+			+ COLUMN_BONEMASS + COMMA 
+			+ COLUMN_WATERCONTENT + COMMA 
+			+ COLUMN_DATE;
+	
+	public static final String TABLE_COLUMNS = COLUMN_ID + COMMA + TABLE_COLUMNS_WITHOUT_ID;
+	
+	
 
 	public MeasureResultDb(Context context) {
 		super(context);
@@ -58,18 +78,20 @@ public class MeasureResultDb extends BaseDb
 		return TABLE_NAME;
 	}
 
-	public void insertUserInfo(UserInfo userInfo) {
+	public void insertMeasureResult(MeasureResult measureResult) {
 		checkDb();
 		String sql = "insert into " + TABLE_NAME + BRACKET_LEFT + TABLE_COLUMNS_WITHOUT_ID
-				+ " ) values " + BRACKET_LEFT + "?, ?, ?, ?, ?, ?, ?, ?, ?, ?" + BRACKET_RIGHT;
+				+ " ) values " + BRACKET_LEFT + "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?" + BRACKET_RIGHT;
 		
-		Log.d(TAG, "insertUserInfo : " + sql);
+		Log.d(TAG, "insertMeasureResult : " + sql);
 		try 
 		{
 			db.execSQL( sql,
-	                new Object[]{ userInfo.getAccount(), userInfo.getUsername(), userInfo.getImei(), userInfo.getGender(), 
-					userInfo.getBirthday(), userInfo.getHeight(), userInfo.getPhone(),
-					userInfo.getQq(), userInfo.getEmail(), userInfo.getGoalWeight() });
+	                new Object[]{ measureResult.getAccount(), measureResult.getWeight(), measureResult.getBmi(),
+					measureResult.getBodyFatRate(), measureResult.getMuscleProportion(), measureResult.getPhysicalAge(),
+					measureResult.getSubcutaneousFat(), measureResult.getVisceralFat(), measureResult.getSubBasalMetabolism(),
+					measureResult.getEuropeBasalMetabolism(), measureResult.getBoneMass(), measureResult.getWaterContent(),
+					measureResult.getDate() });
 		} 
 		catch (SQLException e) 
 		{
@@ -78,18 +100,34 @@ public class MeasureResultDb extends BaseDb
 		Log.d(TAG, "insert success");
 	}
 	
-	public void updateUserInfo(UserInfo userInfo) 
+	public void updateMeasureResult(MeasureResult measureResult) 
 	{
 		checkDb();
-		String sql = "update " + TABLE_NAME + " set " + COLUMN_USERNAME + " =?, " + COLUMN_BIRTHDAY + " =?, "
-				+ COLUMN_GENDER + " =?, " + COLUMN_HEIGHT + " =? where " + COLUMN_ACCOUNT + " =? ";
+		String sql = "update " + TABLE_NAME + " set " 
+				+ COLUMN_WEIGHT + " =?, " 
+				+ COLUMN_BMI + " =?, "
+				+ COLUMN_BODYFATRATE + " =?, "
+				+ COLUMN_MUSCLEPROPORTION + " =?, "
+				+ COLUMN_PHYSICALAGE + " =?, "
+				+ COLUMN_SUBCUTANEOUSFAT + " =?, "
+				+ COLUMN_VISCERALFAT + " =?, "
+				+ COLUMN_SUBBASALMETABOLISM + " =?, "
+				+ COLUMN_EUROPEBASALMETABOLISM + " =?, "
+				+ COLUMN_BONEMASS + " =?, "
+				+ COLUMN_WATERCONTENT + " =?, "
+				+ " where 1=1 "
+				+ " and " + COLUMN_ACCOUNT + " =? "
+				+ " and " + COLUMN_DATE + " =? ";
 		
 		Log.d(TAG, "updateUserInfo : " + sql);
 		try 
 		{
 			db.execSQL( sql,
-	                new Object[]{ userInfo.getUsername(), userInfo.getBirthday(), userInfo.getGender(), 
-					 userInfo.getHeight(), userInfo.getAccount() });
+	                new Object[]{ measureResult.getWeight(), measureResult.getBmi(),
+					measureResult.getBodyFatRate(), measureResult.getMuscleProportion(), measureResult.getPhysicalAge(),
+					measureResult.getSubcutaneousFat(), measureResult.getVisceralFat(), measureResult.getSubBasalMetabolism(),
+					measureResult.getEuropeBasalMetabolism(), measureResult.getBoneMass(), measureResult.getWaterContent(),
+					measureResult.getAccount(), measureResult.getDate() });
 		} 
 		catch (SQLException e) 
 		{
@@ -98,49 +136,35 @@ public class MeasureResultDb extends BaseDb
 		Log.d(TAG, "update success");
 	}
 	
-	public void updateGoalWeight( String account, String goalWeight) 
+	public MeasureResult getMeasureResult( String account, String date ) 
 	{
+		MeasureResult measureResult = null;
 		checkDb();
-		String sql = "update " + TABLE_NAME + " set " + COLUMN_WEIGHT + " =? where " + COLUMN_ACCOUNT + " =? ";
+		String sql = "select " + TABLE_COLUMNS + " from " + TABLE_NAME + " where 1=1 "
+				+ " and " + COLUMN_ACCOUNT + " =? "
+				+ " and " + COLUMN_DATE + " =? ";
 		
-		Log.d(TAG, "updateGoalWeight : " + sql);
+		Log.d(TAG, "getMeasureResult : " + sql);
 		try 
 		{
-			db.execSQL( sql,
-	                new Object[]{ goalWeight, account });
-		} 
-		catch (SQLException e) 
-		{
-			Log.d("err", "updateGoalWeight failed");
-		}
-		Log.d(TAG, "updateGoalWeight success");
-	}
-	
-	public UserInfo getUserInfo( String account ) 
-	{
-		UserInfo userInfo = null;
-		checkDb();
-		String sql = "select " + TABLE_COLUMNS + " from " + TABLE_NAME + " where account =? ";
-		
-		Log.d(TAG, "getUserInfo : " + sql);
-		try 
-		{
-			cursor = db.rawQuery(sql, new String[]{ account });
-						
+			cursor = db.rawQuery(sql, new String[]{ account, date });
 			if ( cursor.moveToFirst() ) {
 				
-				userInfo = new UserInfo();
-				userInfo.setId( cursor.getInt( 0 ) );
-				userInfo.setAccount( cursor.getString( 1 ) );
-				userInfo.setUsername( cursor.getString( 2 ) );
-				userInfo.setImei( cursor.getString( 3 ) );
-				userInfo.setGender( cursor.getString( 4 ) );
-				userInfo.setBirthday( cursor.getString( 5 ) );
-				userInfo.setHeight( cursor.getString( 6 ) );
-				userInfo.setPhone( cursor.getString( 7 ) );
-				userInfo.setQq( cursor.getString( 8 ) );
-				userInfo.setEmail( cursor.getString( 9 ) );
-				userInfo.setGoalWeight( cursor.getString( 10 ) );
+				measureResult = new MeasureResult();
+				measureResult.setId( cursor.getInt( 0 ) );
+				measureResult.setAccount( cursor.getString( 1 ) );
+				measureResult.setWeight( cursor.getFloat( 2 ) );
+				measureResult.setBmi( cursor.getFloat( 3 ) );
+				measureResult.setBodyFatRate( cursor.getFloat( 4 ) );
+				measureResult.setMuscleProportion( cursor.getFloat( 5 ) );
+				measureResult.setPhysicalAge( cursor.getFloat( 6 ) );
+				measureResult.setSubcutaneousFat( cursor.getFloat( 7 ) );
+				measureResult.setVisceralFat( cursor.getFloat( 8 ) );
+				measureResult.setSubBasalMetabolism( cursor.getFloat( 9 ) );
+				measureResult.setEuropeBasalMetabolism( cursor.getFloat( 10 ) );
+				measureResult.setBoneMass( cursor.getFloat( 11 ) );
+				measureResult.setWaterContent( cursor.getFloat( 12 ) );
+				measureResult.setDate( cursor.getString( 13 ) );
 			}
 			cursor.close();
 			cursor = null;
@@ -150,30 +174,57 @@ public class MeasureResultDb extends BaseDb
 			Log.d("err", "get failed");
 		}
 		
-		return userInfo;
+		return measureResult;
 	}
 	
-	public void insertOrUpdateUserInfo( UserInfo userInfo )
+	public MeasureResult getLastMeasureResult( String account ) 
 	{
-		UserInfo user = getUserInfo( userInfo.getAccount() );
-		if( user == null )
+		MeasureResult measureResult = null;
+		checkDb();
+		String sql = "select " + TABLE_COLUMNS + " from " + TABLE_NAME + " where 1=1 "
+				+ " and " + COLUMN_ACCOUNT + " =? order by " + COLUMN_ID + " desc limit 0, 1 ";
+		
+		Log.d(TAG, "getLastMeasureResult : " + sql);
+		try 
 		{
-			insertUserInfo(userInfo);
-		}
-		else
+			cursor = db.rawQuery(sql, new String[]{ account });
+			if ( cursor.moveToFirst() ) {
+				
+				measureResult = new MeasureResult();
+				measureResult.setId( cursor.getInt( 0 ) );
+				measureResult.setAccount( cursor.getString( 1 ) );
+				measureResult.setWeight( cursor.getFloat( 2 ) );
+				measureResult.setBmi( cursor.getFloat( 3 ) );
+				measureResult.setBodyFatRate( cursor.getFloat( 4 ) );
+				measureResult.setMuscleProportion( cursor.getFloat( 5 ) );
+				measureResult.setPhysicalAge( cursor.getFloat( 6 ) );
+				measureResult.setSubcutaneousFat( cursor.getFloat( 7 ) );
+				measureResult.setVisceralFat( cursor.getFloat( 8 ) );
+				measureResult.setSubBasalMetabolism( cursor.getFloat( 9 ) );
+				measureResult.setEuropeBasalMetabolism( cursor.getFloat( 10 ) );
+				measureResult.setBoneMass( cursor.getFloat( 11 ) );
+				measureResult.setWaterContent( cursor.getFloat( 12 ) );
+				measureResult.setDate( cursor.getString( 13 ) );
+			}
+			cursor.close();
+			cursor = null;
+		} 
+		catch (SQLException e) 
 		{
-			updateUserInfo(userInfo);
+			Log.d("err", "get failed");
 		}
+		
+		return measureResult;
 	}
-
-	public ArrayList<UserInfo> getUserInfoes() 
+	
+	public ArrayList<MeasureResult> getMeasureResults() 
 	{
-		UserInfo userInfo = null;
-		ArrayList<UserInfo> list = new ArrayList<UserInfo>();
+		MeasureResult measureResult = null;
+		ArrayList<MeasureResult> list = new ArrayList<MeasureResult>();
 		checkDb();
 		String sql = "select " + TABLE_COLUMNS + " from " + TABLE_NAME;
 		
-		Log.d(TAG, "getUserInfoes : " + sql);
+		Log.d(TAG, "getMeasureResults : " + sql);
 		try 
 		{
 			cursor = db.rawQuery(sql, null );
@@ -183,20 +234,23 @@ public class MeasureResultDb extends BaseDb
 				int count = cursor.getCount();
 				for (int i = 0; i < count; i++) 
 				{
-					userInfo = new UserInfo();
-					userInfo.setId( cursor.getInt( 0 ) );
-					userInfo.setAccount( cursor.getString( 1 ) );
-					userInfo.setUsername( cursor.getString( 2 ) );
-					userInfo.setImei( cursor.getString( 3 ) );
-					userInfo.setGender( cursor.getString( 4 ) );
-					userInfo.setBirthday( cursor.getString( 5 ) );
-					userInfo.setHeight( cursor.getString( 6 ) );
-					userInfo.setPhone( cursor.getString( 7 ) );
-					userInfo.setQq( cursor.getString( 8 ) );
-					userInfo.setEmail( cursor.getString( 9 ) );
-					userInfo.setGoalWeight( cursor.getString( 10 ) );
+					measureResult = new MeasureResult();
+					measureResult.setId( cursor.getInt( 0 ) );
+					measureResult.setAccount( cursor.getString( 1 ) );
+					measureResult.setWeight( cursor.getFloat( 2 ) );
+					measureResult.setBmi( cursor.getFloat( 3 ) );
+					measureResult.setBodyFatRate( cursor.getFloat( 4 ) );
+					measureResult.setMuscleProportion( cursor.getFloat( 5 ) );
+					measureResult.setPhysicalAge( cursor.getFloat( 6 ) );
+					measureResult.setSubcutaneousFat( cursor.getFloat( 7 ) );
+					measureResult.setVisceralFat( cursor.getFloat( 8 ) );
+					measureResult.setSubBasalMetabolism( cursor.getFloat( 9 ) );
+					measureResult.setEuropeBasalMetabolism( cursor.getFloat( 10 ) );
+					measureResult.setBoneMass( cursor.getFloat( 11 ) );
+					measureResult.setWaterContent( cursor.getFloat( 12 ) );
+					measureResult.setDate( cursor.getString( 13 ) );
 					
-					list.add(userInfo);
+					list.add( measureResult );
 					cursor.moveToNext();
 				}
 			}

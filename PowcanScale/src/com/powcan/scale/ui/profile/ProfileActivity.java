@@ -30,6 +30,7 @@ import com.powcan.scale.net.NetRequest;
 import com.powcan.scale.ui.RegisterActivity;
 import com.powcan.scale.ui.base.BaseActivity;
 import com.powcan.scale.util.SpUtil;
+import com.powcan.scale.util.Utils;
 
 /**
  * 动画参考：http://cyrilmottier.com/2014/05/20/custom-animations-with-fragments/
@@ -117,8 +118,7 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		case R.id.et_birthday:
 			if ( birthday.equals("0000-00-00") )
 			{
-				Date date = new Date();
-				birthday = date.getYear() + "-" + date.getMonth() + "-" + date.getDay();
+				birthday = Utils.getCurDate();
 			}
 			String []datas = birthday.split("-");
 			int year = Integer.valueOf( datas[0] );

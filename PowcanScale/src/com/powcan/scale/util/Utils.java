@@ -70,6 +70,26 @@ public class Utils {
     	int day = calendar.get( Calendar.DAY_OF_MONTH );
     	return year + "-" + String.format("%02d", month) + "-" + String.format("%02d", day);
     }
+    
+    public static String getWeightRange( int height, String gender )
+    {
+    	// 健康体重计算方式
+     	// 标准体重=身高(m)×身高(m)×标准系数（女性20，男性22）
+ 		// 标准体重正负10﹪为正常体重
+    	int ratio = 22;
+    	float minWeight = 0;
+    	float maxWeight = 0;
+    	
+    	if ( gender.equalsIgnoreCase( "F" ) )
+    	{
+    		ratio = 20;
+    	}
+    	float weight = (float)height / 100 * (float)height / 100 * ratio; 
+		minWeight = (float)( Math.round(weight * 0.9f * 100) / 100 );
+		maxWeight = (float)( Math.round(weight * 1.1f * 100) / 100 ) ; 
+    	
+    	return minWeight + "-" + maxWeight;
+    }
 
 	// 获取ApiKey
 	public static String getMetaValue(Context context, String metaKey) {

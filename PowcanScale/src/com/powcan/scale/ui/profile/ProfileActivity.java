@@ -145,9 +145,9 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 	private void reqSaveUserInfo() 
 	{
 		userInfo.setUsername( etUsername.getText().toString() );
-		userInfo.setGender( etGender.getText().toString() );
+		userInfo.setGender( gender );
 		userInfo.setBirthday( etBirthday.getText().toString() );
-		userInfo.setHeight( etHeight.getText().toString() );
+		userInfo.setHeight( height );
 		
 		
 		loadingDialog = new LoadingDialog( this, "保存中..." );

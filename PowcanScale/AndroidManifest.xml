@@ -49,9 +49,11 @@
         <activity android:name="com.powcan.scale.ui.LoginActivity" />
         <activity android:name="com.powcan.scale.ui.settings.SettingsActivity" />
         <activity android:name="com.powcan.scale.ui.profile.UserInfoDetailActivity" />
-		<activity android:name="com.powcan.scale.ui.settings.SetGoalActivity" />
-		
+        <activity android:name="com.powcan.scale.ui.settings.SetGoalActivity" />
+        <activity android:name="com.powcan.scale.ui.settings.MeasureRemindActivity" />
+
         <service android:name="com.powcan.scale.ble.BluetoothLeService" />
+        <receiver android:name="com.powcan.scale.receiver.AlarmMeasure" />
 
         <meta-data
             android:name="UMENG_APPKEY"

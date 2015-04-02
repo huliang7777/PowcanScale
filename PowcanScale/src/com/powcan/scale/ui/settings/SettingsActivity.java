@@ -72,7 +72,8 @@ public class SettingsActivity extends BaseActivity implements OnClickListener
 				break;
 				
 			case R.id.rl_measure_remind:
-				
+				intent = new Intent( this, MeasureRemindActivity.class );
+				startActivity( intent );
 				break;
 				
 			case R.id.btn_exit:

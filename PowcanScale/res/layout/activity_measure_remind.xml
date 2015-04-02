@@ -25,8 +25,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/img_back"
             android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/img_back"
             android:ellipsize="end"
             android:singleLine="true"
             android:text="测量提醒"
@@ -40,9 +40,10 @@
         android:background="@color/light_gray" />
 
     <RelativeLayout
+        android:id="@+id/rl_morning_switch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp" >
+        android:padding="@dimen/activity_margin" >
 
         <TextView
             android:id="@+id/tv_morning"
@@ -53,7 +54,7 @@
             android:text="07:30"
             android:textColor="@color/deep_gray"
             android:textSize="@dimen/title" />
-        
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -67,10 +68,10 @@
             android:id="@+id/img_morning_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/set_on"
-            android:contentDescription="@string/app_name"/>
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/set_off" />
     </RelativeLayout>
 
     <View
@@ -78,10 +79,11 @@
         android:layout_height="@dimen/height_line"
         android:background="@color/gray" />
 
-     <RelativeLayout
+    <RelativeLayout
+        android:id="@+id/rl_noon_switch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp" >
+        android:padding="@dimen/activity_margin" >
 
         <TextView
             android:id="@+id/tv_noon"
@@ -92,7 +94,7 @@
             android:text="13:00"
             android:textColor="@color/deep_gray"
             android:textSize="@dimen/title" />
-        
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -106,21 +108,22 @@
             android:id="@+id/img_noon_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/set_off"
-            android:contentDescription="@string/app_name"/>
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/set_off" />
     </RelativeLayout>
-    
-     <View
+
+    <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_line"
         android:background="@color/gray" />
-    
-         <RelativeLayout
+
+    <RelativeLayout
+        android:id="@+id/rl_night_switch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp" >
+        android:padding="@dimen/activity_margin" >
 
         <TextView
             android:id="@+id/tv_noon"
@@ -131,7 +134,7 @@
             android:text="22:00"
             android:textColor="@color/deep_gray"
             android:textSize="@dimen/title" />
-        
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -142,13 +145,18 @@
             android:textSize="@dimen/subtitle" />
 
         <ImageView
-            android:id="@+id/img_noon_switch"
+            android:id="@+id/img_night_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/set_off"
-            android:contentDescription="@string/app_name"/>
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/set_off" />
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_line"
+        android:background="@color/gray" />
 
 </LinearLayout>

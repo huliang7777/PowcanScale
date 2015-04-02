@@ -12,6 +12,7 @@ import com.powcan.scale.dialog.SelectDataDialog;
 import com.powcan.scale.dialog.SelectDataDialog.ItemClickEvent;
 import com.powcan.scale.ui.base.BaseActivity;
 import com.powcan.scale.util.SpUtil;
+import com.powcan.scale.util.Utils;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -59,6 +60,10 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 		curUser = dbUserInfo.getUserInfo( account );
 		dbMeasureResult = new MeasureResultDb( this );
 		measureResult = dbMeasureResult.getLastMeasureResult( account );
+		if ( measureResult == null )
+		{
+			measureResult = new MeasureResult();
+		}
 		
 		list = new ArrayList<Integer>();
 		for( int i = 5; i <= 500; i += 5 )
@@ -93,10 +98,12 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 	
 	private void setData()
 	{
+		String range = Utils.getWeightRange( Integer.valueOf( curUser.getHeight() ), curUser.getGender() );
+		String []ranges = range.split( "-" );
 		tvCurWeight.setText( "当前体重为" + curWeight + "KG（标准）" );
-		tvSugCurWeight.setText( "专家建议:您的标准体重区间为65KG~80KG" );
+		tvSugCurWeight.setText( "专家建议:您的标准体重区间为" + ranges[0] + "KG~" + ranges[1] + "KG" );
 		tvGoalWeight.setText( "目标体重为" + goalWeight + "KG" );
-		tvSugGoalWeight.setText( "距离目标体重还有" + ( curWeight - goalWeight ) + "KG" );
+		tvSugGoalWeight.setText( "距离目标体重还有" + Math.abs( curWeight - goalWeight ) + "KG" );
 	}
 
 	@Override

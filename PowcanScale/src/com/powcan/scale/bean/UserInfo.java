@@ -13,6 +13,9 @@ public class UserInfo {
 	private String qq;
 	private String email;
 	private String goalWeight;
+	private int morningRemind;
+	private int noonRemind;
+	private int nightRemind;
 
 	public Integer getId() {
 		return id;
@@ -109,6 +112,30 @@ public class UserInfo {
 	public void setGoalWeight(String goalWeight) {
 		this.goalWeight = goalWeight;
 	}
+	
+	public int getMorningRemind() {
+		return morningRemind;
+	}
+
+	public void setMorningRemind(int morningRemind) {
+		this.morningRemind = morningRemind;
+	}
+
+	public int getNoonRemind() {
+		return noonRemind;
+	}
+
+	public void setNoonRemind(int noonRemind) {
+		this.noonRemind = noonRemind;
+	}
+
+	public int getNightRemind() {
+		return nightRemind;
+	}
+
+	public void setNightRemind(int nightRemind) {
+		this.nightRemind = nightRemind;
+	}
 
 	@Override
 	public String toString() {
@@ -116,6 +143,8 @@ public class UserInfo {
 				+ username + ", imei=" + imei + ", gender=" + gender
 				+ ", birthday=" + birthday + ", height=" + height + ", phone="
 				+ phone + ", qq=" + qq + ", email=" + email + ", goalWeight="
-				+ goalWeight + "]";
+				+ goalWeight + ", morningRemind=" + morningRemind
+				+ ", noonRemind=" + noonRemind + ", nightRemind=" + nightRemind
+				+ "]";
 	}
 }

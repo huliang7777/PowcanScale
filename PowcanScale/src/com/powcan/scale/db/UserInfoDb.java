@@ -22,6 +22,9 @@ public class UserInfoDb extends BaseDb {
 	public static final String COLUMN_QQ = "QQ ";
 	public static final String COLUMN_EMAIL = "EMAIL ";
 	public static final String COLUMN_WEIGHT = "GOALWEIGHT  ";
+	public static final String COLUMN_MORNING_REMIND = "MORNINGREMIND ";
+	public static final String COLUMN_NOON_REMIND = "NOONREMIND ";
+	public static final String COLUMN_NIGHT_REMIND = "NIGHTREMIND  ";
 
 	public static final String DROP_TABLE = DROP_TABLE_PREFIX + TABLE_NAME;
 	public static final String CREATE_TABLE = CREATE_TABLE_PREFIX + TABLE_NAME + BRACKET_LEFT 
@@ -35,7 +38,10 @@ public class UserInfoDb extends BaseDb {
 			+ COLUMN_PHONE + COLUMN_TYPE.TEXT + COMMA 
 			+ COLUMN_QQ + COLUMN_TYPE.TEXT + COMMA 
 			+ COLUMN_EMAIL + COLUMN_TYPE.TEXT + COMMA
-			+ COLUMN_WEIGHT + COLUMN_TYPE.TEXT
+			+ COLUMN_WEIGHT + COLUMN_TYPE.TEXT + COMMA
+			+ COLUMN_MORNING_REMIND + COLUMN_TYPE.INTEGER + COMMA
+			+ COLUMN_NOON_REMIND + COLUMN_TYPE.INTEGER + COMMA
+			+ COLUMN_NIGHT_REMIND + COLUMN_TYPE.INTEGER
 			+ BRACKET_RIGHT;
 	
 	public static final String TABLE_COLUMNS_WITHOUT_ID = COLUMN_ACCOUNT + COMMA 
@@ -46,7 +52,11 @@ public class UserInfoDb extends BaseDb {
 			+ COLUMN_HEIGHT + COMMA
 			+ COLUMN_PHONE + COMMA 
 			+ COLUMN_QQ + COMMA 
-			+ COLUMN_EMAIL + COMMA + COLUMN_WEIGHT;
+			+ COLUMN_EMAIL + COMMA 
+			+ COLUMN_WEIGHT + COMMA
+			+ COLUMN_MORNING_REMIND + COMMA 
+			+ COLUMN_NOON_REMIND + COMMA 
+			+ COLUMN_NIGHT_REMIND;
 	
 	public static final String TABLE_COLUMNS = COLUMN_ID + COMMA
 			+ TABLE_COLUMNS_WITHOUT_ID;
@@ -63,7 +73,7 @@ public class UserInfoDb extends BaseDb {
 	public void insertUserInfo(UserInfo userInfo) {
 		checkDb();
 		String sql = "insert into " + TABLE_NAME + BRACKET_LEFT + TABLE_COLUMNS_WITHOUT_ID
-				+ " ) values " + BRACKET_LEFT + "?, ?, ?, ?, ?, ?, ?, ?, ?, ?" + BRACKET_RIGHT;
+				+ " ) values " + BRACKET_LEFT + "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?" + BRACKET_RIGHT;
 		
 		Log.d(TAG, "insertUserInfo : " + sql);
 		try 
@@ -71,7 +81,7 @@ public class UserInfoDb extends BaseDb {
 			db.execSQL( sql,
 	                new Object[]{ userInfo.getAccount(), userInfo.getUsername(), userInfo.getImei(), userInfo.getGender(), 
 					userInfo.getBirthday(), userInfo.getHeight(), userInfo.getPhone(),
-					userInfo.getQq(), userInfo.getEmail(), userInfo.getGoalWeight() });
+					userInfo.getQq(), userInfo.getEmail(), userInfo.getGoalWeight(), 0, 0, 0 });
 		} 
 		catch (SQLException e) 
 		{
@@ -118,6 +128,24 @@ public class UserInfoDb extends BaseDb {
 		Log.d(TAG, "updateGoalWeight success");
 	}
 	
+	public void updateRemind( String account, int morningRemind, int noonRemind, int nightRemind ) 
+	{
+		checkDb();
+		String sql = "update " + TABLE_NAME + " set " + COLUMN_MORNING_REMIND + " =?, " + COLUMN_NOON_REMIND + " =?, " + COLUMN_NIGHT_REMIND + " =? where " + COLUMN_ACCOUNT + " =? ";
+		
+		Log.d(TAG, "updateGoalWeight : " + sql);
+		try 
+		{
+			db.execSQL( sql,
+	                new Object[]{ morningRemind, noonRemind, nightRemind,  account });
+		} 
+		catch (SQLException e) 
+		{
+			Log.d("err", "updateRemind failed");
+		}
+		Log.d(TAG, "updateRemind success");
+	}
+	
 	public UserInfo getUserInfo( String account ) 
 	{
 		UserInfo userInfo = null;
@@ -129,8 +157,8 @@ public class UserInfoDb extends BaseDb {
 		{
 			cursor = db.rawQuery(sql, new String[]{ account });
 						
-			if ( cursor.moveToFirst() ) {
-				
+			if ( cursor.moveToFirst() ) 
+			{
 				userInfo = new UserInfo();
 				userInfo.setId( cursor.getInt( 0 ) );
 				userInfo.setAccount( cursor.getString( 1 ) );
@@ -143,6 +171,9 @@ public class UserInfoDb extends BaseDb {
 				userInfo.setQq( cursor.getString( 8 ) );
 				userInfo.setEmail( cursor.getString( 9 ) );
 				userInfo.setGoalWeight( cursor.getString( 10 ) );
+				userInfo.setMorningRemind( cursor.getInt( 11 ) );
+				userInfo.setNoonRemind( cursor.getInt( 12 ) );
+				userInfo.setNightRemind( cursor.getInt( 13 ) );
 			}
 			cursor.close();
 			cursor = null;
@@ -197,6 +228,9 @@ public class UserInfoDb extends BaseDb {
 					userInfo.setQq( cursor.getString( 8 ) );
 					userInfo.setEmail( cursor.getString( 9 ) );
 					userInfo.setGoalWeight( cursor.getString( 10 ) );
+					userInfo.setMorningRemind( cursor.getInt( 11 ) );
+					userInfo.setNoonRemind( cursor.getInt( 12 ) );
+					userInfo.setNightRemind( cursor.getInt( 13 ) );
 					
 					list.add(userInfo);
 					cursor.moveToNext();

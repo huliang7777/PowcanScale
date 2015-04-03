@@ -57,13 +57,13 @@
                 android:singleLine="true"
                 android:text="体检80分"
                 android:textColor="@color/orange"
-                android:textSize="@dimen/title" />
+                android:textSize="@dimen/title"
+                android:visibility="gone" />
             <TextView
                 android:id="@+id/tv_weight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space"
-                android:layout_marginLeft="@dimen/space"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:singleLine="true"

@@ -1,7 +1,6 @@
 package com.powcan.scale;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
@@ -33,11 +32,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
 
-import com.powcan.scale.bean.http.LGNRequest;
-import com.powcan.scale.bean.http.LGNResponse;
 import com.powcan.scale.ble.BluetoothLeService;
 import com.powcan.scale.ble.SampleGattAttributes;
-import com.powcan.scale.net.NetRequest;
 import com.powcan.scale.ui.LoginActivity;
 import com.powcan.scale.ui.base.BaseActivity;
 import com.powcan.scale.ui.fragment.CenterFragment;
@@ -45,9 +41,6 @@ import com.powcan.scale.ui.fragment.CenterFragment.OnViewPagerChangeListener;
 import com.powcan.scale.ui.fragment.LeftFragment;
 import com.powcan.scale.ui.fragment.LeftFragment.NavigationDrawerCallbacks;
 import com.powcan.scale.ui.fragment.RightFragment;
-import com.powcan.scale.ui.profile.ProfileActivity;
-import com.powcan.scale.ui.settings.SettingsActivity;
-import com.powcan.scale.util.Md5Utils;
 import com.powcan.scale.widget.SlidingMenu;
 
 public class MainActivity extends BaseActivity implements NavigationDrawerCallbacks {
@@ -340,7 +333,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
         	Log.d(TAG, "display hex: " + hex);
         }
         
-        if ( data.length >=6 && data[4] == 0 )
+        if ( data.length >=9 && data[4] == 0 )
         {
         	// 换算成KG
         	int weight = ( data[5] * 100 + data[6] ) / 40;

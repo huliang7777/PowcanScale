@@ -217,17 +217,18 @@ public class MeasureResultDb extends BaseDb
 		return measureResult;
 	}
 	
-	public ArrayList<MeasureResult> getMeasureResults() 
+	public ArrayList<MeasureResult> getMeasureResults( String account ) 
 	{
 		MeasureResult measureResult = null;
 		ArrayList<MeasureResult> list = new ArrayList<MeasureResult>();
 		checkDb();
-		String sql = "select " + TABLE_COLUMNS + " from " + TABLE_NAME;
+		String sql = "select " + TABLE_COLUMNS + " from " + TABLE_NAME + " where 1=1 "
+				+ " and " + COLUMN_ACCOUNT + " =? order by " + COLUMN_ID + " desc ";
 		
 		Log.d(TAG, "getMeasureResults : " + sql);
 		try 
 		{
-			cursor = db.rawQuery(sql, null );
+			cursor = db.rawQuery(sql, new String[]{ account } );
 						
 			if ( cursor.moveToFirst() ) 
 			{

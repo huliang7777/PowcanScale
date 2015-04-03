@@ -87,7 +87,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		case R.id.tv_to_register:
 			Intent intent = new Intent(this, RegisterActivity.class);
 			startActivity(intent);
-			finish();
 			break;
 		}
 	}

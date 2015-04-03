@@ -7,7 +7,9 @@
     <color name="half_transparent">#AA000000</color>
     <color name="black">#000000</color>
     <color name="red">#FF0000</color>
+    <color name="light_red">#f77f6c</color>
     <color name="blue">#0066FF</color>
+    <color name="radio_color">#ff5cb85c</color>
     <color name="no_color">#00000000</color>
     <color name="bg_color">#F4F3F3</color>
     <color name="bg_color_deep">#E5E5E5</color>
@@ -34,11 +36,14 @@
     <color name="gray">#aaaaaa</color>
     <color name="light_gray">#c2c2c3</color>
     <color name="body">#999084</color>
-    <color name="green">#8eb32c</color>
+    <color name="green">#995cb85c</color>
     <color name="app_gray">#EFEFED</color>
     
     <color name="rbm_menu_background">#303030</color>
     <color name="rbm_item_text_color">#ffffff</color>
     
     <color name="dialog_bg">#FFFFFFFF</color>
+    
+    <color name="circle_color">#995cb85c</color>
+    <color name="ring_color">#ff5cb85c</color>
 </resources>

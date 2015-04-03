@@ -98,7 +98,7 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 	
 	private void setData()
 	{
-		String range = Utils.getWeightRange( Integer.valueOf( curUser.getHeight() ), curUser.getGender() );
+		String range = Utils.getWeightRange( Integer.valueOf( curUser.getHeight() ), curUser.getGender(), 0.1f );
 		String []ranges = range.split( "-" );
 		tvCurWeight.setText( "当前体重为" + curWeight + "KG（标准）" );
 		tvSugCurWeight.setText( "专家建议:您的标准体重区间为" + ranges[0] + "KG~" + ranges[1] + "KG" );

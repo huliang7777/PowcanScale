@@ -107,9 +107,9 @@ public class ProgressView extends View {
 			oval.right = mRingRadius * 2 + (mXCenter - mRingRadius);
 			oval.bottom = mRingRadius * 2 + (mYCenter - mRingRadius);
 			canvas.drawArc(oval, 90, ( mProgress / mTotalProgress ) * 360, false, mRingPaint); 
-			mTxtWidth = mTextPaint.measureText( content, 0, content.length() );
-			canvas.drawText( content, mXCenter - mTxtWidth / 2, mYCenter + mTxtHeight / 4, mTextPaint);
 		}
+		mTxtWidth = mTextPaint.measureText( content, 0, content.length() );
+		canvas.drawText( content, mXCenter - mTxtWidth / 2, mYCenter + mTxtHeight / 4, mTextPaint);
 	}
 	
 	public void setTotalProgress( float totalProgress )

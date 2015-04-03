@@ -3,7 +3,6 @@ package com.powcan.scale.ui.fragment;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.app.SearchManager.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,8 +13,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,8 +20,6 @@ import com.powcan.scale.R;
 import com.powcan.scale.adapter.UserListAdapter;
 import com.powcan.scale.bean.UserInfo;
 import com.powcan.scale.db.UserInfoDb;
-import com.powcan.scale.dialog.LoadingDialog;
-import com.powcan.scale.ui.LoginActivity;
 import com.powcan.scale.ui.base.BaseFragment;
 import com.powcan.scale.ui.profile.UserInfoDetailActivity;
 import com.powcan.scale.ui.settings.SettingsActivity;

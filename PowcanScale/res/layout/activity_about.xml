@@ -43,19 +43,20 @@
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="8dp" >
+        android:layout_margin="@dimen/activity_margin" >
 
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:contentDescription="@string/app_name"
+            android:layout_margin="@dimen/activity_margin"
             android:src="@drawable/ic_launcher" />
 
         <TextView
             android:id="@+id/tv_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/height_space"
+            android:layout_margin="@dimen/activity_margin"
             android:text="脂肪称V1.0"
             android:textColor="@color/deep_gray"
             android:textSize="@dimen/title" />
@@ -63,7 +64,7 @@
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_margin="@dimen/height_space"
+            android:layout_margin="@dimen/activity_margin"
             android:contentDescription="@string/app_name"
             android:src="@drawable/two_dimension_code" />
     </LinearLayout>

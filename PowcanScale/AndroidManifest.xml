@@ -51,8 +51,11 @@
         <activity android:name="com.powcan.scale.ui.profile.UserInfoDetailActivity" />
         <activity android:name="com.powcan.scale.ui.settings.SetGoalActivity" />
         <activity android:name="com.powcan.scale.ui.settings.MeasureRemindActivity" />
+        <activity android:name="com.powcan.scale.ui.settings.AboutActivity" />
+        <activity android:name="com.powcan.scale.ui.settings.HelpActivity" />
 
         <service android:name="com.powcan.scale.ble.BluetoothLeService" />
+
         <receiver android:name="com.powcan.scale.receiver.AlarmMeasure" />
 
         <meta-data

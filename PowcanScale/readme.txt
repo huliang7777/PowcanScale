@@ -139,3 +139,38 @@
 //				}
 //			};
 //		}.start();
+
+
+
+private void initView() {
+		mTasksView = (TasksCompletedView) findViewById(R.id.tasks_view);
+		mTasksView.setTotalProgress( 64.9f - 45.0f );
+	}
+	
+	class ProgressRunable implements Runnable {
+
+		@Override
+		public void run() {
+			float weight = 55.9f;
+			float progress = weight - 45.0f;
+			float content = 0.0f;
+			int startCount = 0;
+			int endCount = Math.round( ( weight - 45.0f ) / ( 64.9f - 45.0f ) * 100 ) ;
+			float perProgress = progress / endCount;
+			float perWeight = weight / endCount;
+			float rWeight = 0.0f;
+			while ( startCount < endCount ) {
+				mCurrentProgress += perProgress;
+				rWeight += perWeight;
+				content = (float)Math.round( rWeight * 10 ) / 10;
+				mTasksView.setData( String.valueOf( content ), mCurrentProgress );
+				startCount += 1;
+				try {
+					Thread.sleep(100);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+	}

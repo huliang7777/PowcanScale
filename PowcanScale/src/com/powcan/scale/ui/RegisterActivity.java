@@ -2,11 +2,12 @@ package com.powcan.scale.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.powcan.scale.MainActivity;
 import com.powcan.scale.R;
 import com.powcan.scale.bean.UserInfo;
 import com.powcan.scale.bean.http.BaseResponse;
@@ -40,6 +40,7 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, I
 	private Button btnCommit;
 	private TextView tvAccount;
 	private EditText etPassword;
+	private EditText etRePassword;
 	private EditText etPhone;
 	private EditText etQQ;
 	private EditText etEmail;
@@ -65,6 +66,7 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, I
 	public void onFindViews() {
 		tvAccount = (TextView) findViewById(R.id.tv_account);
 		etPassword = (EditText) findViewById(R.id.et_password);
+		etRePassword = (EditText) findViewById(R.id.et_repassword);
 		etPhone = (EditText) findViewById(R.id.et_phone);
 		etQQ = (EditText) findViewById(R.id.et_qq);
 		etEmail = (EditText) findViewById(R.id.et_email);
@@ -90,11 +92,9 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, I
 		switch (v.getId()) {
 		case R.id.btn_register:
 			Log.d( TAG, "btn_commit" );
-//			if (checkUsername() && checkPassword()) {
-//				requestLogin();
-				
-//			}
-			reqRegister();
+			if ( check() ) {
+				reqRegister();
+			}
 			break;
 		case R.id.tv_account:
 			Log.d( TAG, "tv_account" );
@@ -109,48 +109,59 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, I
 		}
 	}
 
-	private boolean checkUsername() {
-		String username = getUsername();
+	private boolean check() {
+		String password = etPassword.getText().toString();
+		String repassword = etRePassword.getText().toString();
+		String phone = etPhone.getText().toString();
+		String qq = etQQ.getText().toString();
+		String email = etEmail.getText().toString();
+		
+		Pattern passwordPattern = Pattern.compile("^[0-9a-zA-z]{6,30}$", Pattern.CASE_INSENSITIVE );
+		Matcher passwordMatcher = passwordPattern.matcher( password );
+		Matcher repasswordMatcher = passwordPattern.matcher( repassword );
+		
+		Pattern phonePattern = Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$", Pattern.CASE_INSENSITIVE );
+		Matcher phoneMatcher = phonePattern.matcher( phone );
+		
+		Pattern qqPattern = Pattern.compile("^[0-9]{6,12}$", Pattern.CASE_INSENSITIVE );
+		Matcher qqMatcher = qqPattern.matcher( qq );
+		
+		Pattern emailPattern = Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$", Pattern.CASE_INSENSITIVE );
+		Matcher emailMatcher = emailPattern.matcher( email );
 		
 		boolean check = false;
-		if (TextUtils.isEmpty(username)) {
-			showToast("请输入用户名");
-		} else if (username.contains(" ")) {
-			showToast("用户名不能包含空格");
-//		} else if (username.length() != 11) {
-//			showToast("手机号码长度不对");
-		} else {
+		if ( !passwordMatcher.matches() ) 
+		{
+			showToast("密码必须由6~30位的字符组成！");
+		} 
+		else if ( !repasswordMatcher.matches() ) 
+		{
+			showToast("确认密码必须由6~30位的字符组成！");
+		}
+		else if( !repassword.equals( password ) )
+		{
+			showToast("两次密码输入不一致！");
+		}
+		else if ( !phoneMatcher.matches() ) 
+		{
+			showToast("手机号码输入有误！");
+		} 
+		else if ( !qqMatcher.matches() ) 
+		{
+			showToast("qq输入有误！");
+		} 
+		else if ( !emailMatcher.matches() ) 
+		{
+			showToast("邮箱输入有误！");
+		}
+		else 
+		{
 			check = true;
 		}
 		
 		return check;
 	}
 	
-	public String getUsername() {
-		return tvAccount.getText().toString();
-	}
-	
-	private boolean checkPassword() {
-		String password = getPassword();
-		
-		boolean check = false;
-		if (TextUtils.isEmpty(password)) {
-			showToast("请输入密码");
-		} else if (password.contains(" ")) {
-			showToast("密码不能包含空格");
-		} else if (password.length() < 6 || password.length() > 30) {
-			showToast("密码由6~30位字母，数字和下划线组成");
-		} else {
-			check = true;
-		}
-		
-		return check;
-	}
-	
-	public String getPassword() {
-		return etPassword.getText().toString();
-	}
-
 	protected void gotoProfile() 
 	{
 		Intent intent = new Intent(this, ProfileActivity.class);

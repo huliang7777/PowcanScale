@@ -1,6 +1,7 @@
 package com.powcan.scale.ui.profile;
 
-import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
@@ -144,9 +145,35 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 
 	private void reqSaveUserInfo() 
 	{
-		userInfo.setUsername( etUsername.getText().toString() );
+		String username = etUsername.getText().toString();
+		String birthday = etBirthday.getText().toString();
+		
+		Pattern usernamePattern = Pattern.compile("^[0-9a-zA-z]{6,30}$", Pattern.CASE_INSENSITIVE );
+		Matcher usernameMatcher = usernamePattern.matcher( username );
+		if ( !usernameMatcher.matches() ) 
+		{
+			showToast("用户必须由6~30位的字符组成！");
+			return;
+		}
+		else if ( TextUtils.isEmpty( gender ) )
+		{
+			showToast("请选择性别！");
+			return;
+		}
+		else if ( TextUtils.isEmpty( birthday ) )
+		{
+			showToast("请选择选择出生年月日！");
+			return;
+		}
+		else if ( TextUtils.isEmpty( height ) )
+		{
+			showToast("请选择您的身高！");
+			return;
+		}
+		
+		userInfo.setUsername( username );
 		userInfo.setGender( gender );
-		userInfo.setBirthday( etBirthday.getText().toString() );
+		userInfo.setBirthday( birthday );
 		userInfo.setHeight( height );
 		
 		

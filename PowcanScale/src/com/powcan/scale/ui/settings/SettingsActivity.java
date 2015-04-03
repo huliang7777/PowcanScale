@@ -14,11 +14,13 @@ import android.widget.ImageView;
 
 public class SettingsActivity extends BaseActivity implements OnClickListener
 {
-	private static final String TAG = SettingsActivity.class.getSimpleName();
-	
 	private ImageView imgBack;
 	private View rlSetGoal;
 	private View rlMeasureRemind;
+	private View rlVersionUpdate;
+	private View rlSuggest;
+	private View rlAboutUs;
+	private View rlHelp;
 	private Button btnExit;
 	
 	@Override
@@ -39,6 +41,10 @@ public class SettingsActivity extends BaseActivity implements OnClickListener
 		imgBack = (ImageView) findViewById(R.id.img_back);
 		rlSetGoal = findViewById(R.id.rl_set_goal);
 		rlMeasureRemind = findViewById(R.id.rl_measure_remind);
+		rlAboutUs = findViewById(R.id.rl_about_us);
+		rlHelp = findViewById(R.id.rl_help);
+		rlVersionUpdate = findViewById(R.id.rl_version_update);
+		rlSuggest = findViewById(R.id.rl_suggest);
 		btnExit = (Button) findViewById(R.id.btn_exit);
 	}
 
@@ -54,6 +60,10 @@ public class SettingsActivity extends BaseActivity implements OnClickListener
 		imgBack.setOnClickListener( this );
 		rlSetGoal.setOnClickListener( this );
 		rlMeasureRemind.setOnClickListener( this );
+		rlAboutUs.setOnClickListener( this );
+		rlHelp.setOnClickListener( this );
+		rlVersionUpdate.setOnClickListener( this );
+		rlSuggest.setOnClickListener( this );
 		btnExit.setOnClickListener( this );
 	}
 
@@ -74,6 +84,22 @@ public class SettingsActivity extends BaseActivity implements OnClickListener
 			case R.id.rl_measure_remind:
 				intent = new Intent( this, MeasureRemindActivity.class );
 				startActivity( intent );
+				break;
+				
+			case R.id.rl_about_us:
+				intent = new Intent( this, AboutActivity.class );
+				startActivity( intent );
+				break;
+				
+			case R.id.rl_help:
+				intent = new Intent( this, HelpActivity.class );
+				startActivity( intent );
+				break;
+				
+			case R.id.rl_version_update:
+				break;
+				
+			case R.id.rl_suggest:
 				break;
 				
 			case R.id.btn_exit:

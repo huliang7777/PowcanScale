@@ -37,6 +37,22 @@
         android:textColor="@color/login_input"
         android:textColorHint="@color/login_hint"
         android:textSize="@dimen/text_input" />
+    
+    <EditText
+        android:id="@+id/et_repassword"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/edittext_height"
+        android:layout_marginLeft="@dimen/activity_margin"
+        android:layout_marginRight="@dimen/activity_margin"
+        android:layout_marginTop="@dimen/activity_margin"
+        android:background="@drawable/bg_input"
+        android:gravity="center_vertical"
+        android:hint="请输入确认密码"
+        android:inputType="textPassword"
+        android:minWidth="@dimen/edittext_width"
+        android:textColor="@color/login_input"
+        android:textColorHint="@color/login_hint"
+        android:textSize="@dimen/text_input" />
 
     <EditText
         android:id="@+id/et_phone"

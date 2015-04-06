@@ -29,7 +29,7 @@ public class HomeFragment extends BaseFragment
 	private ProgressView weightView;
 	private TextView tvSuggest;
 	
-	private int weight;
+	private float weight;
 	private float minWeight;
 	private float maxWeight;
 	private MeasureResult measureResult;
@@ -125,7 +125,7 @@ public class HomeFragment extends BaseFragment
 
 	}
 
-	public void setWeightData(int weight) 
+	public void setWeightData(float weight) 
 	{
 //		list.get(0).data = weight + "KG";
 //		mAdapter.notifyDataSetChanged();
@@ -140,7 +140,6 @@ public class HomeFragment extends BaseFragment
 		public void run() {
 			float progress = weight - minWeight;
 			float showProgress = 0.0f;
-			float showContent = 0.0f;
 			
 			int startCount = 0;
 			int endCount = Math.round( ( weight - minWeight ) / ( maxWeight - minWeight ) * 100 ) ;
@@ -154,9 +153,18 @@ public class HomeFragment extends BaseFragment
 				showProgress += perProgress;
 				
 				rWeight += perWeight;
-				showContent = (float)Math.round( rWeight * 10 ) / 10;
+				final float showContent = (float)Math.round( rWeight * 10 ) / 10;
 				
-				weightView.setData( String.valueOf( showContent ), showProgress );
+				final float curProgress = showProgress;
+				
+				weightView.post(new Runnable() {
+					
+					@Override
+					public void run() {
+						weightView.setData( String.valueOf( showContent ), curProgress );
+					}
+				});
+				
 				startCount += 1;
 				try 
 				{

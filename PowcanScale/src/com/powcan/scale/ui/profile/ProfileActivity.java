@@ -117,7 +117,7 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 			genderDialog.show();
 			break;
 		case R.id.et_birthday:
-			if ( birthday.equals("0000-00-00") )
+			if ( TextUtils.isEmpty(birthday) || birthday.equals("0000-00-00") )
 			{
 				birthday = Utils.getCurDate();
 			}
@@ -148,11 +148,12 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		String username = etUsername.getText().toString();
 		String birthday = etBirthday.getText().toString();
 		
-		Pattern usernamePattern = Pattern.compile("^[0-9a-zA-z]{6,30}$", Pattern.CASE_INSENSITIVE );
-		Matcher usernameMatcher = usernamePattern.matcher( username );
-		if ( !usernameMatcher.matches() ) 
+//		Pattern usernamePattern = Pattern.compile("^[0-9a-zA-z]{2,30}$", Pattern.CASE_INSENSITIVE );
+//		Matcher usernameMatcher = usernamePattern.matcher( username );
+//		if ( !usernameMatcher.matches() )
+		if (TextUtils.isEmpty(username) || username.length() < 2 || username.length() >= 30)
 		{
-			showToast("用户必须由6~30位的字符组成！");
+			showToast("用户必须由2~30位的字符组成！");
 			return;
 		}
 		else if ( TextUtils.isEmpty( gender ) )

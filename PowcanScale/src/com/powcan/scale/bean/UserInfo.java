@@ -34,7 +34,7 @@ public class UserInfo {
 	}
 
 	public String getUsername() {
-		return username;
+		return ("NULL".equals(username)) ? "" : username;
 	}
 
 	public void setUsername(String username) {
@@ -66,7 +66,7 @@ public class UserInfo {
 	}
 
 	public String getBirthday() {
-		return birthday;
+		return "0000-00-00".equals(birthday) ? "" : birthday;
 	}
 
 	public void setBirthday(String birthday) {

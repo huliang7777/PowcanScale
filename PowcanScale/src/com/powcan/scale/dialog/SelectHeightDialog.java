@@ -45,7 +45,7 @@ public class SelectHeightDialog extends Dialog
 		this.mItemClickEvent = mItemClickEvent;
 		if( TextUtils.isEmpty( height ) || height.equals( "0" ) )
 		{
-			curHeight = 30;
+			curHeight = 170;
 		}
 		else
 		{

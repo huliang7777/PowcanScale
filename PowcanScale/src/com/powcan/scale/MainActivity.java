@@ -1,6 +1,7 @@
 package com.powcan.scale;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
@@ -325,22 +326,21 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     };
 
     private void displayData(byte[] data, String hex) {
-    	for( int i=0;i<data.length;i++ )
-    	{
-    		Log.d(TAG, "display Data: " + data[i]);
-    	}
+    	Log.d(TAG, "display Data: " + Arrays.toString(data));
         if (hex != null) {
         	Log.d(TAG, "display hex: " + hex);
-        }
-        
-        if ( data.length >=9 && data[4] == 0 )
-        {
-        	// 换算成KG
-        	int weight = ( data[5] * 100 + data[6] ) / 40;
-        	
-        	String weightHexStr = Byte.toString(data[8]) + Byte.toString(data[9]);
-        	weight = Integer.parseInt(weightHexStr, 16);
-        	mCenterFragment.setWeightData( weight );
+        	hex = hex.replaceAll(" ", "");
+        	if ( hex.length() >=14 && data[4] == 0 )
+        	{
+        		// 换算成KG
+//        		int weight = ( data[5] * 100 + data[6] ) / 40;
+        		
+        		String weightHexStr = hex.substring(10, 14);//Byte.toString(data[5]) + Byte.toString(data[6]);
+        		float weight = (float)Integer.parseInt(weightHexStr, 16) / 200;
+
+            	Log.d(TAG, "display weight: " + weight);
+        		mCenterFragment.setWeightData( weight );
+        	}
         }
     }
 

@@ -211,7 +211,7 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 				String weight = map.get( dates[i] );
 				if ( weight != null )
 				{
-					measureResult.setWeight( Integer.valueOf( weight ) );
+					measureResult.setWeight( Float.valueOf( weight ) );
 					measureResult.setDate( dates[i].substring(5) );
 				}
 				else

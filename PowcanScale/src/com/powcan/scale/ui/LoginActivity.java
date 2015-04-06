@@ -191,14 +191,16 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
 	}
 
-	protected void gotoMain() {
+	protected void gotoMain() 
+	{
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
 
 		finish();
 	}
 
-	protected void gotoProfile() {
+	protected void gotoProfile() 
+	{
 		Intent intent = new Intent(this, ProfileActivity.class);
 		startActivity(intent);
 
@@ -215,7 +217,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK) 
 		{
-			PowcanScaleApplication.getInstance().exit();
+			//PowcanScaleApplication.getInstance().exit();
 		}
 
 		return super.onKeyDown(keyCode, event);

@@ -30,6 +30,14 @@ public class HomeFragment extends BaseFragment
 	private TextView tvSuggest;
 	
 	private float weight;
+	private float bmi;
+	private float bodyFatRate;
+	private float waterContent;
+	private String weightResult;
+	private String bmiResult;
+	private String bodyFatRateResult;
+	private String waterContentResult;
+
 	private float minWeight;
 	private float maxWeight;
 	private MeasureResult measureResult;
@@ -37,6 +45,13 @@ public class HomeFragment extends BaseFragment
 	
 	private List<Measure> list = new ArrayList<Measure>();
 	private UserInfo curUser;
+	
+	private String[] bmiStandard;
+	private String[] bodyFatRateStandard;
+	private String[] waterContentStandard;
+	private String[] bmiResults;
+	private String[] bodyFatRateResults;
+	private String[] waterContentResults;
 	
 	public HomeFragment() {
 		super();
@@ -75,7 +90,62 @@ public class HomeFragment extends BaseFragment
 		measureResult = dbMeasureResult.getLastMeasureResult( curUser.getAccount() );
 		if ( measureResult != null )
 		{
-			weight = (int) measureResult.getWeight();
+			weight = measureResult.getWeight();
+			bmi = measureResult.getBmi();
+			bodyFatRate = measureResult.getBodyFatRate();
+			waterContent = measureResult.getWaterContent();
+		}
+		
+		bmiResults = mContext.getResources().getStringArray( R.array.bmi_result );
+		bodyFatRateResults = mContext.getResources().getStringArray( R.array.bodyFatRate_result );
+		waterContentResults = mContext.getResources().getStringArray( R.array.waterContent_result );
+		
+		bmiStandard = mContext.getResources().getStringArray( R.array.bmi_standard );
+		
+		if( Utils.calAge( curUser.getBirthday() ) <= 30 )
+		{
+			if ( curUser.getGender().equalsIgnoreCase("M") )
+			{
+				bodyFatRateStandard = mContext.getResources().getStringArray( R.array.bodyFatRate_male_less_thirty_standard );
+			}
+			else
+			{
+				bodyFatRateStandard = mContext.getResources().getStringArray( R.array.bodyFatRate_female_less_thirty_standard );
+			}
+		}
+		else
+		{
+			if ( curUser.getGender().equalsIgnoreCase("M") )
+			{
+				bodyFatRateStandard = mContext.getResources().getStringArray( R.array.bodyFatRate_male_more_thirty_standard );
+			}
+			else
+			{
+				bodyFatRateStandard = mContext.getResources().getStringArray( R.array.bodyFatRate_female_more_thirty_standard );
+			}
+		}
+		
+		if( Utils.calAge( curUser.getBirthday() ) <= 30 )
+		{
+			if ( curUser.getGender().equalsIgnoreCase("M") )
+			{
+				waterContentStandard = mContext.getResources().getStringArray( R.array.waterContent_male_less_thirty_standard );
+			}
+			else
+			{
+				waterContentStandard = mContext.getResources().getStringArray( R.array.waterContent_female_less_thirty_standard );
+			}
+		}
+		else
+		{
+			if ( curUser.getGender().equalsIgnoreCase("M") )
+			{
+				waterContentStandard = mContext.getResources().getStringArray( R.array.waterContent_male_more_thirty_standard );
+			}
+			else
+			{
+				waterContentStandard = mContext.getResources().getStringArray( R.array.waterContent_female_more_thirty_standard );
+			}
 		}
 	}
 
@@ -96,42 +166,50 @@ public class HomeFragment extends BaseFragment
 	public void onInitViewData() 
 	{
 		mListView.setVisibility(View.VISIBLE);
-
+		suggest();
 		if ( list.isEmpty() ) 
 		{
-			list.add(new Measure("体重", ""));
-			list.add(new Measure("体脂率", ""));
-			list.add(new Measure("水含量", ""));
-			list.add(new Measure("BMI", "0"));
-			list.add(new Measure("肌肉比例", "0"));
-			list.add(new Measure("身体年龄", "0"));
-			list.add(new Measure("皮下脂肪", "0"));
-			list.add(new Measure("内脏脂肪", "0"));
-			list.add(new Measure("基础代谢(亚)", "0"));
-			list.add(new Measure("基础代谢(欧)", "0"));
-			list.add(new Measure("骨量", "0"));
+			judgeResult();
+			list.add(new Measure("体重", weight + "KG", weightResult));
+			list.add(new Measure("体脂率", "" + bodyFatRate, bodyFatRateResult));
+			list.add(new Measure("水含量", "" + waterContent, waterContentResult));
+			list.add(new Measure("BMI", "" + bmi, bmiResult));
+			list.add(new Measure("肌肉比例", "0", ""));
+			list.add(new Measure("身体年龄", "0", ""));
+			list.add(new Measure("皮下脂肪", "0", ""));
+			list.add(new Measure("内脏脂肪", "0", ""));
+			list.add(new Measure("基础代谢(亚)", "0", ""));
+			list.add(new Measure("基础代谢(欧)", "0", ""));
+			list.add(new Measure("骨量", "0", ""));
 		}
 
 		mAdapter = new HomeAdapter(mContext, list);
 		mListView.setAdapter(mAdapter);
 		
 		weightView.setTotalProgress( maxWeight - minWeight );
+//		setWeightData( 47.0f );
 		weightView.setData( String.valueOf( weight ), weight - minWeight );
-		suggest();
 	}
 
 	@Override
-	public void onBindListener() {
+	public void onBindListener() 
+	{
 
 	}
 
-	public void setWeightData(float weight) 
+	public void setWeightData( float weight, float bodyFatRate, float waterContent ) 
 	{
-//		list.get(0).data = weight + "KG";
-//		mAdapter.notifyDataSetChanged();
 		this.weight = weight;
+		this.bodyFatRate = bodyFatRate;
+		this.waterContent = waterContent;
+		bmi = weight / ( (Float.valueOf( curUser.getHeight() ) / 100) * (Float.valueOf( curUser.getHeight() ) / 100) );
+		bmi = (float)Math.round( bmi * 100 ) / 100;
 		measureResult = new MeasureResult();
+		measureResult.setAccount( curUser.getAccount() );
 		measureResult.setWeight(weight);
+		measureResult.setBodyFatRate(bodyFatRate);
+		measureResult.setWaterContent(waterContent);
+		measureResult.setBmi( bmi );
 		measureResult.setDate( Utils.getCurDate() );
 		MeasureResult result = dbMeasureResult.getMeasureResult( curUser.getAccount(), Utils.getCurDate() );
 		if ( result == null )
@@ -140,12 +218,26 @@ public class HomeFragment extends BaseFragment
 		}
 		else
 		{
-			result.setWeight( ( weight + result.getWeight() ) / 2 );
+			result.setWeight( (float)Math.round( ( weight + result.getWeight() ) / 2 * 100 ) / 100  );
+			result.setBodyFatRate( (float)Math.round( ( bodyFatRate + result.getBodyFatRate() ) / 2 ) / 100  );
+			result.setWaterContent( (float)Math.round( ( waterContent + result.getWaterContent() ) / 2 ) / 100 );
+			result.setBmi( bmi );
 			dbMeasureResult.updateMeasureResult( result );
 		}
 		
 		suggest();
+		judgeResult();
 		new Thread( new ProgressRunable() ).start();
+		
+		list.get(0).data = weight + "KG";
+		list.get(0).result = weightResult;
+		list.get(1).data = "" + bodyFatRate;
+		list.get(1).result = bodyFatRateResult;
+		list.get(2).data = "" + waterContent;
+		list.get(2).result = waterContentResult;
+		list.get(3).data = "" + bmi;
+		list.get(3).result = bmiResult;
+		mAdapter.notifyDataSetChanged();
 	}
 	
 	class ProgressRunable implements Runnable 
@@ -153,41 +245,45 @@ public class HomeFragment extends BaseFragment
 		@Override
 		public void run() {
 			float progress = weight - minWeight;
-			float showProgress = 0.0f;
-			
-			int startCount = 0;
-			int endCount = Math.round( ( weight - minWeight ) / ( maxWeight - minWeight ) * 100 ) ;
-			
-			float perProgress = progress / endCount;
-			float perWeight = weight / endCount;
-			
-			float rWeight = 0.0f;
-			while ( startCount < endCount ) 
-			{
-				showProgress += perProgress;
-				
-				rWeight += perWeight;
-				final float showContent = (float)Math.round( rWeight * 100 ) / 100;
-				
-				final float curProgress = showProgress;
-				
-				weightView.post(new Runnable() {
-					
-					@Override
-					public void run() {
-						weightView.setData( String.valueOf( showContent ), curProgress );
+			if (progress >= 0) {
+				float showProgress = 0.0f;
+
+				int startCount = 0;
+				int endCount = Math.round(progress / (maxWeight - minWeight)
+						* 100);
+
+				float perProgress = progress / endCount;
+				float perWeight = weight / endCount;
+
+				float rWeight = 0.0f;
+				while (startCount < endCount) 
+				{
+					showProgress += perProgress;
+
+					rWeight += perWeight;
+					final float showContent = (float) Math.round(rWeight * 100) / 100;
+
+					final float curProgress = showProgress;
+
+					weightView.post(new Runnable() 
+					{
+						@Override
+						public void run() 
+						{
+							weightView.setData(String.valueOf(showContent), curProgress);
+						}
+					});
+					startCount += 1;
+					try {
+						Thread.sleep(100);
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-				});
-				
-				startCount += 1;
-				try 
-				{
-					Thread.sleep(100);
-				} 
-				catch (Exception e) 
-				{
-					e.printStackTrace();
 				}
+			}
+			else
+			{
+				weightView.setData(String.valueOf(weight), progress );
 			}
 		}
 	}
@@ -201,19 +297,62 @@ public class HomeFragment extends BaseFragment
 		}
 		else if ( weight < subWeight + minWeight )
 		{
+			weightResult = "偏瘦";
 			tvSuggest.setText( "您的体重太轻了，请多补充营养" );
 		}
 		else if( weight < subWeight * 2 + minWeight )
 		{
+			weightResult = "标准";
 			tvSuggest.setText( "您的体重正常，请多多保持" );
 		}
 		else if( weight < subWeight * 3 + minWeight )
 		{
+			weightResult = "微胖";
 			tvSuggest.setText( "您的体重稍微胖了点，请注意饮食，合理安排运动" );
 		}
 		else
 		{
+			weightResult = "超标";
 			tvSuggest.setText( "您的体重已经超标，请控制饮食，多运动" );
+		}
+	}
+	
+	private void judgeResult()
+	{
+		if ( bmi > 0.0 )
+		{
+			for( int i=0;i<bmiStandard.length;i++ )
+			{
+				if ( bmi <= Float.valueOf( bmiStandard[i] ) )
+				{
+					bmiResult = bmiResults[i];
+					break;
+				}
+			}
+		}
+		
+		if ( bodyFatRate > 0.0 )
+		{
+			for( int i=0;i<bodyFatRateStandard.length;i++ )
+			{
+				if ( bodyFatRate <= Float.valueOf( bodyFatRateStandard[i] ) )
+				{
+					bodyFatRateResult = bodyFatRateResults[i];
+					break;
+				}
+			}
+		}
+		
+		if ( waterContent > 0.0 )
+		{
+			for( int i=0;i<waterContentStandard.length;i++ )
+			{
+				if ( waterContent >= Float.valueOf( waterContentStandard[i] ) )
+				{
+					waterContentResult = waterContentResults[i];
+					break;
+				}
+			}
 		}
 	}
 }

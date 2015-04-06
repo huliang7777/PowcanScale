@@ -5,12 +5,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
@@ -63,6 +64,53 @@ public class Utils {
         final float scale = context.getResources().getDisplayMetrics().density;  
         return (int) (dpValue * scale + 0.5f);  
     }
+    
+    @SuppressLint("SimpleDateFormat")
+	public static int calAge( String birthday )
+	{
+		int age = 0;
+		if ( TextUtils.isEmpty( birthday ) || birthday.equalsIgnoreCase("null") || birthday.equals("0000-00-00") )
+		{
+			return age;
+		}
+		
+		Date now = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  
+		Date birth = null;
+		try 
+		{
+			birth = sdf.parse( birthday );
+		} 
+		catch (ParseException e) 
+		{
+			e.printStackTrace();
+			return age;
+		}
+		
+		SimpleDateFormat format_y = new SimpleDateFormat( "yyyy" );
+		SimpleDateFormat format_M = new SimpleDateFormat( "MM" );
+		
+
+		String birth_year = format_y.format( birth );
+		String this_year = format_y.format( now );
+
+		String birth_month = format_M.format( birth );
+		String this_month = format_M.format( now );
+
+		// 初步，估算
+		age = Integer.parseInt(this_year) - Integer.parseInt(birth_year);
+
+		// 如果未到出生月份，则age - 1
+		if (this_month.compareTo(birth_month) < 0)
+		{
+			age -= 1;
+		}
+		if (age < 0)
+		{
+			age = 0;
+		}
+		return age;
+	}
     
     public static String getCurDate()
     {

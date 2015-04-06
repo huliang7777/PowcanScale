@@ -35,13 +35,13 @@ import android.widget.Toast;
 
 import com.powcan.scale.ble.BluetoothLeService;
 import com.powcan.scale.ble.SampleGattAttributes;
-import com.powcan.scale.ui.LoginActivity;
 import com.powcan.scale.ui.base.BaseActivity;
 import com.powcan.scale.ui.fragment.CenterFragment;
 import com.powcan.scale.ui.fragment.CenterFragment.OnViewPagerChangeListener;
 import com.powcan.scale.ui.fragment.LeftFragment;
 import com.powcan.scale.ui.fragment.LeftFragment.NavigationDrawerCallbacks;
 import com.powcan.scale.ui.fragment.RightFragment;
+import com.powcan.scale.ui.profile.UserInfoDetailActivity;
 import com.powcan.scale.widget.SlidingMenu;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -73,6 +73,8 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     
     private boolean mConnected = false;
     private BluetoothGattCharacteristic mNotifyCharacteristic;
+    private boolean isDataUpdate = false;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -208,10 +210,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	{
 		if( obj != null )
 		{
-			Intent intent = new Intent( this, LoginActivity.class );
+			Intent intent = new Intent( this, UserInfoDetailActivity.class );
 	        intent.putExtra( "account", (String)obj );
 	        startActivity(intent);
-	        finish();
 		}
 	}
 	
@@ -332,19 +333,28 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 
     private void displayData(byte[] data, String hex) {
     	Log.d(TAG, "display Data: " + Arrays.toString(data));
-        if (hex != null) {
+        if (hex != null) 
+        {
         	Log.d(TAG, "display hex: " + hex);
         	hex = hex.replaceAll(" ", "");
         	if ( hex.length() >=14 && data[4] == 0 )
         	{
+        		isDataUpdate = true;
+        	}
+        	else if( isDataUpdate && hex.length() >=34 && hex.startsWith("081101B1020109")  )
+        	{
+        		isDataUpdate = false;
         		// 换算成KG
-//        		int weight = ( data[5] * 100 + data[6] ) / 40;
+        		String weightHexStr = hex.substring(22, 26);
+        		String bodyFatRateHexStr = hex.substring(26, 30);
+        		String waterContentHexStr = hex.substring(30, 34);
         		
-        		String weightHexStr = hex.substring(10, 14);//Byte.toString(data[5]) + Byte.toString(data[6]);
         		float weight = (float)Integer.parseInt(weightHexStr, 16) / 200;
-
-            	Log.d(TAG, "display weight: " + weight);
-        		mCenterFragment.setWeightData( weight );
+        		float bodyFatRate = (float)Integer.parseInt(bodyFatRateHexStr, 16) / 10;
+        		float waterContent = (float)Integer.parseInt(waterContentHexStr, 16) / 10;
+        		
+        		Log.d(TAG, "display weight-bodyFatRate-waterContent: " + weight + "-" + bodyFatRate + "-" + waterContent );
+        		mCenterFragment.setWeightData( weight, bodyFatRate, waterContent );
         	}
         }
     }

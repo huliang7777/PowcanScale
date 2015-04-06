@@ -116,7 +116,7 @@ public class MeasureResultDb extends BaseDb
 				+ COLUMN_SUBBASALMETABOLISM + " =?, "
 				+ COLUMN_EUROPEBASALMETABOLISM + " =?, "
 				+ COLUMN_BONEMASS + " =?, "
-				+ COLUMN_WATERCONTENT + " =?, "
+				+ COLUMN_WATERCONTENT + " =? "
 				+ " where 1=1 "
 				+ " and " + COLUMN_ACCOUNT + " =? "
 				+ " and " + COLUMN_DATE + " =? ";

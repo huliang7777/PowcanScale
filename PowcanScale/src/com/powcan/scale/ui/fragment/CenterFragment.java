@@ -147,9 +147,9 @@ public class CenterFragment extends Fragment implements OnClickListener {
 		}
 	}
 
-	public void setWeightData( float weight )
+	public void setWeightData( float weight, float bodyFatRate, float waterContent )
 	{
 		HomeFragment fragment = (HomeFragment)(pagerItemList.get(0));
-		fragment.setWeightData( weight );
+		fragment.setWeightData( weight, bodyFatRate, waterContent );
 	}
 }

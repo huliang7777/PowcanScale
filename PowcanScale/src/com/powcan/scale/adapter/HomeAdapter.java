@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.powcan.scale.R;
 import com.powcan.scale.bean.Measure;
+import com.powcan.scale.bean.UserInfo;
+import com.powcan.scale.util.SpUtil;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,16 +14,24 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+/**
+ * @author Administrator
+ *
+ */
 public class HomeAdapter extends BaseAdapter {
 
 	private List<Measure> items;
 	private Context context;
 	private LayoutInflater mInflater;
+	
+	private UserInfo curUser;
 
 	public HomeAdapter(Context context, List<Measure> list) {
 		this.context = context;
 		this.mInflater = LayoutInflater.from(context);
 		this.items = list;
+		
+		curUser = SpUtil.getInstance(context).getCurrUser();
 	}
 
 	@Override
@@ -50,6 +60,8 @@ public class HomeAdapter extends BaseAdapter {
 		Measure measure = items.get(position);
 		tvName.setText(measure.name);
 		tvData.setText(measure.data);
+		tvResult.setText(measure.result);
+		
 		
 		return convertView;
 	}

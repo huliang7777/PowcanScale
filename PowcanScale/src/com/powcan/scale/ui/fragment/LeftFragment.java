@@ -20,6 +20,7 @@ import com.powcan.scale.R;
 import com.powcan.scale.adapter.UserListAdapter;
 import com.powcan.scale.bean.UserInfo;
 import com.powcan.scale.db.UserInfoDb;
+import com.powcan.scale.ui.LoginActivity;
 import com.powcan.scale.ui.base.BaseFragment;
 import com.powcan.scale.ui.profile.UserInfoDetailActivity;
 import com.powcan.scale.ui.settings.SettingsActivity;
@@ -49,6 +50,7 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
     private boolean mUserLearnedDrawer;
 
 	private View mBtnSettings;
+	private View imgAdd;
 	private TextView tvUsername;
 
 	private UserInfoDb dbUserInfo;
@@ -86,6 +88,7 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
         mDrawerListView = (ListView) mDrawer.findViewById(R.id.listView);        
         mBtnSettings = mDrawer.findViewById(R.id.btn_settings);
         tvUsername = (TextView) mDrawer.findViewById(R.id.tv_username);
+        imgAdd = mDrawer.findViewById(R.id.img_add);
 	}
 
 	@Override
@@ -121,6 +124,7 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
 		});
         
         tvUsername.setOnClickListener( this );
+        imgAdd.setOnClickListener( this );
 	}
 
     @Override
@@ -196,6 +200,10 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
 		{
 			case R.id.tv_username:
 				Intent intent = new Intent(mContext, UserInfoDetailActivity.class);
+				startActivity(intent);
+				break;
+			case R.id.img_add:
+				intent = new Intent(mContext, LoginActivity.class);
 				startActivity(intent);
 				break;
 		}

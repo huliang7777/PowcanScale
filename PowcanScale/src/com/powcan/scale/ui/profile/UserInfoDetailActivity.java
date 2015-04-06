@@ -3,6 +3,7 @@ package com.powcan.scale.ui.profile;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,10 +12,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.powcan.scale.R;
 import com.powcan.scale.bean.UserInfo;
+import com.powcan.scale.db.UserInfoDb;
 import com.powcan.scale.ui.base.BaseActivity;
 import com.powcan.scale.util.SpUtil;
+import com.powcan.scale.util.Utils;
 
 /**
  * 动画参考：http://cyrilmottier.com/2014/05/20/custom-animations-with-fragments/
@@ -30,7 +34,10 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 	private TextView tvBirthday;
 	private TextView tvHeight;
 	
+	private String account;
 	private UserInfo curUser;
+	private UserInfoDb dbUserInfo;
+	private boolean isShowSetting;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -42,7 +49,19 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 	@Override
 	public void onInit() 
 	{
-		curUser = SpUtil.getInstance(this).getCurrUser();
+		dbUserInfo = new UserInfoDb( this );
+		account = getIntent().getStringExtra("account");
+		String acc = SpUtil.getInstance(this).getAccount();
+		if ( TextUtils.isEmpty( account ) )
+		{
+			curUser = SpUtil.getInstance(this).getCurrUser();
+		}
+		else
+		{
+			curUser = dbUserInfo.getUserInfo( account );
+		}
+		
+		isShowSetting = acc.equals( curUser.getAccount() );
 	}
 
 	@Override
@@ -60,12 +79,20 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 	@Override
 	public void onInitViewData() 
 	{
-		
 		tvUsername.setText( curUser.getUsername() );
 		tvGender.setText( curUser.getGender().equalsIgnoreCase("m") ? "男" : "女" );
-		tvAge.setText( String.valueOf( calAge() ) + "岁" );
+		tvAge.setText( String.valueOf( Utils.calAge( curUser.getBirthday() ) ) + "岁" );
 		tvBirthday.setText( curUser.getBirthday() );
 		tvHeight.setText( curUser.getHeight() + "CM" );
+		
+		if ( isShowSetting )
+		{
+			ivEdit.setVisibility( View.VISIBLE );
+		}
+		else
+		{
+			ivEdit.setVisibility( View.GONE );
+		}
 	}
 
 	@Override
@@ -88,53 +115,5 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 			startActivity(intent);
 			break;
 		}
-	}
-
-	@SuppressLint("SimpleDateFormat")
-	private int calAge()
-	{
-		int age = 0;
-		String birthday = curUser.getBirthday();
-		if ( TextUtils.isEmpty( birthday ) || birthday.equalsIgnoreCase("null") )
-		{
-			return age;
-		}
-		
-		Date now = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  
-		Date birth = null;
-		try 
-		{
-			birth = sdf.parse( birthday );
-		} 
-		catch (ParseException e) 
-		{
-			e.printStackTrace();
-			return age;
-		}
-		
-		SimpleDateFormat format_y = new SimpleDateFormat( "yyyy" );
-		SimpleDateFormat format_M = new SimpleDateFormat( "MM" );
-		
-
-		String birth_year = format_y.format( birth );
-		String this_year = format_y.format( now );
-
-		String birth_month = format_M.format( birth );
-		String this_month = format_M.format( now );
-
-		// 初步，估算
-		age = Integer.parseInt(this_year) - Integer.parseInt(birth_year);
-
-		// 如果未到出生月份，则age - 1
-		if (this_month.compareTo(birth_month) < 0)
-		{
-			age -= 1;
-		}
-		if (age < 0)
-		{
-			age = 0;
-		}
-		return age;
 	}
 }

@@ -59,7 +59,7 @@ public class CenterFragment extends Fragment implements OnClickListener {
 		mRightToogle.setOnClickListener(this);
 
 		pagerItemList.add(HomeFragment.getInstance(1));
-		pagerItemList.add(PagerFragment.getInstance(2));
+		pagerItemList.add(ChartFragment.getInstance(2));
 		pagerItemList.add(ReportFragment.getInstance(3));
 
 		adapter = new MyPagerAdapter(getFragmentManager());

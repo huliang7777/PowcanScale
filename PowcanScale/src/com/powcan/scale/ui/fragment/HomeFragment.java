@@ -13,7 +13,9 @@ import android.widget.TextView;
 import com.powcan.scale.R;
 import com.powcan.scale.adapter.HomeAdapter;
 import com.powcan.scale.bean.Measure;
+import com.powcan.scale.bean.MeasureResult;
 import com.powcan.scale.bean.UserInfo;
+import com.powcan.scale.db.MeasureResultDb;
 import com.powcan.scale.ui.base.BaseFragment;
 import com.powcan.scale.util.SpUtil;
 import com.powcan.scale.util.Utils;
@@ -30,6 +32,8 @@ public class HomeFragment extends BaseFragment
 	private int weight;
 	private float minWeight;
 	private float maxWeight;
+	private MeasureResult measureResult;
+	private MeasureResultDb dbMeasureResult;
 	
 	private List<Measure> list = new ArrayList<Measure>();
 	private UserInfo curUser;
@@ -66,6 +70,13 @@ public class HomeFragment extends BaseFragment
 		String []ranges = range.split( "-" );
 		minWeight = Float.valueOf( ranges[0] );
 		maxWeight = Float.valueOf( ranges[1] );
+		
+		dbMeasureResult = new MeasureResultDb( mContext );
+		measureResult = dbMeasureResult.getLastMeasureResult( curUser.getAccount() );
+		if ( measureResult != null )
+		{
+			weight = (int) measureResult.getWeight();
+		}
 	}
 
 	@Override

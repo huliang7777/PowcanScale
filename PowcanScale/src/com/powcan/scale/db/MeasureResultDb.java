@@ -1,8 +1,10 @@
 package com.powcan.scale.db;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.powcan.scale.bean.MeasureResult;
+
 import android.content.Context;
 import android.database.SQLException;
 import android.util.Log;
@@ -264,5 +266,41 @@ public class MeasureResultDb extends BaseDb
 		}
 		
 		return list;
+	}
+	
+	public HashMap<String, String> getMeasureResults( String account, String startDate, String endDate ) 
+	{
+		HashMap<String, String> map = new HashMap<String, String>();
+		checkDb();
+		String sql = "select " + COLUMN_WEIGHT + ", " + COLUMN_DATE +  " from " + TABLE_NAME + " where 1=1 "
+				+ " and " + COLUMN_ACCOUNT + " =? and "
+				+ COLUMN_DATE + " >=? and " + COLUMN_DATE + " <= ? ";
+		
+		Log.d(TAG, "getMeasureResults : " + sql);
+		try 
+		{
+			cursor = db.rawQuery(sql, new String[]{ account, startDate, endDate } );
+						
+			if ( cursor.moveToFirst() ) 
+			{
+				int count = cursor.getCount();
+				for (int i = 0; i < count; i++) 
+				{
+					String weight = cursor.getString( 0 );
+					String date = cursor.getString( 1 );
+					
+					map.put(date, weight);
+					cursor.moveToNext();
+				}
+			}
+			cursor.close();
+			cursor = null;
+		} 
+		catch (SQLException e) 
+		{
+			Log.d("err", "get list failed");
+		}
+		
+		return map;
 	}
 }

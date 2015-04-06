@@ -3,6 +3,7 @@ package com.powcan.scale.ui.fragment;
 
 import java.util.ArrayList;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 	private TextView tvDistanceGoal;
 	private TextView tvWeight;
 	private TextView tvContinueDay;
+	private Button btnShare;
 	private Button btnSport;
 	private Button btnNutrition;
 	private TextView tvContent;
@@ -98,8 +100,8 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 		MeasureResult measureResult2 = null;
 		for( int i=0; i<size - 1; i++ )
 		{
-			measureResult1 = measureResults.get( 0 );
-			measureResult2 = measureResults.get( 1 );
+			measureResult1 = measureResults.get( i );
+			measureResult2 = measureResults.get( i + 1 );
 			if ( measureResult1.getWeight() < measureResult2.getWeight() )
 			{
 				curContinueDay ++;
@@ -113,6 +115,10 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 				curContinueDay = 0;
 			}
 		}
+		if ( size > 0 && curContinueDay > continueDay )
+		{
+			continueDay = curContinueDay;
+		}
 	}
 
 	@Override
@@ -122,6 +128,7 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 		tvDistanceGoal = (TextView) v.findViewById(R.id.tv_distance_goal);
 		tvWeight = (TextView) v.findViewById(R.id.tv_weight);
 		tvContinueDay = (TextView) v.findViewById(R.id.tv_continue_day);
+		btnShare = (Button) v.findViewById(R.id.btn_share);
 		btnSport = (Button) v.findViewById(R.id.btn_sport);
 		btnNutrition = (Button) v.findViewById(R.id.btn_nutrition);
 		tvContent = (TextView) v.findViewById(R.id.tv_content);
@@ -139,6 +146,7 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 	@Override
 	public void onBindListener() 
 	{
+		btnShare.setOnClickListener( this );
 		btnSport.setOnClickListener( this );
 		btnNutrition.setOnClickListener( this );
 	}
@@ -154,6 +162,12 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 		case R.id.btn_nutrition:
 			isSport = false;
 			break;
+		case R.id.btn_share:
+			Intent intent = new Intent(Intent.ACTION_SEND); // 启动分享发送的属性
+			intent.setType("text/plain"); // 分享发送的数据类型
+			String msg = "脂肪称，特别好，推荐给大家~ \n下载地址：http://www.baidu.com";
+			intent.putExtra(Intent.EXTRA_TEXT, msg); // 分享的内容
+			mContext.startActivity(Intent.createChooser(intent, "选择分享"));// 目标应用选择对话框的标题
 		}
 		
 		changeContent();

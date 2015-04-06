@@ -53,6 +53,8 @@ public class Utils {
 
 	public static final int MEDIA_TYPE_VIDEO = 2;
 	
+	public static final int[][] quarterMonths = { {1,2,3}, {4,5,6}, {7,8,9}, {10,11,12} };
+	
 	 /** 
      * 根据手机的分辨率从 dp 的单位 转成为 px(像素) 
      */  
@@ -90,6 +92,91 @@ public class Utils {
     	
 		Log.d(TAG, minWeight + "-" + maxWeight);
     	return minWeight + "-" + maxWeight;
+    }
+    
+    public static String[] getCurWeekDate()
+    {
+    	String [] dates = new String[ 7 ];
+    	Calendar calendar = Calendar.getInstance();
+        // 今天是一周中的第几天
+        int dayOfWeek = calendar.get( Calendar.DAY_OF_WEEK );
+ 
+        if ( calendar.getFirstDayOfWeek() == Calendar.SUNDAY ) 
+        {
+        	calendar.add( Calendar.DAY_OF_MONTH, 1 );
+        }
+        // 计算一周开始的日期
+        calendar.add( Calendar.DAY_OF_MONTH, -dayOfWeek );
+        
+        int year = calendar.get( Calendar.YEAR );
+    	int month = calendar.get( Calendar.MONTH ) + 1;
+    	int day = calendar.get( Calendar.DAY_OF_MONTH );
+    	dates[0] = year + "-" + String.format("%02d", month) + "-" + String.format("%02d", day);
+        
+    	for ( int i=1; i<7; i++ )
+    	{
+    		// 计算一周结束的日期
+            calendar.add( Calendar.DAY_OF_MONTH, 1 );
+            
+            year = calendar.get( Calendar.YEAR );
+        	month = calendar.get( Calendar.MONTH ) + 1;
+        	day = calendar.get( Calendar.DAY_OF_MONTH );
+        	dates[i] = year + "-" + String.format("%02d", month) + "-" + String.format("%02d", day);
+    	}
+        return dates;
+    }
+    
+    public static int[] getCurMonthDate()
+    {
+    	Calendar calendar = Calendar.getInstance();
+    	int year = calendar.get( Calendar.YEAR );
+    	int month = calendar.get( Calendar.MONTH ) + 1;
+    	int endDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+    	
+    	calendar.set(Calendar.DAY_OF_MONTH, 1);
+    	int dayOfWeek = calendar.get( Calendar.DAY_OF_WEEK);
+    	
+    	return new int[]{ year, month, endDay, dayOfWeek };
+    }
+    
+    public static int[] getQuarterDate( int m )
+    {
+    	int[] dates = new int[7];
+    	Calendar calendar = Calendar.getInstance();
+    	int year = calendar.get( Calendar.YEAR );
+    	int month = m;
+    	if ( month == -1 )
+    	{
+    		month = calendar.get( Calendar.MONTH );
+    	}
+    	int[] quarterMonth = quarterMonths[ month / 3 ];
+    	
+    	for(int i=0;i<quarterMonth.length;i++)
+    	{
+    		calendar.set( Calendar.MONTH, quarterMonth[i] - 1 );
+        	int endDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        	dates[ i * 2 ] = quarterMonth[i];
+        	dates[ i * 2 + 1 ] = endDay;
+    	}
+    	dates[ 6 ] = year;
+    	return dates;
+    }
+    
+    public static int[] getYearDate()
+    {
+    	int[] dates = new int[25];
+    	Calendar calendar = Calendar.getInstance();
+    	int year = calendar.get( Calendar.YEAR );
+    	for(int i=0;i<12;i++)
+    	{
+    		calendar.set( Calendar.MONTH, i );
+        	int endDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        	dates[ i * 2 ] = i + 1;
+        	dates[ i * 2 + 1 ] = endDay;
+    	}
+    	dates[ 24 ] = year;
+
+    	return dates;
     }
 
 	// 获取ApiKey

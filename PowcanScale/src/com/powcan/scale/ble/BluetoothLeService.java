@@ -169,7 +169,8 @@ public class BluetoothLeService extends Service {
                  		    	c.set(2000, 0, 1, 0, 0, 0);
                  		    	long time2000 = c.getTimeInMillis();
                  		    	
-                 		    	String hexStr = Byte.toString(data[7]) + Byte.toString(data[8]) + Byte.toString(data[9]) + Byte.toString(data[10]);
+//                 		    	String hexStr = Byte.toString(data[7]) + Byte.toString(data[8]) + Byte.toString(data[9]) + Byte.toString(data[10]);
+                 		    	String hexStr = hex.replaceAll(" ", "").substring(14, 20);
                  		    	long time = Long.parseLong(hexStr, 16);
                  		    	time = time * 1000 + time2000;
             					

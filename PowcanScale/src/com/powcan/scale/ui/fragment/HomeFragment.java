@@ -99,17 +99,17 @@ public class HomeFragment extends BaseFragment
 
 		if ( list.isEmpty() ) 
 		{
-//			list.add(new Measure("体重", ""));
-			list.add(new Measure("BMI", ""));
+			list.add(new Measure("体重", ""));
 			list.add(new Measure("体脂率", ""));
-			list.add(new Measure("肌肉比例", ""));
-			list.add(new Measure("身体年龄", ""));
-			list.add(new Measure("皮下脂肪", ""));
-			list.add(new Measure("内脏脂肪", ""));
-			list.add(new Measure("基础代谢(亚)", ""));
-			list.add(new Measure("基础代谢(欧)", ""));
-			list.add(new Measure("骨量", ""));
 			list.add(new Measure("水含量", ""));
+			list.add(new Measure("BMI", "0"));
+			list.add(new Measure("肌肉比例", "0"));
+			list.add(new Measure("身体年龄", "0"));
+			list.add(new Measure("皮下脂肪", "0"));
+			list.add(new Measure("内脏脂肪", "0"));
+			list.add(new Measure("基础代谢(亚)", "0"));
+			list.add(new Measure("基础代谢(欧)", "0"));
+			list.add(new Measure("骨量", "0"));
 		}
 
 		mAdapter = new HomeAdapter(mContext, list);
@@ -130,6 +130,20 @@ public class HomeFragment extends BaseFragment
 //		list.get(0).data = weight + "KG";
 //		mAdapter.notifyDataSetChanged();
 		this.weight = weight;
+		measureResult = new MeasureResult();
+		measureResult.setWeight(weight);
+		measureResult.setDate( Utils.getCurDate() );
+		MeasureResult result = dbMeasureResult.getMeasureResult( curUser.getAccount(), Utils.getCurDate() );
+		if ( result == null )
+		{
+			dbMeasureResult.insertMeasureResult( measureResult );
+		}
+		else
+		{
+			result.setWeight( ( weight + result.getWeight() ) / 2 );
+			dbMeasureResult.updateMeasureResult( result );
+		}
+		
 		suggest();
 		new Thread( new ProgressRunable() ).start();
 	}
@@ -153,7 +167,7 @@ public class HomeFragment extends BaseFragment
 				showProgress += perProgress;
 				
 				rWeight += perWeight;
-				final float showContent = (float)Math.round( rWeight * 10 ) / 10;
+				final float showContent = (float)Math.round( rWeight * 100 ) / 100;
 				
 				final float curProgress = showProgress;
 				

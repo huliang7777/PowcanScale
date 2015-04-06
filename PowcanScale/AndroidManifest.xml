@@ -57,10 +57,40 @@
         <service android:name="com.powcan.scale.ble.BluetoothLeService" />
 
         <receiver android:name="com.powcan.scale.receiver.AlarmMeasure" />
+        
+        <service
+		    android:name="com.alexbbb.uploadservice.UploadService"
+		    android:enabled="true"
+		    android:exported="false" >
+		    <intent-filter>
+		        <action android:name="com.alexbbb.uploadservice.action.upload"/>
+		    </intent-filter>
+		</service>
+
+        <service
+            android:name="com.umeng.update.net.DownloadingService"
+            android:process=":DownloadingService" >
+        </service>
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" >
+        </service>
+
+        <activity
+            android:name="com.umeng.update.UpdateDialogActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+        <activity
+            android:name="com.umeng.fb.ConversationActivity"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="com.umeng.fb.ContactActivity"
+            android:theme="@android:style/Theme.NoTitleBar" />
 
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="54c398f9fd98c5a3c2000085" >
+            android:value="54492129fd98c58ea5007598" >
         </meta-data>
         <meta-data
             android:name="UMENG_CHANNEL"

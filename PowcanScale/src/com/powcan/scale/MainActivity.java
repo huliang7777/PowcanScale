@@ -43,6 +43,8 @@ import com.powcan.scale.ui.fragment.LeftFragment;
 import com.powcan.scale.ui.fragment.LeftFragment.NavigationDrawerCallbacks;
 import com.powcan.scale.ui.fragment.RightFragment;
 import com.powcan.scale.widget.SlidingMenu;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.update.UmengUpdateAgent;
 
 public class MainActivity extends BaseActivity implements NavigationDrawerCallbacks {
 	
@@ -76,6 +78,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		UmengUpdateAgent.update(this);
+		MobclickAgent.updateOnlineConfig(this);
 	}
 
 	@Override

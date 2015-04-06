@@ -4,6 +4,11 @@ import com.powcan.scale.R;
 import com.powcan.scale.ui.LoginActivity;
 import com.powcan.scale.ui.base.BaseActivity;
 import com.powcan.scale.util.SpUtil;
+import com.umeng.fb.FeedbackAgent;
+import com.umeng.update.UmengUpdateAgent;
+import com.umeng.update.UmengUpdateListener;
+import com.umeng.update.UpdateResponse;
+import com.umeng.update.UpdateStatus;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class SettingsActivity extends BaseActivity implements OnClickListener
 {
@@ -23,6 +29,8 @@ public class SettingsActivity extends BaseActivity implements OnClickListener
 	private View rlHelp;
 	private Button btnExit;
 	
+	private FeedbackAgent mFeedbackAgent;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -32,6 +40,9 @@ public class SettingsActivity extends BaseActivity implements OnClickListener
 
 	@Override
 	public void onInit() {
+
+        mFeedbackAgent = new FeedbackAgent(this);
+        mFeedbackAgent.sync();
 		
 	}
 
@@ -97,9 +108,11 @@ public class SettingsActivity extends BaseActivity implements OnClickListener
 				break;
 				
 			case R.id.rl_version_update:
+				toCheckUpdateVersion();
 				break;
 				
 			case R.id.rl_suggest:
+				mFeedbackAgent.startFeedbackActivity();
 				break;
 				
 			case R.id.btn_exit:
@@ -110,4 +123,30 @@ public class SettingsActivity extends BaseActivity implements OnClickListener
 				break;
 		}
 	}
+	
+	private void toCheckUpdateVersion() {
+    	// 检查更新
+		UmengUpdateAgent.setUpdateAutoPopup(false);
+		UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
+		    @Override
+		    public void onUpdateReturned(int updateStatus,UpdateResponse updateInfo) {
+		        switch (updateStatus) {
+		        case UpdateStatus.Yes: // has update
+		            UmengUpdateAgent.showUpdateDialog(getActivity(), updateInfo);
+		            break;
+		        case UpdateStatus.No: // has no update
+		            Toast.makeText(getActivity(), "没有更新", Toast.LENGTH_SHORT).show();
+		            break;
+		        case UpdateStatus.NoneWifi: // none wifi
+		            Toast.makeText(getActivity(), "没有wifi连接， 只在wifi下更新", Toast.LENGTH_SHORT).show();
+		            break;
+		        case UpdateStatus.Timeout: // time out
+		            Toast.makeText(getActivity(), "超时", Toast.LENGTH_SHORT).show();
+		            break;
+		        }
+		    }
+		});
+		UmengUpdateAgent.update(this);
+//    	UmengUpdateAgent.forceUpdate(this);
+    }
 }

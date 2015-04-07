@@ -77,11 +77,8 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 		dbMeasureResult = new MeasureResultDb( mContext );
 		
 		measureResults = dbMeasureResult.getMeasureResults( account );
-		if ( !measureResults.isEmpty() )
-		{
-			measureResult = measureResults.get( 0 );
-		}
-		else
+		measureResult = dbMeasureResult.getLastMeasureResult( account + "C" );
+		if ( measureResult == null )
 		{
 			measureResult = new MeasureResult();
 		}

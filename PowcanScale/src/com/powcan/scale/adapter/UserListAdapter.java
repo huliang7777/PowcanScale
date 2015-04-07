@@ -41,7 +41,7 @@ public class UserListAdapter extends BaseAdapter {
 		for ( int i=0;i<items.size();i++ )
 		{
 			account = items.get( i ).getAccount();
-			result = dbMeasureResult.getLastMeasureResult( account + "0000" );
+			result = dbMeasureResult.getLastMeasureResult( account + "C" );
 			if( result != null )
 			{
 				measureMap.put( account, result );

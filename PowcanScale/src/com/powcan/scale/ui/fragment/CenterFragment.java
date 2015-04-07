@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.powcan.scale.MainActivity;
 import com.powcan.scale.R;
+import com.powcan.scale.bean.CurUserInfo;
 import com.powcan.scale.bean.UserInfo;
 import com.powcan.scale.util.SpUtil;
 
@@ -32,14 +33,11 @@ public class CenterFragment extends Fragment implements OnClickListener {
 	private MyPagerAdapter adapter;
 
 	private ArrayList<Fragment> pagerItemList = new ArrayList<Fragment>();
-	private UserInfo curUser;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_center, null);
-		
-		curUser = SpUtil.getInstance(getActivity()).getCurrUser();
 		
 		findView(view);
 		initView(view);
@@ -86,7 +84,14 @@ public class CenterFragment extends Fragment implements OnClickListener {
 
 		mViewPager.setAdapter(adapter);
 		
-		tvName.setText( curUser.getUsername() );
+		
+	}
+	
+	@Override
+	public void onResume() 
+	{
+		super.onResume();
+		tvName.setText( CurUserInfo.getInstance( getActivity() ).getCurUser().getUsername() );
 	}
 
 	@Override

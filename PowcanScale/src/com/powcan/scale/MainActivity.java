@@ -33,6 +33,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import com.powcan.scale.bean.CurUserInfo;
 import com.powcan.scale.ble.BluetoothLeService;
 import com.powcan.scale.ble.SampleGattAttributes;
 import com.powcan.scale.ui.base.BaseActivity;
@@ -175,6 +176,8 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
             final boolean result = mBluetoothLeService.connect(mDeviceAddress);
             Log.d(TAG, "Connect request result=" + result);
         }
+        
+        CurUserInfo.getInstance( this ).reloadUserInfo();
 	}
 
     private static IntentFilter makeGattUpdateIntentFilter() {

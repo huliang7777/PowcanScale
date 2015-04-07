@@ -36,6 +36,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	private UserInfoDb dbUserInfo;
 
 	private String account;
+	private String from;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	@Override
 	public void onInitViewData() {
 		account = getIntent().getStringExtra("account");
+		from = getIntent().getStringExtra("from");
 		if (!TextUtils.isEmpty(account) && !account.equals("0")) {
 			etUsername.setText(account);
 		}
@@ -217,7 +219,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK) 
 		{
-			//PowcanScaleApplication.getInstance().exit();
+			if ( !TextUtils.isEmpty( from ) && from.equals("exit") ) 
+			{
+				PowcanScaleApplication.getInstance().exit();
+			}
 		}
 
 		return super.onKeyDown(keyCode, event);

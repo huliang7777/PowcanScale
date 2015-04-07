@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.powcan.scale.R;
 import com.powcan.scale.adapter.UserListAdapter;
+import com.powcan.scale.bean.CurUserInfo;
 import com.powcan.scale.bean.UserInfo;
 import com.powcan.scale.db.UserInfoDb;
 import com.powcan.scale.ui.LoginActivity;
@@ -51,10 +52,10 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
 
 	private View mBtnSettings;
 	private View imgAdd;
+	private View flUser;
 	private TextView tvUsername;
 
 	private UserInfoDb dbUserInfo;
-	private UserInfo curUser;
 	private ArrayList<UserInfo> users;
 	private UserListAdapter mAdapter;
 	
@@ -77,7 +78,6 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
         // Select either the default item (0) or the last selected item.
 //        selectItem(mCurrentSelectedPosition);
         
-        curUser = SpUtil.getInstance(mContext).getCurrUser();
 		dbUserInfo = new UserInfoDb( mContext ); 
 	}
 
@@ -89,20 +89,14 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
         mBtnSettings = mDrawer.findViewById(R.id.btn_settings);
         tvUsername = (TextView) mDrawer.findViewById(R.id.tv_username);
         imgAdd = mDrawer.findViewById(R.id.img_add);
+        flUser = mDrawer.findViewById(R.id.fl_user);
 	}
 
 	@Override
 	public void onInitViewData() {
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-        
-        String username = curUser.getUsername();
-        if ( TextUtils.isEmpty(username) || username.equalsIgnoreCase("NULL") )
-        {
-        	username = curUser.getAccount();
-        }
-        tvUsername.setText(username);
 	}
-
+	
 	@Override
 	public void onBindListener() {
 		mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -123,7 +117,7 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
 			}
 		});
         
-        tvUsername.setOnClickListener( this );
+        flUser.setOnClickListener( this );
         imgAdd.setOnClickListener( this );
 	}
 
@@ -188,9 +182,11 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
     public void onResume() {
     	super.onResume();
     	
-    	users = dbUserInfo.getUserInfoes();
+    	users = dbUserInfo.getUserInfoes( CurUserInfo.getInstance( getActivity() ).getCurUser().getAccount() );
 		mAdapter = new UserListAdapter(mContext, users);
 		mDrawerListView.setAdapter( mAdapter );
+		
+        tvUsername.setText( CurUserInfo.getInstance( getActivity() ).getCurUser().getUsername() );
     }
 
 	@Override
@@ -198,7 +194,7 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
 	{
 		switch ( view.getId() ) 
 		{
-			case R.id.tv_username:
+			case R.id.fl_user:
 				Intent intent = new Intent(mContext, UserInfoDetailActivity.class);
 				startActivity(intent);
 				break;

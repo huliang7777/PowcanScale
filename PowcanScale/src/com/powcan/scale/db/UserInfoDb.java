@@ -199,17 +199,17 @@ public class UserInfoDb extends BaseDb {
 		}
 	}
 
-	public ArrayList<UserInfo> getUserInfoes() 
+	public ArrayList<UserInfo> getUserInfoes( String account ) 
 	{
 		UserInfo userInfo = null;
 		ArrayList<UserInfo> list = new ArrayList<UserInfo>();
 		checkDb();
-		String sql = "select " + TABLE_COLUMNS + " from " + TABLE_NAME;
+		String sql = "select " + TABLE_COLUMNS + " from " + TABLE_NAME + " where " + COLUMN_ACCOUNT + " !=? ";
 		
 		Log.d(TAG, "getUserInfoes : " + sql);
 		try 
 		{
-			cursor = db.rawQuery(sql, null );
+			cursor = db.rawQuery(sql, new String[]{ account } );
 						
 			if ( cursor.moveToFirst() ) 
 			{

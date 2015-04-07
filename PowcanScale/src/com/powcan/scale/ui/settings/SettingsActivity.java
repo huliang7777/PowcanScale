@@ -118,6 +118,7 @@ public class SettingsActivity extends BaseActivity implements OnClickListener
 			case R.id.btn_exit:
 				SpUtil.getInstance( this ).reset();
 				intent = new Intent( this, LoginActivity.class );
+				intent.putExtra( "from", "exit" );
 				startActivity( intent );
 				finish();
 				break;

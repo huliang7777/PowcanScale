@@ -87,13 +87,21 @@ public class HomeFragment extends BaseFragment
 		maxWeight = Float.valueOf( ranges[1] );
 		
 		dbMeasureResult = new MeasureResultDb( mContext );
-		measureResult = dbMeasureResult.getLastMeasureResult( curUser.getAccount() );
+		measureResult = dbMeasureResult.getLastMeasureResult( curUser.getAccount() + "C" );
 		if ( measureResult != null )
 		{
 			weight = measureResult.getWeight();
 			bmi = measureResult.getBmi();
 			bodyFatRate = measureResult.getBodyFatRate();
 			waterContent = measureResult.getWaterContent();
+		}
+		else
+		{
+			measureResult = new MeasureResult();
+			measureResult.setAccount( curUser.getAccount() + "C" );
+			measureResult.setDate( curUser.getAccount() );
+			dbMeasureResult.insertMeasureResult(measureResult);
+			measureResult = dbMeasureResult.getLastMeasureResult( curUser.getAccount() + "C" );
 		}
 		
 		bmiResults = mContext.getResources().getStringArray( R.array.bmi_result );
@@ -174,13 +182,13 @@ public class HomeFragment extends BaseFragment
 			list.add(new Measure("体脂率", "" + bodyFatRate, bodyFatRateResult));
 			list.add(new Measure("水含量", "" + waterContent, waterContentResult));
 			list.add(new Measure("BMI", "" + bmi, bmiResult));
-			list.add(new Measure("肌肉比例", "0", ""));
-			list.add(new Measure("身体年龄", "0", ""));
-			list.add(new Measure("皮下脂肪", "0", ""));
-			list.add(new Measure("内脏脂肪", "0", ""));
-			list.add(new Measure("基础代谢(亚)", "0", ""));
-			list.add(new Measure("基础代谢(欧)", "0", ""));
-			list.add(new Measure("骨量", "0", ""));
+			list.add(new Measure("肌肉比例", "0.0", ""));
+			list.add(new Measure("身体年龄", "0.0", ""));
+			list.add(new Measure("皮下脂肪", "0.0", ""));
+			list.add(new Measure("内脏脂肪", "0.0", ""));
+			list.add(new Measure("基础代谢(亚)", "0.0", ""));
+			list.add(new Measure("基础代谢(欧)", "0.0", ""));
+			list.add(new Measure("骨量", "0.0", ""));
 		}
 
 		mAdapter = new HomeAdapter(mContext, list);
@@ -204,13 +212,18 @@ public class HomeFragment extends BaseFragment
 		this.waterContent = waterContent;
 		bmi = weight / ( (Float.valueOf( curUser.getHeight() ) / 100) * (Float.valueOf( curUser.getHeight() ) / 100) );
 		bmi = (float)Math.round( bmi * 100 ) / 100;
-		measureResult = new MeasureResult();
-		measureResult.setAccount( curUser.getAccount() );
+		measureResult.setAccount( curUser.getAccount() + "C" );
 		measureResult.setWeight(weight);
 		measureResult.setBodyFatRate(bodyFatRate);
 		measureResult.setWaterContent(waterContent);
 		measureResult.setBmi( bmi );
+		measureResult.setDate( curUser.getAccount() );
+		// 更新最新一条数据
+		dbMeasureResult.updateMeasureResult( measureResult );
+		
+		measureResult.setAccount( curUser.getAccount() );
 		measureResult.setDate( Utils.getCurDate() );
+		
 		MeasureResult result = dbMeasureResult.getMeasureResult( curUser.getAccount(), Utils.getCurDate() );
 		if ( result == null )
 		{

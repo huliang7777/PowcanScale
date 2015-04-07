@@ -184,7 +184,7 @@ public class MeasureResultDb extends BaseDb
 		MeasureResult measureResult = null;
 		checkDb();
 		String sql = "select " + TABLE_COLUMNS + " from " + TABLE_NAME + " where 1=1 "
-				+ " and " + COLUMN_ACCOUNT + " =? order by " + COLUMN_ID + " desc limit 0, 1 ";
+				+ " and " + COLUMN_ACCOUNT + " =?";
 		
 		Log.d(TAG, "getLastMeasureResult : " + sql);
 		try 

@@ -34,8 +34,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.powcan.scale.bean.CurUserInfo;
+import com.powcan.scale.bean.http.LGNResponse;
+import com.powcan.scale.bean.http.RECRequest;
 import com.powcan.scale.ble.BluetoothLeService;
 import com.powcan.scale.ble.SampleGattAttributes;
+import com.powcan.scale.net.NetRequest;
 import com.powcan.scale.ui.base.BaseActivity;
 import com.powcan.scale.ui.fragment.CenterFragment;
 import com.powcan.scale.ui.fragment.CenterFragment.OnViewPagerChangeListener;
@@ -43,6 +46,7 @@ import com.powcan.scale.ui.fragment.LeftFragment;
 import com.powcan.scale.ui.fragment.LeftFragment.NavigationDrawerCallbacks;
 import com.powcan.scale.ui.fragment.RightFragment;
 import com.powcan.scale.ui.profile.UserInfoDetailActivity;
+import com.powcan.scale.util.SpUtil;
 import com.powcan.scale.widget.SlidingMenu;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -321,6 +325,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 mConnected = true;
                 updateConnectionState(R.string.connected);
+                mSpUtil.checkOnlineParams(context);
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
                 updateConnectionState(R.string.disconnected);
@@ -352,12 +357,38 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
         		String bodyFatRateHexStr = hex.substring(26, 30);
         		String waterContentHexStr = hex.substring(30, 34);
         		
-        		float weight = (float)Integer.parseInt(weightHexStr, 16) / 200;
-        		float bodyFatRate = (float)Integer.parseInt(bodyFatRateHexStr, 16) / 10;
-        		float waterContent = (float)Integer.parseInt(waterContentHexStr, 16) / 10;
+        		final float weight = (float)Integer.parseInt(weightHexStr, 16) / 200;
+        		final float bodyFatRate = (float)Integer.parseInt(bodyFatRateHexStr, 16) / 10;
+        		final float waterContent = (float)Integer.parseInt(waterContentHexStr, 16) / 10;
         		
         		Log.d(TAG, "display weight-bodyFatRate-waterContent: " + weight + "-" + bodyFatRate + "-" + waterContent );
         		mCenterFragment.setWeightData( weight, bodyFatRate, waterContent );
+        		
+        		new Thread(){
+        			public void run() 
+        			{
+    					String account = SpUtil.getInstance(MainActivity.this).getAccount();
+    					
+    					RECRequest request = new RECRequest();
+    					request.account = account;
+    					request.weight = "" + weight;
+    					request.fat =  "" + bodyFatRate;
+    					request.water = "" + waterContent;
+    					request.muscle = "0.0";
+    					request.bone = "0.0";
+    					request.bmr = "0.0";
+    					request.sfat = "0.0";
+    					request.infat = "0.0";
+    					request.bodyage = "0.0";
+    					request.amr = "0.0";
+    					
+    					LGNResponse response = NetRequest.getInstance(getActivity()).send(request, LGNResponse.class);
+    					if (response != null && response.RES == 901 )
+    					{
+    						Log.d( TAG, "数据上传成功" );
+    					}
+        			};
+        		}.start();
         	}
         }
     }

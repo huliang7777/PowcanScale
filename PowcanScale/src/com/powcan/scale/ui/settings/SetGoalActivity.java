@@ -59,7 +59,7 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 		dbUserInfo = new UserInfoDb(this);
 		curUser = dbUserInfo.getUserInfo( account );
 		dbMeasureResult = new MeasureResultDb( this );
-		measureResult = dbMeasureResult.getLastMeasureResult( account );
+		measureResult = dbMeasureResult.getLastMeasureResult( account + "0000" );
 		if ( measureResult == null )
 		{
 			measureResult = new MeasureResult();

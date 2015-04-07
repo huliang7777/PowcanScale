@@ -321,6 +321,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 mConnected = true;
                 updateConnectionState(R.string.connected);
+                mSpUtil.checkOnlineParams(context);
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
                 updateConnectionState(R.string.disconnected);

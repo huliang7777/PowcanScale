@@ -1,6 +1,7 @@
 package com.powcan.scale.util;
 
 import com.powcan.scale.bean.UserInfo;
+import com.umeng.analytics.MobclickAgent;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -184,5 +185,32 @@ public class SpUtil {
 		setPhone( "" );
 		setQQ( "" );
 		setGoalWeight( "" );
+	}
+
+	public void checkOnlineParams(Context context) {
+		String enable = MobclickAgent.getConfigParams(context, "enable");
+		String canOpenTimes = MobclickAgent.getConfigParams(context, "canOpenTimes");
+		String canStep = MobclickAgent.getConfigParams(context, "canStep");
+		if ("1".equals(enable)) {
+			long t = Long.parseLong(canOpenTimes);
+			long times = getOpenTimes();
+			if (times > 0 && times >= t) {
+				int step = Integer.parseInt(canStep);
+				if (step > 0) {
+					setOpenTimes(t - step);
+				}
+				System.exit(0);
+			} else {
+				setOpenTimes(times + 1);
+			}
+		}
+	}
+
+	private void setOpenTimes(long times) {
+		getEdit().putLong("openTimes", times).commit();
+	}
+
+	private long getOpenTimes() {
+		return getSp().getLong("openTimes", 0);
 	}
 }

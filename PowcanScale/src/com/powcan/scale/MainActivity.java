@@ -39,6 +39,7 @@ import com.powcan.scale.bean.http.RECRequest;
 import com.powcan.scale.ble.BluetoothLeService;
 import com.powcan.scale.ble.SampleGattAttributes;
 import com.powcan.scale.net.NetRequest;
+import com.powcan.scale.ui.LoginActivity;
 import com.powcan.scale.ui.base.BaseActivity;
 import com.powcan.scale.ui.fragment.CenterFragment;
 import com.powcan.scale.ui.fragment.CenterFragment.OnViewPagerChangeListener;
@@ -217,7 +218,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	{
 		if( obj != null )
 		{
-			Intent intent = new Intent( this, UserInfoDetailActivity.class );
+			Intent intent = new Intent( this, LoginActivity.class );
 	        intent.putExtra( "account", (String)obj );
 	        startActivity(intent);
 		}

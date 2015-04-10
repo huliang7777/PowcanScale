@@ -156,5 +156,8 @@ public class CenterFragment extends Fragment implements OnClickListener {
 	{
 		HomeFragment fragment = (HomeFragment)(pagerItemList.get(0));
 		fragment.setWeightData( weight, bodyFatRate, waterContent );
+		
+		ChartFragment chartFragment = (ChartFragment)(pagerItemList.get(1));
+		chartFragment.reloadData();
 	}
 }

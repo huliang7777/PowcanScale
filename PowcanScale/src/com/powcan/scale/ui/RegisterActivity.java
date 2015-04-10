@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -102,14 +103,13 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, I
 			break;
 		case R.id.btn_to_login:
 			Log.d( TAG, "btn_to_login" );
-			Intent intent = new Intent( this, LoginActivity.class );
-			startActivity(intent);
 			finish();
 			break;
 		}
 	}
 
 	private boolean check() {
+		String account = tvAccount.getText().toString();
 		String password = etPassword.getText().toString();
 		String repassword = etRePassword.getText().toString();
 		String phone = etPhone.getText().toString();
@@ -130,7 +130,11 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, I
 		Matcher emailMatcher = emailPattern.matcher( email );
 		
 		boolean check = false;
-		if ( !passwordMatcher.matches() ) 
+		if ( account.equals( "请选择帐号" ) )
+		{
+			showToast("请选择帐号");
+		}
+		else if ( !passwordMatcher.matches() ) 
 		{
 			showToast("密码必须由6~30位的字符组成！");
 		} 
@@ -142,15 +146,15 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, I
 		{
 			showToast("两次密码输入不一致！");
 		}
-		else if ( !phoneMatcher.matches() ) 
+		else if ( !TextUtils.isEmpty( phone ) && !phoneMatcher.matches() ) 
 		{
 			showToast("手机号码输入有误！");
 		} 
-		else if ( !qqMatcher.matches() ) 
+		else if ( !TextUtils.isEmpty( qq ) && !qqMatcher.matches() ) 
 		{
 			showToast("qq输入有误！");
 		} 
-		else if ( !emailMatcher.matches() ) 
+		else if ( !TextUtils.isEmpty( email ) && !emailMatcher.matches() ) 
 		{
 			showToast("邮箱输入有误！");
 		}

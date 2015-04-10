@@ -33,6 +33,8 @@ public class SplashActivity extends Activity {
 		dbUserInfo = new UserInfoDb( this );
 		curUser = SpUtil.getInstance(this).getCurrUser();
 		
+		gotoProfile();
+		
 		if( curUser != null && !curUser.getAccount().equals("0") && !curUser.getPassword().equals("") )
 		{
 			new AsyncTask<Void, Void, UserInfo>() {

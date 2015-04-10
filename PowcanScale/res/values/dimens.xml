@@ -38,7 +38,7 @@
     <dimen name="height_avater">40dp</dimen>
     <dimen name="height_icon">24dp</dimen>
     
-    <dimen name="edittext_width">480dp</dimen>
+    <dimen name="edittext_width">300dp</dimen>
     <dimen name="edittext_height">48dp</dimen>
     <dimen name="height_small_item">32dp</dimen>
     

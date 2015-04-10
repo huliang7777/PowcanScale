@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.powcan.scale.MainActivity;
 import com.powcan.scale.R;
@@ -46,6 +47,7 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 	private EditText etGender;
 	private EditText etBirthday;
 	private EditText etHeight;
+	private TextView tvSelect;
 	
 	private String gender;
 	private String birthday;
@@ -82,6 +84,7 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		etGender = (EditText) findViewById(R.id.et_gender);
 		etBirthday = (EditText) findViewById(R.id.et_birthday);
 		etHeight = (EditText) findViewById(R.id.et_height);
+		tvSelect = (TextView) findViewById(R.id.tv_select);
 	}
 
 	@Override
@@ -101,7 +104,7 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 	public void onBindListener() {
 		btnSave.setOnClickListener( this );
 		etGender.setOnClickListener( this );
-		etBirthday.setOnClickListener( this );
+		tvSelect.setOnClickListener( this );
 		etHeight.setOnClickListener( this );
 	}
 
@@ -116,7 +119,8 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 			genderDialog = new SelectGenderDialog( this, gender, this );
 			genderDialog.show();
 			break;
-		case R.id.et_birthday:
+		case R.id.tv_select:
+			birthday = etBirthday.getText().toString();
 			if ( TextUtils.isEmpty(birthday) || birthday.equals("0000-00-00") )
 			{
 				birthday = Utils.getCurDate();
@@ -148,9 +152,8 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		String username = etUsername.getText().toString();
 		String birthday = etBirthday.getText().toString();
 		
-//		Pattern usernamePattern = Pattern.compile("^[0-9a-zA-z]{2,30}$", Pattern.CASE_INSENSITIVE );
-//		Matcher usernameMatcher = usernamePattern.matcher( username );
-//		if ( !usernameMatcher.matches() )
+		Pattern birthdayPattern = Pattern.compile("^((\\d{2}(([02468][048])|([13579][26]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])))))|(\\d{2}(([02468][1235679])|([13579][01345789]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))$", Pattern.CASE_INSENSITIVE );
+		Matcher birthdayMatcher = birthdayPattern.matcher( birthday );
 		if (TextUtils.isEmpty(username) || username.length() < 2 || username.length() >= 30)
 		{
 			showToast("用户必须由2~30位的字符组成！");
@@ -163,10 +166,15 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		}
 		else if ( TextUtils.isEmpty( birthday ) )
 		{
-			showToast("请选择选择出生年月日！");
+			showToast("请输入出生年月日！");
 			return;
 		}
-		else if ( TextUtils.isEmpty( height ) )
+		else if ( !birthdayMatcher.matches() )
+		{
+			showToast("出生年月日输入有误！");
+			return;
+		}
+		else if ( TextUtils.isEmpty( height ) || height.equals( "0" ) )
 		{
 			showToast("请选择您的身高！");
 			return;

@@ -387,4 +387,9 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		chartView.addData(data);
 		chartView.postInvalidate();
 	}
+	
+	public void reloadData()
+	{
+		changeContent();
+	}
 }

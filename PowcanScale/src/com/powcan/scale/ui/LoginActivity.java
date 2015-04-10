@@ -1,6 +1,7 @@
 package com.powcan.scale.ui;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -31,6 +32,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	private EditText etUsername;
 	private EditText etPassword;
 	private TextView tvToRegister;
+	private TextView tvForgetPassword;
 
 	private LoadingDialog loadingDialog;
 	private UserInfoDb dbUserInfo;
@@ -60,6 +62,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		etPassword = (EditText) findViewById(R.id.et_password);
 		btnCommit = (Button) findViewById(R.id.btn_commit);
 		tvToRegister = (TextView) findViewById(R.id.tv_to_register);
+		tvForgetPassword = (TextView) findViewById(R.id.tv_forgetPassword);
 	}
 
 	@Override
@@ -69,12 +72,16 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		if (!TextUtils.isEmpty(account) && !account.equals("0")) {
 			etUsername.setText(account);
 		}
+		
+		tvToRegister.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);//下划线
+		tvToRegister.getPaint().setAntiAlias( true ); // 抗锯齿
 	}
 
 	@Override
 	public void onBindListener() {
 		btnCommit.setOnClickListener(this);
 		tvToRegister.setOnClickListener(this);
+		tvForgetPassword.setOnClickListener(this);
 	}
 
 	@Override
@@ -88,6 +95,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.tv_to_register:
 			Intent intent = new Intent(this, RegisterActivity.class);
+			startActivity(intent);
+			break;
+		case R.id.tv_forgetPassword:
+			intent = new Intent(this, FindPasswordActivity.class);
 			startActivity(intent);
 			break;
 		}

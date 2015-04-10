@@ -47,6 +47,7 @@
         <activity android:name="com.powcan.scale.ui.profile.ProfileActivity" />
         <activity android:name="com.powcan.scale.ui.RegisterActivity" />
         <activity android:name="com.powcan.scale.ui.LoginActivity" />
+        <activity android:name="com.powcan.scale.ui.FindPasswordActivity" />
         <activity android:name="com.powcan.scale.ui.settings.SettingsActivity" />
         <activity android:name="com.powcan.scale.ui.profile.UserInfoDetailActivity" />
         <activity android:name="com.powcan.scale.ui.settings.SetGoalActivity" />

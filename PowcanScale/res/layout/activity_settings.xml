@@ -123,19 +123,51 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/set_on"
-            android:contentDescription="@string/app_name"/>
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/set_on" />
     </RelativeLayout>
 
-   <View
-       android:layout_width="match_parent"
-       android:layout_height="@dimen/height_line"
-       android:background="@color/light_gray" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_line"
+        android:background="@color/light_gray" />
 
-   <RelativeLayout
-       android:id="@+id/rl_version_update"
+    <RelativeLayout
+        android:id="@+id/rl_perfect_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_margin" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="完善资料"
+            android:textColor="@color/deep_gray"
+            android:textSize="@dimen/title" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text=">"
+            android:textColor="@color/deep_gray"
+            android:textSize="@dimen/title" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_line"
+        android:background="@color/light_gray" />
+
+    <RelativeLayout
+        android:id="@+id/rl_version_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/activity_margin" >
@@ -149,12 +181,12 @@
             android:text="版本更新"
             android:textColor="@color/deep_gray"
             android:textSize="@dimen/title" />
-        
+
         <TextView
             android:id="@+id/tv_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-             android:layout_alignParentRight="true"
+            android:layout_alignParentRight="true"
             android:layout_marginRight="5dp"
             android:ellipsize="end"
             android:singleLine="true"
@@ -179,12 +211,12 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_line"
         android:background="@color/gray" />
-    
-       <RelativeLayout
-           	android:id="@+id/rl_about_us"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:padding="@dimen/activity_margin" >
+
+    <RelativeLayout
+        android:id="@+id/rl_about_us"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_margin" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -211,12 +243,12 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_line"
         android:background="@color/gray" />
-    
-       <RelativeLayout
-           android:id="@+id/rl_suggest"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:padding="@dimen/activity_margin" >
+
+    <RelativeLayout
+        android:id="@+id/rl_suggest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_margin" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -227,7 +259,7 @@
             android:text="意见反馈"
             android:textColor="@color/deep_gray"
             android:textSize="@dimen/title" />
-        
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -243,12 +275,12 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_line"
         android:background="@color/gray" />
-    
-       <RelativeLayout
-   	        android:id="@+id/rl_help"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:padding="@dimen/activity_margin" >
+
+    <RelativeLayout
+        android:id="@+id/rl_help"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_margin" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -259,7 +291,7 @@
             android:text="帮助"
             android:textColor="@color/deep_gray"
             android:textSize="@dimen/title" />
-        
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -275,7 +307,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_line"
         android:background="@color/gray" />
-   
+
     <Button
         android:id="@+id/btn_exit"
         android:layout_width="wrap_content"

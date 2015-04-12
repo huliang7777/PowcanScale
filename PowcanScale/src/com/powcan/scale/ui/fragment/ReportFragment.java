@@ -79,7 +79,7 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 	
 	public void loadData()
 	{
-		String account = SpUtil.getInstance( mContext ).getAccount();
+		String account = mSpUtil.getAccount();
 		curUser = dbUserInfo.getUserInfo( account );
 		measureResults = dbMeasureResult.getMeasureResults( account );
 		measureResult = dbMeasureResult.getLastMeasureResult( account );

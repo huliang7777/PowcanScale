@@ -19,6 +19,7 @@ import com.powcan.scale.MainActivity;
 import com.powcan.scale.R;
 import com.powcan.scale.bean.CurUserInfo;
 import com.powcan.scale.bean.UserInfo;
+import com.powcan.scale.ui.base.BaseFragment;
 import com.powcan.scale.util.SpUtil;
 
 public class CenterFragment extends Fragment implements OnClickListener {
@@ -32,7 +33,7 @@ public class CenterFragment extends Fragment implements OnClickListener {
 
 	private MyPagerAdapter adapter;
 
-	private ArrayList<Fragment> pagerItemList = new ArrayList<Fragment>();
+	private ArrayList<BaseFragment> pagerItemList = new ArrayList<BaseFragment>();
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -159,5 +160,16 @@ public class CenterFragment extends Fragment implements OnClickListener {
 		
 		ChartFragment chartFragment = (ChartFragment)(pagerItemList.get(1));
 		chartFragment.reloadData();
+	}
+	
+	public void reloadData()
+	{
+		tvName.setText( CurUserInfo.getInstance( getActivity() ).getCurUser().getUsername() );
+		int size = pagerItemList.size();
+		for ( int i=0;i<size;i++ )
+		{
+			BaseFragment fragment = pagerItemList.get( i );
+			fragment.reloadData();
+		}
 	}
 }

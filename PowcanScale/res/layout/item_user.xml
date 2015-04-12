@@ -38,10 +38,9 @@
             android:layout_marginTop="@dimen/space"
             android:ellipsize="end"
             android:gravity="center_vertical"
-            android:maxLines="2"
-            android:text="上次体检：2015-03-30，距减重目标还有5KG"
+            android:text="上次体检：2015-03-30\n距减重目标还有5KG"
             android:textColor="@color/light_gray"
-            android:textSize="@dimen/subtitle" />
+            android:textSize="@dimen/subhead" />
 
         <LinearLayout
             android:layout_width="match_parent"

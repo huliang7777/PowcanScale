@@ -70,14 +70,19 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 	{
 		isSport = true;
 		continueDay = 0;
-		String account = SpUtil.getInstance( mContext ).getAccount();
-		dbUserInfo = new UserInfoDb( mContext );
-		curUser = dbUserInfo.getUserInfo( account );
 		
+		dbUserInfo = new UserInfoDb( mContext );
 		dbMeasureResult = new MeasureResultDb( mContext );
 		
+		loadData();
+	}
+	
+	public void loadData()
+	{
+		String account = SpUtil.getInstance( mContext ).getAccount();
+		curUser = dbUserInfo.getUserInfo( account );
 		measureResults = dbMeasureResult.getMeasureResults( account );
-		measureResult = dbMeasureResult.getLastMeasureResult( account + "C" );
+		measureResult = dbMeasureResult.getLastMeasureResult( account );
 		if ( measureResult == null )
 		{
 			measureResult = new MeasureResult();
@@ -92,7 +97,7 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 	private void calContinueDay()
 	{
 		int size = measureResults.size();
-		int curContinueDay = 1;
+		int curContinueDay = 0;
 		MeasureResult measureResult1 = null;
 		MeasureResult measureResult2 = null;
 		for( int i=0; i<size - 1; i++ )
@@ -188,5 +193,19 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 			btnNutrition.setBackgroundResource(R.color.radio_color);
 			btnNutrition.setTextColor(mContext.getResources().getColor( R.color.white ));
 		}
+	}
+	
+	@Override
+	public void reloadData() 
+	{
+		super.reloadData();
+		if ( mContext == null )
+		{
+			return;
+		}
+		loadData();
+		tvDistanceGoal.setText( Math.abs( curWeight - goalWeight ) + "KG" );
+		tvWeight.setText( curWeight + "KG" );
+		tvContinueDay.setText( continueDay + "天" );
 	}
 }

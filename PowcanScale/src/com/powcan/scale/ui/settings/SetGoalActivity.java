@@ -59,14 +59,18 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 		dbUserInfo = new UserInfoDb(this);
 		curUser = dbUserInfo.getUserInfo( account );
 		dbMeasureResult = new MeasureResultDb( this );
-		measureResult = dbMeasureResult.getLastMeasureResult( account + "C" );
+		measureResult = dbMeasureResult.getLastMeasureResult( account );
 		if ( measureResult == null )
 		{
 			measureResult = new MeasureResult();
 		}
 		
+		String range = Utils.getWeightRange( Integer.valueOf( curUser.getHeight() ), curUser.getGender(), 0.2f );
+		String []ranges = range.split( "-" );
 		list = new ArrayList<Integer>();
-		for( int i = 5; i <= 500; i += 5 )
+		int start = Math.round( Float.valueOf( ranges[ 0 ] ) );
+		int end = Math.round( Float.valueOf( ranges[ 1 ] ) );
+		for( int i = start; i <= end; i += 1 )
 		{
 			list.add( i );
 		}

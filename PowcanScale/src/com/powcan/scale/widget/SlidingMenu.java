@@ -16,6 +16,8 @@
 
 package com.powcan.scale.widget;
 
+import com.powcan.scale.util.Utils;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.AttributeSet;
@@ -206,6 +208,12 @@ public class SlidingMenu extends RelativeLayout {
 			// break;
 		case MotionEvent.ACTION_MOVE:
 			int distance = x - mLastPostionX;
+			
+			if ( Math.abs(distance) < Utils.dip2px(mContext, 5) )
+			{
+				return false;
+			}
+			
 			int yDistance = Math.abs(y - mLastPostionY);
 			// If the Y-axis distance is bigger than X-axis,do not intercept
 			// this and parse it to the child view.

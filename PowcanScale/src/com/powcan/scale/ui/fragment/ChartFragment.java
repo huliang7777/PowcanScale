@@ -25,6 +25,7 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 {
 	private int index;
 	
+	private Button btnDay;
 	private Button btnWeek;
 	private Button btnMonth;
 	private Button btnQuarter;
@@ -61,7 +62,7 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 	@Override
 	public void onInit() 
 	{
-		selected = 0;
+		selected = -1;
 		account = SpUtil.getInstance( mContext ).getAccount();
 		
 		dbMeasureResult = new MeasureResultDb( mContext );
@@ -73,6 +74,7 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 	{
 		View v = getView();
 		
+		btnDay = (Button) v.findViewById(R.id.btn_day);
 		btnWeek = (Button) v.findViewById(R.id.btn_week);
 		btnMonth = (Button) v.findViewById(R.id.btn_month);
 		btnQuarter = (Button) v.findViewById(R.id.btn_quarter);
@@ -89,12 +91,13 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 	@Override
 	public void onBindListener() 
 	{
+		btnDay.setOnClickListener( this );
 		btnWeek.setOnClickListener( this );
 		btnMonth.setOnClickListener( this );
 		btnQuarter.setOnClickListener( this );
 		btnYear.setOnClickListener( this );
 		
-		btnWeek.callOnClick();
+		btnDay.callOnClick();
 	}
 
 	@Override
@@ -102,6 +105,17 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 	{
 		switch ( v.getId() ) 
 		{
+			case R.id.btn_day:
+				if ( selected == 0 )
+				{
+					return;
+				}
+				selected = 0;
+				resetButton();
+				btnDay.setBackgroundResource(R.color.radio_color);
+				btnDay.setTextColor(mContext.getResources().getColor( R.color.white ));
+				
+			break;
 			case R.id.btn_week:
 				if ( selected == 1 )
 				{
@@ -149,6 +163,8 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 	
 	private void resetButton()
 	{
+		btnDay.setBackgroundResource(R.drawable.bg_rectangle);
+		btnDay.setTextColor(mContext.getResources().getColor( R.color.radio_color ));
 		btnWeek.setBackgroundResource(R.drawable.bg_rectangle);
 		btnWeek.setTextColor(mContext.getResources().getColor( R.color.radio_color ));
 		btnMonth.setBackgroundResource(R.drawable.bg_rectangle);
@@ -164,6 +180,9 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		chartView.clearValues();
 		switch ( selected ) 
 		{
+			case 0:
+				dealDayData();
+			break;
 			case 1:
 				dealWeekData();
 				break;
@@ -177,6 +196,49 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 				dealYearData();
 				break;
 		}
+	}
+	
+	private void dealDayData()
+	{
+		ArrayList<MeasureResult> results = dbMeasureResult.getMeasureResults( account, 5 );
+		
+		// 处理数据
+		ArrayList<MeasureResult> measureResults = new ArrayList<MeasureResult>();
+		if ( !results.isEmpty() )
+		{
+			int length = 5;
+			int size = results.size();
+			tvDesc.setText( "最近" + length + "次测量" );
+			
+			MeasureResult measureResult = null;
+			for( int i=0; i< 5; i++ )
+			{
+				measureResult = new MeasureResult();
+				measureResult.setAccount(account);
+				
+				if ( i < size )
+				{
+					Float weight = results.get( i ).getWeight();
+					measureResult.setWeight( weight );
+					measureResult.setDate( String.valueOf( i + 1 ) );
+				}
+				else
+				{
+					measureResult.setWeight( 0.0f );
+					measureResult.setDate( String.valueOf( i + 1 ) );
+				}
+				measureResults.add( measureResult );
+			}
+			
+			chartView.setVisibility(View.VISIBLE);
+			showChart( measureResults );
+		}
+		else
+		{
+			tvDesc.setText( "" );
+			chartView.setVisibility(View.GONE);
+		}
+		
 	}
 	
 	private void dealWeekData()
@@ -196,7 +258,7 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 //		}
 		tvDesc.setText( dates[ 0 ] + "~" + dates[6] );
 		
-		HashMap<String, String> map = dbMeasureResult.getMeasureResults( account, dates[ 0 ], dates[6] );
+		HashMap<String, Float> map = dbMeasureResult.getMeasureResults( account, dates[ 0 ], dates[6] );
 
 		// 处理数据
 		ArrayList<MeasureResult> measureResults = new ArrayList<MeasureResult>();
@@ -208,10 +270,10 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 				measureResult = new MeasureResult();
 				measureResult.setAccount(account);
 				
-				String weight = map.get( dates[i] );
-				if ( weight != null )
+				Float weight = map.get( dates[i] );
+				if ( weight != null && weight != 0.0f )
 				{
-					measureResult.setWeight( Float.valueOf( weight ) );
+					measureResult.setWeight( weight );
 					measureResult.setDate( dates[i].substring(5) );
 				}
 				else
@@ -221,7 +283,12 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 				}
 				measureResults.add( measureResult );
 			}
+			chartView.setVisibility(View.VISIBLE);
 			showChart( measureResults );
+		}
+		else
+		{
+			chartView.setVisibility(View.GONE);
 		}
 		
 	}
@@ -239,7 +306,7 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		
     	tvDesc.setText( firstDate + "~" + lastDate );
     	
-		HashMap<String, String> map = dbMeasureResult.getMeasureResults( account, firstDate, lastDate );
+		HashMap<String, Float> map = dbMeasureResult.getMeasureResults( account, firstDate, lastDate );
 		// 处理数据
 		ArrayList<MeasureResult> measureResults = new ArrayList<MeasureResult>();
 		if ( !map.isEmpty() )
@@ -254,8 +321,8 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 			{
 				date = year + "-" + String.format("%02d", month) + "-" + String.format("%02d", i);
 				
-				String weight = map.get( date );
-				if ( weight != null )
+				Float weight = map.get( date );
+				if ( weight != null && weight != 0.0f )
 				{
 					totalWeight += Float.valueOf( weight );
 					++ count;
@@ -275,7 +342,12 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 				}
 				++week;
 			}
+			chartView.setVisibility(View.VISIBLE);
 			showChart( measureResults );
+		}
+		else
+		{
+			chartView.setVisibility(View.GONE);
 		}
 	}
 	
@@ -288,7 +360,7 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		
     	tvDesc.setText( firstDate + "~" + lastDate );
     	
-		HashMap<String, String> map = dbMeasureResult.getMeasureResults( account, firstDate, lastDate );
+		HashMap<String, Float> map = dbMeasureResult.getMeasureResults( account, firstDate, lastDate );
 		// 处理数据
 		ArrayList<MeasureResult> measureResults = new ArrayList<MeasureResult>();
 		if ( !map.isEmpty() )
@@ -306,8 +378,8 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 				{
 					date = year + "-" + String.format("%02d", month) + "-" + String.format("%02d", j);
 					
-					String weight = map.get( date );
-					if ( weight != null )
+					Float weight = map.get( date );
+					if ( weight != null && weight != 0.0f )
 					{
 						totalWeight += Float.valueOf( weight );
 						++ count;
@@ -319,7 +391,12 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 				measureResult.setDate( month + "月" );
 				measureResults.add(measureResult);
 			}
+			chartView.setVisibility(View.VISIBLE);
 			showChart( measureResults );
+		}
+		else
+		{
+			chartView.setVisibility(View.GONE);
 		}
 		
 	}
@@ -333,7 +410,7 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		
     	tvDesc.setText( firstDate + "~" + lastDate );
     	
-		HashMap<String, String> map = dbMeasureResult.getMeasureResults( account, firstDate, lastDate );
+		HashMap<String, Float> map = dbMeasureResult.getMeasureResults( account, firstDate, lastDate );
 		// 处理数据
 		ArrayList<MeasureResult> measureResults = new ArrayList<MeasureResult>();
 		if ( !map.isEmpty() )
@@ -350,8 +427,8 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 				{
 					date = year + "-" + String.format("%02d", month) + "-" + String.format("%02d", j);
 					
-					String weight = map.get( date );
-					if ( weight != null )
+					Float weight = map.get( date );
+					if ( weight != null && weight != 0.0f )
 					{
 						totalWeight += Float.valueOf( weight );
 						++ count;
@@ -369,7 +446,12 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 					count = 0;
 				}
 			}
+			chartView.setVisibility(View.VISIBLE);
 			showChart( measureResults );
+		}
+		else
+		{
+			chartView.setVisibility(View.GONE);
 		}
 	}
 	
@@ -388,8 +470,15 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		chartView.postInvalidate();
 	}
 	
+	@Override
 	public void reloadData()
 	{
+		super.reloadData();
+		if ( mContext == null )
+		{
+			return;
+		}
+		account = SpUtil.getInstance( mContext ).getAccount();
 		changeContent();
 	}
 }

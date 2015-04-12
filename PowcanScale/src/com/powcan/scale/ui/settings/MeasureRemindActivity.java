@@ -1,46 +1,66 @@
 package com.powcan.scale.ui.settings;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
 import com.powcan.scale.R;
-import com.powcan.scale.bean.UserInfo;
-import com.powcan.scale.db.UserInfoDb;
+import com.powcan.scale.adapter.RemindAdapter;
+import com.powcan.scale.bean.Remind;
+import com.powcan.scale.dialog.SelectStrDataDialog;
+import com.powcan.scale.dialog.SelectStrDataDialog.ItemClickEvent;
+import com.powcan.scale.dialog.TimeDialog;
 import com.powcan.scale.receiver.AlarmMeasure;
 import com.powcan.scale.ui.base.BaseActivity;
 import com.powcan.scale.util.SpUtil;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
-public class MeasureRemindActivity extends BaseActivity implements OnClickListener
+public class MeasureRemindActivity extends BaseActivity implements OnClickListener, ItemClickEvent
 {
 	private static final String TAG = MeasureRemindActivity.class.getSimpleName();
 	
 	private ImageView imgBack;
-	private ImageView imgMorningSwitch;
-	private ImageView imgNoonSwitch;
-	private ImageView imgNightSwitch;
-	private View morningSwitch;
-	private View noonSwitch;
-	private View nightSwitch;
+	private TextView tvAdd;
+//	private ImageView imgMorningSwitch;
+//	private ImageView imgNoonSwitch;
+//	private ImageView imgNightSwitch;
+//	private View morningSwitch;
+//	private View noonSwitch;
+//	private View nightSwitch;
 	
-	private int morningRemind;
-	private int noonRemind;
-	private int nightRemind;
+	private ListView list;
+	private String[] reminds;
+	private String[] switches;
+	private RemindAdapter adapter;
+	private ArrayList<Remind> datas = new ArrayList<Remind>();
 	
-	private UserInfo curUser;
-	private UserInfoDb dbUserInfo;
+//	private int morningRemind;
+//	private int noonRemind;
+//	private int nightRemind;
 	
 	private static final String MORNING_TIME = "07:30";
 	private static final String NOON_TIME = "13:00";
 	private static final String NIGHT_TIME = "22:00";
+	private static final String[] contents = { "早上测量(建议在早餐前)", "中午测量(建议在午睡前)", "晚上测量(建议在入眠前)", "自定义提醒测量" };
+	
+	private SelectStrDataDialog operatorDialog;
+	private ArrayList<String> operators = new ArrayList<String>();
+	private int oprtIndex = -1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -53,41 +73,101 @@ public class MeasureRemindActivity extends BaseActivity implements OnClickListen
 	public void onInit() 
 	{
 		String account = SpUtil.getInstance(this).getAccount();
-		dbUserInfo = new UserInfoDb(this);
-		curUser = dbUserInfo.getUserInfo( account );
+		
+		reminds = SpUtil.getInstance( this ).getRemind( account ).split( "," );
+		switches = SpUtil.getInstance( this ).getRemindSwitch( account ).split( "," );
+		
+		if ( reminds == null || reminds.length < 3 )
+		{
+			reminds = new String[]{ MORNING_TIME, NOON_TIME, NIGHT_TIME };
+			switches = new String[]{ "0", "0", "0" };
+			SpUtil.getInstance( this ).setRemind( account, MORNING_TIME + "," + NOON_TIME + "," + NIGHT_TIME );
+			SpUtil.getInstance( this ).setRemindSwitch( account, "0,0,0" );
+		}
+		
+		Remind remind = null;
+		for ( int i=0;i<reminds.length;i++ )
+		{
+			remind = new Remind();
+			remind.setTime( reminds[ i ] );
+			remind.setOn( switches[ i ].equals("1") );
+			if ( i > 3 )
+			{
+				remind.setContent( contents[ 3 ] );
+			}
+			else
+			{
+				remind.setContent( contents[ i ] );
+			}
+			datas.add( remind );
+		}
+		
+		operators.add( "修改" );
+		operators.add( "删除" );
 	}
 
 	@Override
 	public void onFindViews() 
 	{
 		imgBack = (ImageView) findViewById(R.id.img_back);
-		imgMorningSwitch = (ImageView) findViewById(R.id.img_morning_switch);
-		imgNoonSwitch = (ImageView) findViewById(R.id.img_noon_switch);
-		imgNightSwitch = (ImageView) findViewById(R.id.img_night_switch);
-		morningSwitch =  findViewById(R.id.rl_morning_switch);
-		noonSwitch = findViewById(R.id.rl_noon_switch);
-		nightSwitch =  findViewById(R.id.rl_night_switch);
+		list = (ListView) findViewById( R.id.list_view );
+		tvAdd =  (TextView) findViewById( R.id.tv_add );
+//		imgMorningSwitch = (ImageView) findViewById(R.id.img_morning_switch);
+//		imgNoonSwitch = (ImageView) findViewById(R.id.img_noon_switch);
+//		imgNightSwitch = (ImageView) findViewById(R.id.img_night_switch);
+//		morningSwitch =  findViewById(R.id.rl_morning_switch);
+//		noonSwitch = findViewById(R.id.rl_noon_switch);
+//		nightSwitch =  findViewById(R.id.rl_night_switch);
 	}
 
 	@Override
 	public void onInitViewData() 
 	{
-		morningRemind = curUser.getMorningRemind();
-		noonRemind = curUser.getNoonRemind();
-		nightRemind = curUser.getNightRemind();
-		
-		imgMorningSwitch.setImageResource( morningRemind == 1 ? R.drawable.set_on : R.drawable.set_off );
-		imgNoonSwitch.setImageResource( noonRemind == 1 ? R.drawable.set_on : R.drawable.set_off );
-		imgNightSwitch.setImageResource( nightRemind == 1 ? R.drawable.set_on : R.drawable.set_off );
+		adapter = new RemindAdapter( this , datas );
+		list.setAdapter( adapter );
 	}
 	
 	@Override
 	public void onBindListener() 
 	{
 		imgBack.setOnClickListener( this );
-		morningSwitch.setOnClickListener( this );
-		noonSwitch.setOnClickListener( this );
-		nightSwitch.setOnClickListener( this );
+		tvAdd.setOnClickListener( this );
+		list.setOnItemClickListener( new OnItemClickListener() 
+		{
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+					long arg3) 
+			{
+				Remind remind = datas.get( position );
+				boolean isOn = !remind.isOn();
+				alarmMeasure( remind.getTime(), isOn ? 1 : 0, true );
+				remind.setOn( !remind.isOn() );
+				adapter.notifyDataSetChanged();
+				
+				String account = SpUtil.getInstance( MeasureRemindActivity.this ).getAccount();
+				SpUtil.getInstance( MeasureRemindActivity.this ).setRemind( account, genRemind() );
+				SpUtil.getInstance( MeasureRemindActivity.this ).setRemindSwitch( account, genRemindSwitch() );
+			}
+		});
+		list.setOnItemLongClickListener( new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int position, long arg3) 
+			{
+				oprtIndex = position;
+				if ( oprtIndex > 2 )
+				{
+					operatorDialog = new SelectStrDataDialog( MeasureRemindActivity.this, operators, "操作", 0, MeasureRemindActivity.this );
+					operatorDialog.show();
+				}
+//				else
+//				{
+//					showToast( "系统提醒,不能修改删除" );
+//				}
+				return true;
+			}
+		});
 	}
 
 	@Override
@@ -99,22 +179,42 @@ public class MeasureRemindActivity extends BaseActivity implements OnClickListen
 				finish();
 				break;
 				
-			case R.id.rl_morning_switch:
-				imgMorningSwitch.setImageResource( morningRemind == 0 ? R.drawable.set_on : R.drawable.set_off );
-				morningRemind = morningRemind == 1 ? 0 : 1;
-				alarmMeasure( MORNING_TIME, morningRemind );
-				break;
+//			case R.id.rl_morning_switch:
+//				imgMorningSwitch.setImageResource( morningRemind == 0 ? R.drawable.set_on : R.drawable.set_off );
+//				morningRemind = morningRemind == 1 ? 0 : 1;
+//				alarmMeasure( MORNING_TIME, morningRemind );
+//				break;
+//				
+//			case R.id.rl_noon_switch:
+//				imgNoonSwitch.setImageResource( noonRemind == 0 ? R.drawable.set_on : R.drawable.set_off );
+//				noonRemind =  noonRemind == 1 ? 0 : 1;
+//				alarmMeasure( NOON_TIME, noonRemind );
+//				break;
+//				
+//			case R.id.rl_night_switch:
+//				imgNightSwitch.setImageResource( nightRemind == 0 ? R.drawable.set_on : R.drawable.set_off );
+//				nightRemind =  nightRemind == 1 ? 0 : 1;
+//				alarmMeasure( NIGHT_TIME, nightRemind );
+//				break;
 				
-			case R.id.rl_noon_switch:
-				imgNoonSwitch.setImageResource( noonRemind == 0 ? R.drawable.set_on : R.drawable.set_off );
-				noonRemind =  noonRemind == 1 ? 0 : 1;
-				alarmMeasure( NOON_TIME, noonRemind );
-				break;
-				
-			case R.id.rl_night_switch:
-				imgNightSwitch.setImageResource( nightRemind == 0 ? R.drawable.set_on : R.drawable.set_off );
-				nightRemind =  nightRemind == 1 ? 0 : 1;
-				alarmMeasure( NIGHT_TIME, nightRemind );
+			case R.id.tv_add:
+				new TimeDialog( this, new OnTimeSetListener() {
+					
+					@Override
+					public void onTimeSet(TimePicker view, int hourOfDay, int minute) 
+					{
+						Remind remind = new Remind();
+						remind.setTime( String.format( "%02d", hourOfDay ) + ":" + String.format( "%02d", minute ) );
+						remind.setOn( false );
+						remind.setContent( contents[ 3 ] );
+						datas.add( remind );
+						adapter.notifyDataSetChanged();
+						
+						String account = SpUtil.getInstance( MeasureRemindActivity.this ).getAccount();
+						SpUtil.getInstance( MeasureRemindActivity.this ).setRemind( account, genRemind() );
+						SpUtil.getInstance( MeasureRemindActivity.this ).setRemindSwitch( account, genRemindSwitch() );
+					}
+				}, 7, 0, true ).show();
 				break;
 		}
 	}
@@ -122,10 +222,9 @@ public class MeasureRemindActivity extends BaseActivity implements OnClickListen
 	/**
 	 * 提醒测量体重
 	 */
-	private void alarmMeasure( String time, int isAlarm )
+	private void alarmMeasure( String time, int isAlarm, boolean isOut )
 	{
 		Log.d( TAG, "alarmMeasure-time : " + time );
-		dbUserInfo.updateRemind( curUser.getAccount(), morningRemind, noonRemind, nightRemind );
 		
 		String []times = time.split(":");
 		
@@ -152,7 +251,90 @@ public class MeasureRemindActivity extends BaseActivity implements OnClickListen
 	    else
 	    {
 	    	am.cancel( sender );
-	    	showToast( time + "测量提醒已经取消" );
+	    	if ( isOut )
+	    	{
+	    		showToast( time + "测量提醒已经取消" );
+	    	}
 	    }
+	}
+	
+	private String genRemind()
+	{
+		StringBuffer strBuff = new StringBuffer( MORNING_TIME );
+		strBuff.append( "," ).append( NOON_TIME )
+		.append( "," ).append( NIGHT_TIME );
+		
+		int size = datas.size();
+		for ( int i=3;i<size;i++ ) 
+		{
+			strBuff.append( "," ).append( datas.get( i ).getTime() );
+		}
+		
+		return strBuff.toString();
+	}
+	
+	private String genRemindSwitch()
+	{
+		StringBuffer strBuff = new StringBuffer();
+		if ( datas.isEmpty() )
+		{
+			return "0,0,0";
+		}
+		int size = datas.size();
+		for ( int i=0;i<size;i++ ) 
+		{
+			if ( i != 0 )
+			{ 
+				strBuff.append( "," );
+			}
+			strBuff.append( datas.get( i ).isOn() ? "1" : "0" );
+		}
+		return strBuff.toString();
+	}
+
+	@Override
+	public void onItemClick( int which ) 
+	{
+		if ( which == 0 )
+		{
+			if ( oprtIndex > 2 )
+			{
+				final Remind remind = datas.get( oprtIndex );
+				String[] time = remind.getTime().split( ":" );
+				if ( remind.isOn() )
+				{
+					alarmMeasure( remind.getTime(), 0, false );
+				}
+				new TimeDialog( this, new OnTimeSetListener() {
+					
+					@Override
+					public void onTimeSet(TimePicker view, int hourOfDay, int minute) 
+					{
+						remind.setTime( String.format( "%02d", hourOfDay ) + ":" + String.format( "%02d", minute ) );
+						remind.setOn( false );
+						adapter.notifyDataSetChanged();
+						
+						String account = SpUtil.getInstance( MeasureRemindActivity.this ).getAccount();
+						SpUtil.getInstance( MeasureRemindActivity.this ).setRemind( account, genRemind() );
+						SpUtil.getInstance( MeasureRemindActivity.this ).setRemindSwitch( account, genRemindSwitch() );
+					}
+				}, Integer.valueOf( time[ 0 ] ), Integer.valueOf( time[ 1 ] ), true ).show();
+			}
+		}
+		else if ( which == 1 )
+		{
+			if ( oprtIndex > 2 )
+			{
+				Remind remind = datas.remove( oprtIndex );
+				adapter.notifyDataSetChanged();
+				String account = SpUtil.getInstance( MeasureRemindActivity.this ).getAccount();
+				SpUtil.getInstance( MeasureRemindActivity.this ).setRemind( account, genRemind() );
+				SpUtil.getInstance( MeasureRemindActivity.this ).setRemindSwitch( account, genRemindSwitch() );
+				
+				alarmMeasure( remind.getTime(), 0, false ); 
+			}
+		}
+		operatorDialog.dismiss();
+		operatorDialog = null;
 	}
 }

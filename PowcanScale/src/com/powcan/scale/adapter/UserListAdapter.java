@@ -41,7 +41,7 @@ public class UserListAdapter extends BaseAdapter {
 		for ( int i=0;i<items.size();i++ )
 		{
 			account = items.get( i ).getAccount();
-			result = dbMeasureResult.getLastMeasureResult( account + "C" );
+			result = dbMeasureResult.getLastMeasureResult( account );
 			if( result != null )
 			{
 				measureMap.put( account, result );
@@ -89,7 +89,7 @@ public class UserListAdapter extends BaseAdapter {
 		MeasureResult result = measureMap.get( user.getAccount() );
 		if ( result != null )
 		{
-			tvData.setText( "上次体检：" + result.getDate() + ", 距减重目标还有" + Math.abs( (int)result.getWeight() - Integer.valueOf( user.getGoalWeight() ) ) + "KG" );
+			tvData.setText( "上次体检：" + result.getDate() + "\n距减重目标还有" + Math.abs( (int)result.getWeight() - Integer.valueOf( user.getGoalWeight() ) ) + "KG" );
 			tvWeight.setText( String.format( "体重%dKG" , (int)result.getWeight() ) );
 			tvWeight.setVisibility(View.VISIBLE);
 		}

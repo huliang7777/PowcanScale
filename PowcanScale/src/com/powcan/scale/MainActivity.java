@@ -34,10 +34,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.powcan.scale.bean.CurUserInfo;
+import com.powcan.scale.bean.UserInfo;
 import com.powcan.scale.bean.http.LGNResponse;
 import com.powcan.scale.bean.http.RECRequest;
 import com.powcan.scale.ble.BluetoothLeService;
 import com.powcan.scale.ble.SampleGattAttributes;
+import com.powcan.scale.db.UserInfoDb;
 import com.powcan.scale.net.NetRequest;
 import com.powcan.scale.ui.LoginActivity;
 import com.powcan.scale.ui.base.BaseActivity;
@@ -46,8 +48,8 @@ import com.powcan.scale.ui.fragment.CenterFragment.OnViewPagerChangeListener;
 import com.powcan.scale.ui.fragment.LeftFragment;
 import com.powcan.scale.ui.fragment.LeftFragment.NavigationDrawerCallbacks;
 import com.powcan.scale.ui.fragment.RightFragment;
-import com.powcan.scale.ui.profile.UserInfoDetailActivity;
 import com.powcan.scale.util.SpUtil;
+import com.powcan.scale.util.Utils;
 import com.powcan.scale.widget.SlidingMenu;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -81,6 +83,8 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     private BluetoothGattCharacteristic mNotifyCharacteristic;
     private boolean isDataUpdate = false;
 
+	private UserInfo curUser;
+	private UserInfoDb dbUserInfo;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +93,8 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 		
 		UmengUpdateAgent.update(this);
 		MobclickAgent.updateOnlineConfig(this);
+		
+		dbUserInfo = new UserInfoDb( this );
 	}
 
 	@Override
@@ -126,7 +132,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	public void onInitViewData() {
 //		int width = UiHelper.getDisplayMetrics(this).widthPixels;
 //		width = width > 250 ? (width / 2 > 250 ? width / 2 : width) : width;
-		int width = 350;
+		int width = 280;
 
 		View leftView = View.inflate(this, R.layout.frame_left, null);
 		View rightView = View.inflate(this, R.layout.frame_right, null);
@@ -183,6 +189,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
         }
         
         CurUserInfo.getInstance( this ).reloadUserInfo();
+        reloadData();
 	}
 
     private static IntentFilter makeGattUpdateIntentFilter() {
@@ -218,9 +225,11 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	{
 		if( obj != null )
 		{
-			Intent intent = new Intent( this, LoginActivity.class );
-	        intent.putExtra( "account", (String)obj );
-	        startActivity(intent);
+			String account = (String)obj;
+			curUser = dbUserInfo.getUserInfo( account );
+			SpUtil.getInstance( this ).reset();
+			SpUtil.getInstance( this ).saveCurrUser( curUser );
+			reloadData();
 		}
 	}
 	
@@ -488,5 +497,11 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 		}
     	
     	return super.onKeyDown(keyCode, event);
+    }
+    
+    public void reloadData()
+    {
+    	mCenterFragment.reloadData();
+    	mLeftFragment.reloadData();
     }
 }

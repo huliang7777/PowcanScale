@@ -15,7 +15,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.powcan.scale.MainActivity;
 import com.powcan.scale.R;
@@ -47,7 +47,7 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 	private EditText etGender;
 	private EditText etBirthday;
 	private EditText etHeight;
-	private TextView tvSelect;
+	private ImageView imgSelect;
 	
 	private String gender;
 	private String birthday;
@@ -84,14 +84,14 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		etGender = (EditText) findViewById(R.id.et_gender);
 		etBirthday = (EditText) findViewById(R.id.et_birthday);
 		etHeight = (EditText) findViewById(R.id.et_height);
-		tvSelect = (TextView) findViewById(R.id.tv_select);
+		imgSelect = (ImageView) findViewById(R.id.img_select);
 	}
 
 	@Override
 	public void onInitViewData() 
 	{
 		etUsername.setText( userInfo.getUsername() );
-		etGender.setText( gender );
+		etGender.setText( gender.equalsIgnoreCase("M") ? "男" : "女" );
 		etBirthday.setText( birthday );
 		if( !TextUtils.isEmpty( height ) && !height.equals( "0" ) )
 		{
@@ -104,7 +104,7 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 	public void onBindListener() {
 		btnSave.setOnClickListener( this );
 		etGender.setOnClickListener( this );
-		tvSelect.setOnClickListener( this );
+		imgSelect.setOnClickListener( this );
 		etHeight.setOnClickListener( this );
 	}
 
@@ -119,7 +119,7 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 			genderDialog = new SelectGenderDialog( this, gender, this );
 			genderDialog.show();
 			break;
-		case R.id.tv_select:
+		case R.id.img_select:
 			birthday = etBirthday.getText().toString();
 			if ( TextUtils.isEmpty(birthday) || birthday.equals("0000-00-00") )
 			{
@@ -254,7 +254,7 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		{
 			gender = "F";
 		}
-		etGender.setText( gender);
+		etGender.setText( gender.equals("M") ? "男" : "女" );
 		genderDialog.dismiss();
 	}
 

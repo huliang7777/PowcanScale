@@ -7,25 +7,26 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.powcan.scale.R;
 import com.powcan.scale.adapter.UserListAdapter;
 import com.powcan.scale.bean.CurUserInfo;
+import com.powcan.scale.bean.MeasureResult;
 import com.powcan.scale.bean.UserInfo;
+import com.powcan.scale.db.MeasureResultDb;
 import com.powcan.scale.db.UserInfoDb;
 import com.powcan.scale.ui.LoginActivity;
 import com.powcan.scale.ui.base.BaseFragment;
 import com.powcan.scale.ui.profile.UserInfoDetailActivity;
 import com.powcan.scale.ui.settings.SettingsActivity;
-import com.powcan.scale.util.SpUtil;
 
 public class LeftFragment extends BaseFragment implements OnClickListener {
 
@@ -52,12 +53,16 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
 
 	private View mBtnSettings;
 	private View imgAdd;
-	private View flUser;
-	private TextView tvUsername;
+	private View llUser;
+	private TextView tvName;
+	private TextView tvData;
+	private TextView tvWeight;
+	private ImageView ivImage;
 
 	private UserInfoDb dbUserInfo;
 	private ArrayList<UserInfo> users;
 	private UserListAdapter mAdapter;
+	private MeasureResultDb dbMeasureResult;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,6 +84,7 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
 //        selectItem(mCurrentSelectedPosition);
         
 		dbUserInfo = new UserInfoDb( mContext ); 
+		dbMeasureResult = new MeasureResultDb( mContext );
 	}
 
 	@Override
@@ -87,9 +93,12 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
     	
         mDrawerListView = (ListView) mDrawer.findViewById(R.id.listView);        
         mBtnSettings = mDrawer.findViewById(R.id.btn_settings);
-        tvUsername = (TextView) mDrawer.findViewById(R.id.tv_username);
+        tvName = (TextView) mDrawer.findViewById(R.id.tv_name);
+		tvData = (TextView) mDrawer.findViewById(R.id.tv_data);
+		tvWeight = (TextView) mDrawer.findViewById(R.id.tv_weight);
+		ivImage = (ImageView) mDrawer.findViewById(R.id.iv_image);
         imgAdd = mDrawer.findViewById(R.id.img_add);
-        flUser = mDrawer.findViewById(R.id.fl_user);
+        llUser = mDrawer.findViewById(R.id.ll_curUser);
 	}
 
 	@Override
@@ -117,7 +126,7 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
 			}
 		});
         
-        flUser.setOnClickListener( this );
+        llUser.setOnClickListener( this );
         imgAdd.setOnClickListener( this );
 	}
 
@@ -182,11 +191,7 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
     public void onResume() {
     	super.onResume();
     	
-    	users = dbUserInfo.getUserInfoes( CurUserInfo.getInstance( getActivity() ).getCurUser().getAccount() );
-		mAdapter = new UserListAdapter(mContext, users);
-		mDrawerListView.setAdapter( mAdapter );
-		
-        tvUsername.setText( CurUserInfo.getInstance( getActivity() ).getCurUser().getUsername() );
+    	reloadData();
     }
 
 	@Override
@@ -194,7 +199,7 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
 	{
 		switch ( view.getId() ) 
 		{
-			case R.id.fl_user:
+			case R.id.ll_curUser:
 				Intent intent = new Intent(mContext, UserInfoDetailActivity.class);
 				startActivity(intent);
 				break;
@@ -202,6 +207,41 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
 				intent = new Intent(mContext, LoginActivity.class);
 				startActivity(intent);
 				break;
+		}
+	}
+	
+	@Override
+	public void reloadData() 
+	{
+		super.reloadData();
+		if ( mContext == null )
+		{
+			return;
+		}
+		users = dbUserInfo.getUserInfoes( CurUserInfo.getInstance( mContext ).getCurUser().getAccount() );
+		mAdapter = new UserListAdapter(mContext, users);
+		mDrawerListView.setAdapter( mAdapter );
+		
+		UserInfo user = CurUserInfo.getInstance( getActivity() ).getCurUser();
+        String username = user.getUsername();
+		tvName.setText( username );
+		
+		if( user.getGender().equalsIgnoreCase("f") )
+		{
+			ivImage.setImageResource(R.drawable.icon_female);
+		}
+		
+		MeasureResult result = dbMeasureResult.getLastMeasureResult( user.getAccount() );
+		if ( result != null )
+		{
+			tvData.setText( "上次体检：" + result.getDate() + "\n距减重目标还有" + Math.abs( (int)result.getWeight() - Integer.valueOf( user.getGoalWeight() ) ) + "KG" );
+			tvWeight.setText( String.format( "体重%dKG" , (int)result.getWeight() ) );
+			tvWeight.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			tvWeight.setVisibility(View.GONE);
+			tvData.setText("亲，还没有测量体重，赶紧测量体重哦~");
 		}
 	}
 }

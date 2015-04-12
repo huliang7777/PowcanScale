@@ -132,13 +132,15 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_line"
-        android:background="@color/light_gray" />
+        android:background="@color/light_gray"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/rl_perfect_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/activity_margin" >
+        android:padding="@dimen/activity_margin"
+        android:visibility="gone" >
 
         <TextView
             android:layout_width="wrap_content"

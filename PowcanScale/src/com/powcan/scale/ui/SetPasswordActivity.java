@@ -10,12 +10,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+
 import com.powcan.scale.R;
 import com.powcan.scale.bean.http.BaseResponse;
 import com.powcan.scale.bean.http.UPPRequest;
 import com.powcan.scale.dialog.LoadingDialog;
 import com.powcan.scale.net.NetRequest;
 import com.powcan.scale.ui.base.BaseActivity;
+import com.powcan.scale.util.Md5Utils;
 
 public class SetPasswordActivity extends BaseActivity implements OnClickListener {
 
@@ -29,7 +31,7 @@ public class SetPasswordActivity extends BaseActivity implements OnClickListener
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_findpwd);
+		setContentView(R.layout.activity_setpwd);
 	}
 
 	@Override
@@ -103,14 +105,14 @@ public class SetPasswordActivity extends BaseActivity implements OnClickListener
 	private void requestFindPwd() 
 	{
 		final String account = etAccount.getText().toString();
-		final String password = etPassword.getText().toString();
+		final String password = Md5Utils.encryptMD5( etPassword.getText().toString() );
 		
 		loadingDialog = new LoadingDialog(this, "设置中...");
 		loadingDialog.show();
 		new AsyncTask<Void, Void, Boolean>() {
 
 			@Override
-			protected Boolean doInBackground(Void... arg0) 
+			protected Boolean doInBackground(Void... v) 
 			{
 				UPPRequest request = new UPPRequest();
 				request.account = account;

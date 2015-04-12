@@ -79,6 +79,12 @@ public class HomeFragment extends BaseFragment
 	@Override
 	public void onInit() 
 	{
+		dbMeasureResult = new MeasureResultDb( mContext );
+		loadData();
+	}
+	
+	public void loadData()
+	{
 		weight = 0;
 		curUser = SpUtil.getInstance(mContext).getCurrUser();
 		String range = Utils.getWeightRange( Integer.valueOf( curUser.getHeight() ), curUser.getGender(), 0.2f );
@@ -86,22 +92,13 @@ public class HomeFragment extends BaseFragment
 		minWeight = Float.valueOf( ranges[0] );
 		maxWeight = Float.valueOf( ranges[1] );
 		
-		dbMeasureResult = new MeasureResultDb( mContext );
-		measureResult = dbMeasureResult.getLastMeasureResult( curUser.getAccount() + "C" );
+		measureResult = dbMeasureResult.getLastMeasureResult( curUser.getAccount() );
 		if ( measureResult != null )
 		{
 			weight = measureResult.getWeight();
 			bmi = measureResult.getBmi();
 			bodyFatRate = measureResult.getBodyFatRate();
 			waterContent = measureResult.getWaterContent();
-		}
-		else
-		{
-			measureResult = new MeasureResult();
-			measureResult.setAccount( curUser.getAccount() + "C" );
-			measureResult.setDate( curUser.getAccount() );
-			dbMeasureResult.insertMeasureResult(measureResult);
-			measureResult = dbMeasureResult.getLastMeasureResult( curUser.getAccount() + "C" );
 		}
 		
 		bmiResults = mContext.getResources().getStringArray( R.array.bmi_result );
@@ -212,31 +209,15 @@ public class HomeFragment extends BaseFragment
 		this.waterContent = waterContent;
 		bmi = weight / ( (Float.valueOf( curUser.getHeight() ) / 100) * (Float.valueOf( curUser.getHeight() ) / 100) );
 		bmi = (float)Math.round( bmi * 100 ) / 100;
-		measureResult.setAccount( curUser.getAccount() + "C" );
+		measureResult = new MeasureResult();
+		measureResult.setAccount( curUser.getAccount() );
 		measureResult.setWeight(weight);
 		measureResult.setBodyFatRate(bodyFatRate);
 		measureResult.setWaterContent(waterContent);
 		measureResult.setBmi( bmi );
-		measureResult.setDate( curUser.getAccount() );
-		// 更新最新一条数据
-		dbMeasureResult.updateMeasureResult( measureResult );
-		
-		measureResult.setAccount( curUser.getAccount() );
 		measureResult.setDate( Utils.getCurDate() );
 		
-		MeasureResult result = dbMeasureResult.getMeasureResult( curUser.getAccount(), Utils.getCurDate() );
-		if ( result == null )
-		{
-			dbMeasureResult.insertMeasureResult( measureResult );
-		}
-		else
-		{
-			result.setWeight( (float)Math.round( ( weight + result.getWeight() ) / 2 * 100 ) / 100  );
-			result.setBodyFatRate( (float)Math.round( ( bodyFatRate + result.getBodyFatRate() ) / 2 ) / 100  );
-			result.setWaterContent( (float)Math.round( ( waterContent + result.getWaterContent() ) / 2 ) / 100 );
-			result.setBmi( bmi );
-			dbMeasureResult.updateMeasureResult( result );
-		}
+		dbMeasureResult.insertMeasureResult( measureResult );
 		
 		suggest();
 		judgeResult();
@@ -367,5 +348,19 @@ public class HomeFragment extends BaseFragment
 				}
 			}
 		}
+	}
+	
+	@Override
+	public void reloadData() 
+	{
+		super.reloadData();
+		if ( mContext == null )
+		{
+			return;
+		}
+		weightResult = "";
+		loadData();
+		list.clear();
+		onInitViewData();
 	}
 }

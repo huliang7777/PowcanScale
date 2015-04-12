@@ -48,6 +48,7 @@
         <activity android:name="com.powcan.scale.ui.RegisterActivity" />
         <activity android:name="com.powcan.scale.ui.LoginActivity" />
         <activity android:name="com.powcan.scale.ui.FindPasswordActivity" />
+        <activity android:name="com.powcan.scale.ui.SetPasswordActivity" />
         <activity android:name="com.powcan.scale.ui.settings.SettingsActivity" />
         <activity android:name="com.powcan.scale.ui.profile.UserInfoDetailActivity" />
         <activity android:name="com.powcan.scale.ui.settings.SetGoalActivity" />
@@ -58,16 +59,15 @@
         <service android:name="com.powcan.scale.ble.BluetoothLeService" />
 
         <receiver android:name="com.powcan.scale.receiver.AlarmMeasure" />
-        
-        <service
-		    android:name="com.alexbbb.uploadservice.UploadService"
-		    android:enabled="true"
-		    android:exported="false" >
-		    <intent-filter>
-		        <action android:name="com.alexbbb.uploadservice.action.upload"/>
-		    </intent-filter>
-		</service>
 
+        <service
+            android:name="com.alexbbb.uploadservice.UploadService"
+            android:enabled="true"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.alexbbb.uploadservice.action.upload" />
+            </intent-filter>
+        </service>
         <service
             android:name="com.umeng.update.net.DownloadingService"
             android:process=":DownloadingService" >

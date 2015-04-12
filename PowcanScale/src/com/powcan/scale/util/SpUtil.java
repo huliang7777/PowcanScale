@@ -143,6 +143,22 @@ public class SpUtil {
 		getEdit().putString("gender", gender).commit();
 	}
 	
+	public String getRemind( String account ) {
+		return getSp().getString( account + "-remind", "");
+	}
+
+	public void setRemind( String account, String remind ) {
+		getEdit().putString( account + "-remind", remind ).commit();
+	}
+	
+	public String getRemindSwitch( String account ) {
+		return getSp().getString( account + "-remindSwitch", "");
+	}
+
+	public void setRemindSwitch( String account, String remindSwitch ) {
+		getEdit().putString( account + "-remindSwitch", remindSwitch ).commit();
+	}
+	
 	public void saveCurrUser( UserInfo userInfo )
 	{
 		setAccount( userInfo.getAccount() );

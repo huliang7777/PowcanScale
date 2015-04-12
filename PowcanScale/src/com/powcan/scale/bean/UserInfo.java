@@ -13,9 +13,7 @@ public class UserInfo {
 	private String qq;
 	private String email;
 	private String goalWeight;
-	private int morningRemind;
-	private int noonRemind;
-	private int nightRemind;
+	private String remind;
 
 	public Integer getId() {
 		return id;
@@ -113,28 +111,12 @@ public class UserInfo {
 		this.goalWeight = goalWeight;
 	}
 	
-	public int getMorningRemind() {
-		return morningRemind;
+	public String getRemind() {
+		return remind;
 	}
 
-	public void setMorningRemind(int morningRemind) {
-		this.morningRemind = morningRemind;
-	}
-
-	public int getNoonRemind() {
-		return noonRemind;
-	}
-
-	public void setNoonRemind(int noonRemind) {
-		this.noonRemind = noonRemind;
-	}
-
-	public int getNightRemind() {
-		return nightRemind;
-	}
-
-	public void setNightRemind(int nightRemind) {
-		this.nightRemind = nightRemind;
+	public void setRemind(String remind) {
+		this.remind = remind;
 	}
 
 	@Override
@@ -143,8 +125,7 @@ public class UserInfo {
 				+ username + ", imei=" + imei + ", gender=" + gender
 				+ ", birthday=" + birthday + ", height=" + height + ", phone="
 				+ phone + ", qq=" + qq + ", email=" + email + ", goalWeight="
-				+ goalWeight + ", morningRemind=" + morningRemind
-				+ ", noonRemind=" + noonRemind + ", nightRemind=" + nightRemind
+				+ goalWeight + ", remind=" + remind
 				+ "]";
 	}
 }

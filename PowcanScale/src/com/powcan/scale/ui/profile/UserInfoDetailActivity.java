@@ -1,10 +1,5 @@
 package com.powcan.scale.ui.profile;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -26,7 +21,7 @@ import com.powcan.scale.util.Utils;
  */
 public class UserInfoDetailActivity extends BaseActivity implements OnClickListener
 {
-	private ImageView ivEdit;
+	private TextView ivEdit;
 	private ImageView ivBack;
 	private TextView tvUsername;
 	private TextView tvGender;
@@ -68,7 +63,7 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 	public void onFindViews() 
 	{
 		ivBack = (ImageView) findViewById(R.id.iv_back);
-		ivEdit = (ImageView) findViewById(R.id.iv_edit);
+		ivEdit = (TextView) findViewById(R.id.iv_edit);
 		tvUsername = (TextView) findViewById(R.id.tv_username);
 		tvGender = (TextView) findViewById(R.id.tv_gender);
 		tvAge = (TextView) findViewById(R.id.tv_age);

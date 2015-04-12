@@ -376,4 +376,9 @@ public abstract class BaseFragment extends Fragment {
 		map.put("type", param);
 		MobclickAgent.onEvent(mContext, id, map);
 	}
+	
+	public void reloadData()
+	{
+		
+	}
 }

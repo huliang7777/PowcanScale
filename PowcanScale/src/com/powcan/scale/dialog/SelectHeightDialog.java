@@ -19,6 +19,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ public class SelectHeightDialog extends Dialog
 	private AccountAdapter mAdapter;
 	private int curHeight;
 	private TextView tvHeight;
+	private Button btnOk;
 	
 	private int genderRes;
 	
@@ -85,6 +87,7 @@ public class SelectHeightDialog extends Dialog
         
         listHeight = (ListView) view.findViewById(R.id.list_height);
         tvHeight =  (TextView) view.findViewById(R.id.tv_height);
+        btnOk = (Button) view.findViewById(R.id.btn_ok);
         
         mAdapter = new AccountAdapter( mContext, list );
         listHeight.setAdapter(mAdapter);
@@ -119,6 +122,17 @@ public class SelectHeightDialog extends Dialog
 			}
 		});
 		
+		btnOk.setOnClickListener( new  android.view.View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if ( mItemClickEvent != null )
+				{
+					mItemClickEvent.onItemClick( curHeight );
+				}				
+			}
+		} );
+			
 		listHeight.setOnScrollListener( new OnScrollListener() 
 		{
 			@Override  

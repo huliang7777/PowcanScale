@@ -23,7 +23,6 @@ public class SettingsActivity extends BaseActivity implements OnClickListener
 	private ImageView imgBack;
 	private View rlSetGoal;
 	private View rlMeasureRemind;
-	private View rlPerfectInfo;
 	private View rlVersionUpdate;
 	private View rlSuggest;
 	private View rlAboutUs;
@@ -52,7 +51,6 @@ public class SettingsActivity extends BaseActivity implements OnClickListener
 		imgBack = (ImageView) findViewById(R.id.img_back);
 		rlSetGoal = findViewById(R.id.rl_set_goal);
 		rlMeasureRemind = findViewById(R.id.rl_measure_remind);
-		rlPerfectInfo = findViewById(R.id.rl_perfect_info);
 		rlAboutUs = findViewById(R.id.rl_about_us);
 		rlHelp = findViewById(R.id.rl_help);
 		rlVersionUpdate = findViewById(R.id.rl_version_update);
@@ -72,7 +70,6 @@ public class SettingsActivity extends BaseActivity implements OnClickListener
 		imgBack.setOnClickListener( this );
 		rlSetGoal.setOnClickListener( this );
 		rlMeasureRemind.setOnClickListener( this );
-		rlPerfectInfo.setOnClickListener( this );
 		rlAboutUs.setOnClickListener( this );
 		rlHelp.setOnClickListener( this );
 		rlVersionUpdate.setOnClickListener( this );
@@ -96,11 +93,6 @@ public class SettingsActivity extends BaseActivity implements OnClickListener
 				
 			case R.id.rl_measure_remind:
 				intent = new Intent( this, MeasureRemindActivity.class );
-				startActivity( intent );
-				break;
-				
-			case R.id.rl_perfect_info:
-				intent = new Intent( this, PerfectInfoActivity.class );
 				startActivity( intent );
 				break;
 				

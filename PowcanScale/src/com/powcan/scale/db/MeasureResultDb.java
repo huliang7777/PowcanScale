@@ -7,6 +7,7 @@ import com.powcan.scale.bean.MeasureResult;
 
 import android.content.Context;
 import android.database.SQLException;
+import android.text.TextUtils;
 import android.util.Log;
 
 /**
@@ -184,7 +185,7 @@ public class MeasureResultDb extends BaseDb
 		MeasureResult measureResult = null;
 		checkDb();
 		String sql = "select " + TABLE_COLUMNS + " from " + TABLE_NAME + " where 1=1 "
-				+ " and " + COLUMN_ACCOUNT + " =?";
+				+ " and " + COLUMN_ACCOUNT + " =? order by " + COLUMN_ID + " desc limit 0, 1 ";
 		
 		Log.d(TAG, "getLastMeasureResult : " + sql);
 		try 
@@ -268,13 +269,13 @@ public class MeasureResultDb extends BaseDb
 		return list;
 	}
 	
-	public HashMap<String, String> getMeasureResults( String account, String startDate, String endDate ) 
+	public HashMap<String, Float> getMeasureResults( String account, String startDate, String endDate ) 
 	{
-		HashMap<String, String> map = new HashMap<String, String>();
+		HashMap<String, Float> map = new HashMap<String, Float>();
 		checkDb();
 		String sql = "select " + COLUMN_WEIGHT + ", " + COLUMN_DATE +  " from " + TABLE_NAME + " where 1=1 "
 				+ " and " + COLUMN_ACCOUNT + " =? and "
-				+ COLUMN_DATE + " >=? and " + COLUMN_DATE + " <= ? ";
+				+ COLUMN_DATE + " >=? and " + COLUMN_DATE + " <= ? order by " + COLUMN_DATE + " desc ";
 		
 		Log.d(TAG, "getMeasureResults : " + sql);
 		try 
@@ -284,12 +285,32 @@ public class MeasureResultDb extends BaseDb
 			if ( cursor.moveToFirst() ) 
 			{
 				int count = cursor.getCount();
+				Float totalWeight = 0.0f;
+				String curDate = "";
+				int n = 0;
 				for (int i = 0; i < count; i++) 
 				{
-					String weight = cursor.getString( 0 );
+					Float weight = cursor.getFloat( 0 );
 					String date = cursor.getString( 1 );
 					
-					map.put(date, weight);
+					if ( TextUtils.isEmpty( curDate ) )
+					{
+						curDate = date;
+					}
+					
+					if ( !curDate.equals( date ) )
+					{
+						map.put( curDate, totalWeight / n );
+						curDate = date;
+						totalWeight = 0.0f;
+						n = 0;
+					}
+					else if ( i == count - 1 )
+					{
+						map.put( curDate, totalWeight / n );
+					}
+					totalWeight += weight;
+					++n;
 					cursor.moveToNext();
 				}
 			}
@@ -302,5 +323,53 @@ public class MeasureResultDb extends BaseDb
 		}
 		
 		return map;
+	}
+	
+	public ArrayList<MeasureResult> getMeasureResults( String account, int num ) 
+	{
+		checkDb();
+		MeasureResult measureResult = null;
+		ArrayList<MeasureResult> list = new ArrayList<MeasureResult>();
+		String sql = "select " + TABLE_COLUMNS + " from " + TABLE_NAME + " where 1=1 "
+				+ " and " + COLUMN_ACCOUNT + " =? order by " + COLUMN_DATE + " asc limit 0," + num;
+		
+		Log.d(TAG, "getMeasureResults : " + sql);
+		try 
+		{
+			cursor = db.rawQuery(sql, new String[]{ account } );
+						
+			if ( cursor.moveToFirst() ) 
+			{
+				int count = cursor.getCount();
+				for (int i = 0; i < count; i++) 
+				{
+					measureResult = new MeasureResult();
+					measureResult.setId( cursor.getInt( 0 ) );
+					measureResult.setAccount( cursor.getString( 1 ) );
+					measureResult.setWeight( cursor.getFloat( 2 ) );
+					measureResult.setBmi( cursor.getFloat( 3 ) );
+					measureResult.setBodyFatRate( cursor.getFloat( 4 ) );
+					measureResult.setMuscleProportion( cursor.getFloat( 5 ) );
+					measureResult.setPhysicalAge( cursor.getFloat( 6 ) );
+					measureResult.setSubcutaneousFat( cursor.getFloat( 7 ) );
+					measureResult.setVisceralFat( cursor.getFloat( 8 ) );
+					measureResult.setSubBasalMetabolism( cursor.getFloat( 9 ) );
+					measureResult.setEuropeBasalMetabolism( cursor.getFloat( 10 ) );
+					measureResult.setBoneMass( cursor.getFloat( 11 ) );
+					measureResult.setWaterContent( cursor.getFloat( 12 ) );
+					measureResult.setDate( cursor.getString( 13 ) );
+					
+					list.add( measureResult );
+					cursor.moveToNext();
+				}
+			}
+			cursor.close();
+			cursor = null;
+		} 
+		catch (SQLException e) 
+		{
+			Log.d("err", "get list failed");
+		}
+		return list;
 	}
 }

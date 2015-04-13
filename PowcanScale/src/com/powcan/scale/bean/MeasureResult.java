@@ -21,6 +21,7 @@ public class MeasureResult
 	private float boneMass; // 骨量
 	private float waterContent; // 水含量
 	private String date;
+	private int upload;
 
 	public int getId() {
 		return id;
@@ -132,6 +133,14 @@ public class MeasureResult
 
 	public void setDate(String date) {
 		this.date = date;
+	}
+	
+	public int getUpload() {
+		return upload;
+	}
+
+	public void setUpload(int upload) {
+		this.upload = upload;
 	}
 
 	@Override

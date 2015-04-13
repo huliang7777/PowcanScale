@@ -245,7 +245,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
             case SENSOR_SHAKE: 
                 Toast.makeText(MainActivity.this, "检测到摇晃，执行操作！", Toast.LENGTH_SHORT).show(); 
                 Log.i(TAG, "检测到摇晃，执行操作！"); 
-
+                
+                // unbindService( mServiceConnection );
+                
                 mLeDevices.clear();
                 scanLeDevice(true);
                 break; 
@@ -373,32 +375,6 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
         		
         		Log.d(TAG, "display weight-bodyFatRate-waterContent: " + weight + "-" + bodyFatRate + "-" + waterContent );
         		mCenterFragment.setWeightData( weight, bodyFatRate, waterContent );
-        		
-        		new Thread(){
-        			public void run() 
-        			{
-    					String account = SpUtil.getInstance(MainActivity.this).getAccount();
-    					
-    					RECRequest request = new RECRequest();
-    					request.account = account;
-    					request.weight = "" + weight;
-    					request.fat =  "" + bodyFatRate;
-    					request.water = "" + waterContent;
-    					request.muscle = "0.0";
-    					request.bone = "0.0";
-    					request.bmr = "0.0";
-    					request.sfat = "0.0";
-    					request.infat = "0.0";
-    					request.bodyage = "0.0";
-    					request.amr = "0.0";
-    					
-    					LGNResponse response = NetRequest.getInstance(getActivity()).send(request, LGNResponse.class);
-    					if (response != null && response.RES == 901 )
-    					{
-    						Log.d( TAG, "数据上传成功" );
-    					}
-        			};
-        		}.start();
         	}
         }
     }

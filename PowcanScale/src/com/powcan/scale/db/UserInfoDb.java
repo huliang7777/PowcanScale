@@ -88,14 +88,17 @@ public class UserInfoDb extends BaseDb {
 	{
 		checkDb();
 		String sql = "update " + TABLE_NAME + " set " + COLUMN_USERNAME + " =?, " + COLUMN_BIRTHDAY + " =?, "
-				+ COLUMN_GENDER + " =?, " + COLUMN_HEIGHT + " =? where " + COLUMN_ACCOUNT + " =? ";
+				+ COLUMN_GENDER + " =?, " + COLUMN_HEIGHT + " =?, "
+				+ COLUMN_PHONE + " =?, " + COLUMN_QQ + " =?, " 
+				+ COLUMN_EMAIL + " =? where " + COLUMN_ACCOUNT + " =? ";
 		
 		Log.d(TAG, "updateUserInfo : " + sql);
 		try 
 		{
 			db.execSQL( sql,
 	                new Object[]{ userInfo.getUsername(), userInfo.getBirthday(), userInfo.getGender(), 
-					 userInfo.getHeight(), userInfo.getAccount() });
+					 userInfo.getHeight(), userInfo.getPhone(), userInfo.getQq(), userInfo.getEmail(),
+					 userInfo.getAccount() });
 		} 
 		catch (SQLException e) 
 		{

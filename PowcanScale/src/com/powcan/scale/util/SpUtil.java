@@ -159,6 +159,14 @@ public class SpUtil {
 		getEdit().putString( account + "-remindSwitch", remindSwitch ).commit();
 	}
 	
+	public boolean getPerfectDataRemind( String account ) {
+		return getSp().getBoolean( account + "-perfectDataRemind", true );
+	}
+
+	public void setPerfectDataRemind( String account, boolean perfectDataRemind ) {
+		getEdit().putBoolean( account + "-perfectDataRemind", perfectDataRemind ).commit();
+	}
+	
 	public void saveCurrUser( UserInfo userInfo )
 	{
 		setAccount( userInfo.getAccount() );

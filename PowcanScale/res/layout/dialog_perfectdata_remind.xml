@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_margin"
+        android:text="您的资料没有完善，是否完善资料?"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/cb_no_remind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_margin"
+        android:text="不再提醒" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center" >
+
+        <Button
+            android:id="@+id/btn_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_margin"
+            android:background="@drawable/bg_red_rectangle"
+            android:minWidth="@dimen/button"
+            android:padding="@dimen/space"
+            android:text="确定"
+            android:textColor="@color/login_btn"
+            android:textSize="@dimen/subhead" />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_margin"
+            android:background="@drawable/bg_red_rectangle"
+            android:minWidth="@dimen/button"
+            android:padding="@dimen/space"
+            android:text="取消"
+            android:textColor="@color/login_btn"
+            android:textSize="@dimen/subhead" />
+    </LinearLayout>
+
+</LinearLayout>

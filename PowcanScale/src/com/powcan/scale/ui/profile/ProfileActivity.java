@@ -47,17 +47,25 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 	private EditText etGender;
 	private EditText etBirthday;
 	private EditText etHeight;
+	private EditText etPhone;
+	private EditText etQQ;
+	private EditText etEmail;
 	private ImageView imgSelect;
 	
 	private String gender;
 	private String birthday;
 	private String height;
+	private String phone;
+	private String qq;
+	private String email;
 	
 	private LoadingDialog loadingDialog;
 	private SelectGenderDialog genderDialog;
 	private SelectHeightDialog heightDialog;
 	private UserInfoDb dbUserInfo;
 	private UserInfo userInfo;
+	
+	private String from;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,12 +76,21 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 	@Override
 	public void onInit() 
 	{
+		from = getIntent().getStringExtra( "from" );
 		userInfo = SpUtil.getInstance( this ).getCurrUser();
 		dbUserInfo = new UserInfoDb( this ); 
 		
 		gender = userInfo.getGender();
 		birthday = userInfo.getBirthday();
 		height = userInfo.getHeight();
+		phone = userInfo.getHeight();
+		qq = userInfo.getHeight();
+		email = userInfo.getHeight();
+		
+		if ( TextUtils.isEmpty( from ) )
+		{
+			from = "";
+		}
 	}
 
 	@Override
@@ -98,6 +115,21 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 			etHeight.setText( height + "CM" );
 		}
 		
+		if ( from.equals( "UserInfoDetail" ) )
+		{
+			etPhone.setVisibility( View.VISIBLE );
+			etQQ.setVisibility( View.VISIBLE );
+			etEmail.setVisibility( View.VISIBLE );
+			etPhone.setText( phone );
+			etQQ.setText( qq );
+			etEmail.setText( email );
+		}
+		else
+		{
+			etPhone.setVisibility( View.GONE );
+			etQQ.setVisibility( View.GONE );
+			etEmail.setVisibility( View.GONE );
+		}
 	}
 
 	@Override
@@ -151,9 +183,22 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 	{
 		String username = etUsername.getText().toString();
 		String birthday = etBirthday.getText().toString();
+		String tempPhone = etPhone.getText().toString();
+		String tempQq = etQQ.getText().toString();
+		String tempEmail = etEmail.getText().toString();
 		
 		Pattern birthdayPattern = Pattern.compile("^((\\d{2}(([02468][048])|([13579][26]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])))))|(\\d{2}(([02468][1235679])|([13579][01345789]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))$", Pattern.CASE_INSENSITIVE );
 		Matcher birthdayMatcher = birthdayPattern.matcher( birthday );
+		
+		Pattern phonePattern = Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$", Pattern.CASE_INSENSITIVE );
+		Matcher phoneMatcher = phonePattern.matcher( tempPhone );
+		
+		Pattern qqPattern = Pattern.compile("^[0-9]{6,12}$", Pattern.CASE_INSENSITIVE );
+		Matcher qqMatcher = qqPattern.matcher( tempQq );
+		
+		Pattern emailPattern = Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$", Pattern.CASE_INSENSITIVE );
+		Matcher emailMatcher = emailPattern.matcher( tempEmail );
+		
 		if (TextUtils.isEmpty(username) || username.length() < 2 || username.length() >= 30)
 		{
 			showToast("用户必须由2~30位的字符组成！");
@@ -179,19 +224,43 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 			showToast("请选择您的身高！");
 			return;
 		}
+		if ( from.equals( "UserInfoDetail" ) )
+		{
+			if ( !TextUtils.isEmpty( phone ) && !phoneMatcher.matches() ) 
+			{
+				showToast("手机号码输入有误！");
+				return;
+			} 
+			else if ( !TextUtils.isEmpty( qq ) && !qqMatcher.matches() ) 
+			{
+				showToast("qq输入有误！");
+				return;
+			} 
+			else if ( !TextUtils.isEmpty( email ) && !emailMatcher.matches() ) 
+			{
+				showToast("邮箱输入有误！");
+				return;
+			}
+		}
+		
 		
 		userInfo.setUsername( username );
 		userInfo.setGender( gender );
 		userInfo.setBirthday( birthday );
 		userInfo.setHeight( height );
-		
+		if ( from.equals( "UserInfoDetail" ) )
+		{
+			userInfo.setPhone( tempPhone );
+			userInfo.setQq( tempQq );
+			userInfo.setEmail( tempEmail );
+		}
 		
 		loadingDialog = new LoadingDialog( this, "保存中..." );
 		loadingDialog.show();
-		new AsyncTask<Void, Void, Boolean>() {
+		new AsyncTask<Void, Void, Integer>() {
 
 			@Override
-			protected Boolean doInBackground(Void... arg0) 
+			protected Integer doInBackground(Void... arg0) 
 			{
 				UTURequest utu = new UTURequest();
 				utu.account = userInfo.getAccount();
@@ -199,31 +268,57 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 				utu.gender = userInfo.getGender();
 				utu.birthday = userInfo.getBirthday();
 				utu.height = userInfo.getHeight();
-//				utu.phone = "";
-//				utu.qq = "";
-//				utu.email = "";
-				
-				BaseResponse regResponse = (BaseResponse) NetRequest.getInstance(getActivity()).send(utu, BaseResponse.class);
-				if (regResponse != null && ( regResponse.RES >= 401 || regResponse.RES <= 404 ) ) 
+				if ( from.equals( "UserInfoDetail" ) )
 				{
-					return true;
+					utu.phone = userInfo.getPhone();
+					utu.qq = userInfo.getQq();
+					utu.email = userInfo.getEmail();
 				}
 				
-				return false;
+				BaseResponse regResponse = (BaseResponse) NetRequest.getInstance(getActivity()).send(utu, BaseResponse.class);
+				if (regResponse != null ) 
+				{
+					return regResponse.RES;
+				}
+				
+				return 0;
 			}
 			
 			@Override
-			protected void onPostExecute(Boolean result)
+			protected void onPostExecute(Integer result)
 			{
 				super.onPostExecute(result);
-				if ( result ) 
+				if ( result == 401 ) 
 				{
 					dbUserInfo.updateUserInfo( userInfo );
 					SpUtil.getInstance( ProfileActivity.this ).saveCurrUser(userInfo);
 					
 					showToast("资料保存成功");
-					
-					gotoMain();
+					if ( !from.equals( "UserInfoDetail" ) )
+					{
+						gotoMain();
+					}
+				}
+				else if ( result == 402 )
+				{
+					userInfo.setPhone( phone );
+					dbUserInfo.updateUserInfo( userInfo );
+					SpUtil.getInstance( ProfileActivity.this ).saveCurrUser(userInfo);
+					showToast("更新资料部分成功，手机号码重复");
+				}
+				else if ( result == 403 )
+				{
+					userInfo.setPhone( qq );
+					dbUserInfo.updateUserInfo( userInfo );
+					SpUtil.getInstance( ProfileActivity.this ).saveCurrUser(userInfo);
+					showToast("更新资料部分成功，QQ重复");
+				}
+				else if ( result == 404 )
+				{
+					userInfo.setPhone( email );
+					dbUserInfo.updateUserInfo( userInfo );
+					SpUtil.getInstance( ProfileActivity.this ).saveCurrUser(userInfo);
+					showToast("更新资料部分成功，邮箱重复");
 				}
 				else
 				{

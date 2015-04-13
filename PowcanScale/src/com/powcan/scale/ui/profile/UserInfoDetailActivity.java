@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.powcan.scale.R;
 import com.powcan.scale.bean.UserInfo;
 import com.powcan.scale.db.UserInfoDb;
+import com.powcan.scale.dialog.PerfectDataRemindDialog;
+import com.powcan.scale.dialog.PerfectDataRemindDialog.PerfectDataEvent;
 import com.powcan.scale.ui.base.BaseActivity;
 import com.powcan.scale.util.SpUtil;
 import com.powcan.scale.util.Utils;
@@ -19,7 +21,7 @@ import com.powcan.scale.util.Utils;
  * 动画参考：http://cyrilmottier.com/2014/05/20/custom-animations-with-fragments/
  * @author Administrator
  */
-public class UserInfoDetailActivity extends BaseActivity implements OnClickListener
+public class UserInfoDetailActivity extends BaseActivity implements OnClickListener, PerfectDataEvent
 {
 	private TextView ivEdit;
 	private ImageView ivBack;
@@ -28,11 +30,17 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 	private TextView tvAge;
 	private TextView tvBirthday;
 	private TextView tvHeight;
-	
+	private TextView tvPhone;
+	private TextView tvQQ;
+	private TextView tvEmail;
+
 	private String account;
 	private UserInfo curUser;
 	private UserInfoDb dbUserInfo;
 	private boolean isShowSetting;
+	
+	private PerfectDataRemindDialog dialog;
+	private boolean isRemind;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -57,6 +65,8 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 		}
 		
 		isShowSetting = acc.equals( curUser.getAccount() );
+		
+		isRemind = SpUtil.getInstance( this ).getPerfectDataRemind( account );
 	}
 
 	@Override
@@ -69,6 +79,9 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 		tvAge = (TextView) findViewById(R.id.tv_age);
 		tvBirthday = (TextView) findViewById(R.id.tv_birthday);
 		tvHeight = (TextView) findViewById(R.id.tv_height);
+		tvPhone = (TextView) findViewById(R.id.tv_phone);
+		tvQQ = (TextView) findViewById(R.id.tv_qq);
+		tvEmail = (TextView) findViewById(R.id.tv_email);
 	}
 
 	@Override
@@ -79,6 +92,36 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 		tvAge.setText( String.valueOf( Utils.calAge( curUser.getBirthday() ) ) + "岁" );
 		tvBirthday.setText( curUser.getBirthday() );
 		tvHeight.setText( curUser.getHeight() + "CM" );
+		String phone = curUser.getPhone();
+		String qq = curUser.getQq();
+		String email = curUser.getEmail();
+		if ( TextUtils.isEmpty( phone ) )
+		{
+			tvPhone.setVisibility(View.GONE);
+		}
+		else
+		{
+			tvPhone.setVisibility(View.VISIBLE);
+			tvPhone.setText( phone );
+		}
+		if ( TextUtils.isEmpty( qq ) )
+		{
+			tvQQ.setVisibility(View.GONE);
+		}
+		else
+		{
+			tvQQ.setVisibility(View.VISIBLE);
+			tvQQ.setText( qq );
+		}
+		if ( TextUtils.isEmpty( email ) )
+		{
+			tvEmail.setVisibility(View.GONE);
+		}
+		else
+		{
+			tvEmail.setVisibility(View.VISIBLE);
+			tvEmail.setText( email );
+		}
 		
 		if ( isShowSetting )
 		{
@@ -87,6 +130,12 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 		else
 		{
 			ivEdit.setVisibility( View.GONE );
+		}
+		
+		if ( isRemind && ( TextUtils.isEmpty( phone ) || TextUtils.isEmpty( qq ) || TextUtils.isEmpty( email ) ) )
+		{
+			dialog = new PerfectDataRemindDialog( this, this );
+			dialog.show();
 		}
 	}
 
@@ -107,8 +156,24 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 
 		case R.id.iv_edit:
 			Intent intent = new Intent( this, ProfileActivity.class );
+			intent.putExtra( "from", "UserInfoDetail" );
 			startActivity(intent);
 			break;
 		}
+	}
+
+	@Override
+	public void onButtonSelect( int which, boolean remind ) 
+	{
+		if ( which == 1 )
+		{
+			Intent intent = new Intent( this, ProfileActivity.class );
+			intent.putExtra( "from", "UserInfoDetail" );
+			startActivity(intent);
+		}
+
+		SpUtil.getInstance( this ).setPerfectDataRemind( account, !remind );
+		dialog.dismiss();
+		dialog = null;
 	}
 }

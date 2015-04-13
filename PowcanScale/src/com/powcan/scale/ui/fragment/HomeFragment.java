@@ -4,18 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.powcan.scale.MainActivity;
 import com.powcan.scale.R;
 import com.powcan.scale.adapter.HomeAdapter;
 import com.powcan.scale.bean.Measure;
 import com.powcan.scale.bean.MeasureResult;
 import com.powcan.scale.bean.UserInfo;
+import com.powcan.scale.bean.http.LGNResponse;
+import com.powcan.scale.bean.http.RECRequest;
 import com.powcan.scale.db.MeasureResultDb;
+import com.powcan.scale.net.NetRequest;
 import com.powcan.scale.ui.base.BaseFragment;
 import com.powcan.scale.util.SpUtil;
 import com.powcan.scale.util.Utils;
@@ -202,7 +207,7 @@ public class HomeFragment extends BaseFragment
 
 	}
 
-	public void setWeightData( float weight, float bodyFatRate, float waterContent ) 
+	public void setWeightData( final float weight, final float bodyFatRate, final float waterContent ) 
 	{
 		this.weight = weight;
 		this.bodyFatRate = bodyFatRate;
@@ -217,8 +222,7 @@ public class HomeFragment extends BaseFragment
 		measureResult.setBmi( bmi );
 		measureResult.setDate( Utils.getCurDate() );
 		
-		dbMeasureResult.insertMeasureResult( measureResult );
-		
+		final int id = dbMeasureResult.insertMeasureResult( measureResult );
 		suggest();
 		judgeResult();
 		new Thread( new ProgressRunable() ).start();
@@ -232,6 +236,33 @@ public class HomeFragment extends BaseFragment
 		list.get(3).data = "" + bmi;
 		list.get(3).result = bmiResult;
 		mAdapter.notifyDataSetChanged();
+		
+		new Thread(){
+			public void run() 
+			{
+				String account = mSpUtil.getAccount();
+				
+				RECRequest request = new RECRequest();
+				request.account = account;
+				request.weight = "" + weight;
+				request.fat =  "" + bodyFatRate;
+				request.water = "" + waterContent;
+				request.muscle = "0.0";
+				request.bone = "0.0";
+				request.bmr = "0.0";
+				request.sfat = "0.0";
+				request.infat = "0.0";
+				request.bodyage = "0.0";
+				request.amr = "0.0";
+				
+				LGNResponse response = NetRequest.getInstance(getActivity()).send(request, LGNResponse.class);
+				if (response != null && response.RES == 901 )
+				{
+					Log.d( "HomeFragment", "数据上传成功" );
+					dbMeasureResult.updateMeasureResult( id, 1 );
+				}
+			};
+		}.start();
 	}
 	
 	class ProgressRunable implements Runnable 

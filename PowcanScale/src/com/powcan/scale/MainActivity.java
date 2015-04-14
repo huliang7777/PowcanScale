@@ -246,7 +246,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
                 Toast.makeText(MainActivity.this, "检测到摇晃，执行操作！", Toast.LENGTH_SHORT).show(); 
                 Log.i(TAG, "检测到摇晃，执行操作！"); 
                 
-                // unbindService( mServiceConnection );
+                unbindService( mServiceConnection );
                 
                 mLeDevices.clear();
                 scanLeDevice(true);

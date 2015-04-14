@@ -225,7 +225,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
 	protected void gotoProfile() 
 	{
-		measureResults = dbMeasureResult.getMeasureResults( getUsername(), 0 );
+		measureResults = dbMeasureResult.getMeasureResults( getUsername(), "0" );
 		int size = measureResults.size();
 		for ( int i=0;i<size;i++ )
 		{

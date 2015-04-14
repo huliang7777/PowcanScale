@@ -119,7 +119,7 @@ public class SplashActivity extends Activity {
 
 	protected void gotoMain() 
 	{
-		measureResults = dbMeasureResult.getMeasureResults( curUser.getAccount(), 0 );
+		measureResults = dbMeasureResult.getMeasureResults( curUser.getAccount(), "0" );
 		int size = measureResults.size();
 		for ( int i=0;i<size;i++ )
 		{

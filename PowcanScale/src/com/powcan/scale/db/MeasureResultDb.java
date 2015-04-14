@@ -155,7 +155,7 @@ public class MeasureResultDb extends BaseDb
 	{
 		checkDb();
 		String sql = "update " + TABLE_NAME + " set " 
-				+ COLUMN_UPLOAD + " =?, " 
+				+ COLUMN_UPLOAD + " =? " 
 				+ " where 1=1 "
 				+ " and " + COLUMN_ID + " =? ";
 		

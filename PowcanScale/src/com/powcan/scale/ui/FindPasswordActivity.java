@@ -110,7 +110,7 @@ public class FindPasswordActivity extends BaseActivity implements OnClickListene
 		boolean check = false;
 		if ( TextUtils.isEmpty( account ) )
 		{
-			showToast("用户id不可以为空");
+			showToast("账户不可以为空");
 		}
 		else if ( type == 0 && !phoneMatcher.matches() ) 
 		{

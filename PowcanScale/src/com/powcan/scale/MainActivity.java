@@ -3,6 +3,8 @@ package com.powcan.scale;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -85,6 +87,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 
 	private UserInfo curUser;
 	private UserInfoDb dbUserInfo;
+	private boolean isDeal = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -246,10 +249,18 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
                 Toast.makeText(MainActivity.this, "检测到摇晃，执行操作！", Toast.LENGTH_SHORT).show(); 
                 Log.i(TAG, "检测到摇晃，执行操作！"); 
                 
-                unbindService( mServiceConnection );
-                
-                mLeDevices.clear();
-                scanLeDevice(true);
+                if ( !isDeal )
+                {
+                	isDeal = true;
+                	if ( mConnected )
+                	{
+                		mConnected = false;
+                		unbindService( mServiceConnection );
+                	}
+                	
+                	mLeDevices.clear();
+					scanLeDevice(true);
+                }
                 break; 
             } 
         } 
@@ -341,12 +352,14 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
                 updateConnectionState(R.string.disconnected);
+                unbindService( mServiceConnection );
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 // Show all the supported services and characteristics on the user interface.
                 displayGattServices(mBluetoothLeService.getSupportedGattServices());
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 displayData(intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA),
                 		intent.getStringExtra(BluetoothLeService.EXTRA_DATA2));
+                isDeal = false;
             }
         }
     };
@@ -440,12 +453,13 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
             float z = values[2]; // z轴方向的重力加速度，向上为正 
             // 一般在这三个方向的重力加速度达到40就达到了摇晃手机的状态。 
             int medumValue = 12;// 三星 i9250、魅族怎么晃都不会超过15，没办法，只设置12了 
-            if (Math.abs(x) > medumValue || Math.abs(y) > medumValue || Math.abs(z) > medumValue) { 
-                Log.i(TAG, "x轴方向的重力加速度" + x +  "；y轴方向的重力加速度" + y +  "；z轴方向的重力加速度" + z); 
+            if (Math.abs(x) > medumValue || Math.abs(y) > medumValue || Math.abs(z) > medumValue) 
+            { 
+            	Log.i(TAG, "x轴方向的重力加速度" + x +  "；y轴方向的重力加速度" + y +  "；z轴方向的重力加速度" + z); 
                 vibrator.vibrate(200); 
-                Message msg = new Message(); 
+            	Message msg = new Message(); 
                 msg.what = SENSOR_SHAKE; 
-                mHandler.sendMessage(msg); 				
+                mHandler.sendMessage(msg); 	
             }
 		}
 		

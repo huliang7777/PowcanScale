@@ -166,6 +166,7 @@ public class FindPasswordActivity extends BaseActivity implements OnClickListene
 				{
 					msg = "密码找回成功,请输入新密码！";
 					Intent intent = new Intent( FindPasswordActivity.this, SetPasswordActivity.class );
+					intent.putExtra( "account", account );
 					startActivity( intent );
 					finish();
 				} 

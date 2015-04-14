@@ -47,7 +47,8 @@
         android:hint="请输入账号"
         android:textColor="@color/login_input"
         android:textColorHint="@color/login_hint"
-        android:textSize="@dimen/text_input" />
+        android:textSize="@dimen/text_input"
+        android:visibility="gone" />
 
     <EditText
         android:id="@+id/et_password"

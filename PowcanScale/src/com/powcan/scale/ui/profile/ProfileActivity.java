@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -18,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.powcan.scale.MainActivity;
+import com.powcan.scale.PowcanScaleApplication;
 import com.powcan.scale.R;
 import com.powcan.scale.bean.UserInfo;
 import com.powcan.scale.bean.http.BaseResponse;
@@ -43,6 +45,7 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 	private static final String TAG = RegisterActivity.class.getSimpleName();
 
 	private Button btnSave;
+	private ImageView imgBack;
 	private EditText etUsername;
 	private EditText etGender;
 	private EditText etBirthday;
@@ -124,13 +127,23 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		llQq = findViewById(R.id.ll_qq);
 		llEmail = findViewById(R.id.ll_email);
 		imgSelect = (ImageView) findViewById(R.id.img_select);
+		imgBack = (ImageView) findViewById(R.id.img_back);
 	}
 
 	@Override
 	public void onInitViewData() 
 	{
 		etUsername.setText( userInfo.getUsername() );
-		etGender.setText( gender.equalsIgnoreCase("M") ? "男" : "女" );
+		String gstr = "";
+		if ( gender.equalsIgnoreCase("M") )
+		{
+			gstr = "男";
+		}
+		else if ( gender.equalsIgnoreCase("F") )
+		{
+			gstr = "女";
+		}
+		etGender.setText( gstr );
 		etBirthday.setText( birthday );
 		if( !TextUtils.isEmpty( height ) && !height.equals( "0" ) )
 		{
@@ -160,6 +173,7 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		etGender.setOnClickListener( this );
 		imgSelect.setOnClickListener( this );
 		etHeight.setOnClickListener( this );
+		imgBack.setOnClickListener( this );
 	}
 
 	@Override
@@ -197,6 +211,16 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		case R.id.et_height:
 			heightDialog = new SelectHeightDialog( this, height, gender, this );
 			heightDialog.show();
+			break;
+		case R.id.img_back:
+			if ( !from.equals( "UserInfoDetail" ) )
+			{
+				PowcanScaleApplication.getInstance().exit();
+			}
+			else
+			{
+				finish();
+			}
 			break;
 		}
 	}
@@ -381,5 +405,19 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		height = String.valueOf( iHeight );
 		etHeight.setText( height + "CM" );
 		heightDialog.dismiss();
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) 
+	{
+		if (keyCode == KeyEvent.KEYCODE_BACK) 
+		{
+			if ( !from.equals( "UserInfoDetail" ) )
+			{
+				PowcanScaleApplication.getInstance().exit();
+			}
+		}
+
+		return super.onKeyDown(keyCode, event);
 	}
 }

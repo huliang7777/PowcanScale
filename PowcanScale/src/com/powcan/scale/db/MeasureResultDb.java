@@ -384,17 +384,18 @@ public class MeasureResultDb extends BaseDb
 					
 					if ( !curDate.equals( date ) )
 					{
+						n = n == 0 ? 1 : n;
 						map.put( curDate, totalWeight / n );
 						curDate = date;
 						totalWeight = 0.0f;
 						n = 0;
 					}
-					else if ( i == count - 1 )
+					totalWeight += weight;
+					++n;
+					if ( i == count - 1 )
 					{
 						map.put( curDate, totalWeight / n );
 					}
-					totalWeight += weight;
-					++n;
 					cursor.moveToNext();
 				}
 			}

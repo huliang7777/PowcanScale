@@ -22,11 +22,12 @@ import com.powcan.scale.util.Md5Utils;
 public class SetPasswordActivity extends BaseActivity implements OnClickListener {
 
 	private Button btnCommit;
-	private EditText etAccount;
+//	private EditText etAccount;
 	private EditText etPassword;
 	private EditText etRePassword;
 
 	private LoadingDialog loadingDialog;
+	private String account;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +36,14 @@ public class SetPasswordActivity extends BaseActivity implements OnClickListener
 	}
 
 	@Override
-	public void onInit() {
+	public void onInit() 
+	{
+		account = getIntent().getStringExtra( "account" );
 	}
 
 	@Override
 	public void onFindViews() {
-		etAccount = (EditText) findViewById(R.id.et_account);
+//		etAccount = (EditText) findViewById(R.id.et_account);
 		etPassword = (EditText) findViewById(R.id.et_password);
 		etRePassword = (EditText) findViewById(R.id.et_repassword);
 		btnCommit = (Button) findViewById(R.id.btn_commit);
@@ -68,7 +71,7 @@ public class SetPasswordActivity extends BaseActivity implements OnClickListener
 
 	private boolean check() 
 	{
-		String account = etAccount.getText().toString();
+//		String account = etAccount.getText().toString();
 		String password = etPassword.getText().toString();
 		String repassword = etRePassword.getText().toString();
 		
@@ -77,11 +80,12 @@ public class SetPasswordActivity extends BaseActivity implements OnClickListener
 		Matcher repasswordMatcher = passwordPattern.matcher( repassword );
 		
 		boolean check = false;
-		if ( TextUtils.isEmpty( account ) )
-		{
-			showToast("用户账号不可以为空");
-		}
-		else if ( !passwordMatcher.matches() ) 
+//		if ( TextUtils.isEmpty( account ) )
+//		{
+//			showToast("用户账号不可以为空");
+//		}
+//		else 
+		if ( !passwordMatcher.matches() ) 
 		{
 			showToast("密码必须由6~30位的字符组成！");
 		} 
@@ -104,7 +108,7 @@ public class SetPasswordActivity extends BaseActivity implements OnClickListener
 
 	private void requestFindPwd() 
 	{
-		final String account = etAccount.getText().toString();
+//		final String account = etAccount.getText().toString();
 		final String password = Md5Utils.encryptMD5( etPassword.getText().toString() );
 		
 		loadingDialog = new LoadingDialog(this, "设置中...");

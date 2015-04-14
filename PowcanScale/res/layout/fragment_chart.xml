@@ -14,7 +14,7 @@
         <Button
             android:id="@+id/btn_day"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/space"
             android:background="@drawable/bg_rectangle"
             android:text="天"
@@ -23,7 +23,7 @@
         <Button
             android:id="@+id/btn_week"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/space"
             android:background="@drawable/bg_rectangle"
             android:text="周"
@@ -32,7 +32,7 @@
         <Button
             android:id="@+id/btn_month"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/space"
             android:background="@drawable/bg_rectangle"
             android:text="月"
@@ -41,7 +41,7 @@
         <Button
             android:id="@+id/btn_quarter"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/space"
             android:background="@drawable/bg_rectangle"
             android:text="季度"
@@ -50,7 +50,7 @@
         <Button
             android:id="@+id/btn_year"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/space"
             android:background="@drawable/bg_rectangle"
             android:text="年"

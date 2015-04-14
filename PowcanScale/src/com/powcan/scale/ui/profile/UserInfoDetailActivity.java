@@ -95,7 +95,7 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 		String phone = curUser.getPhone();
 		String qq = curUser.getQq();
 		String email = curUser.getEmail();
-		if ( TextUtils.isEmpty( phone ) )
+		if ( TextUtils.isEmpty( phone ) || phone.equalsIgnoreCase( "NULL" ) )
 		{
 			tvPhone.setVisibility(View.GONE);
 		}
@@ -104,7 +104,7 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 			tvPhone.setVisibility(View.VISIBLE);
 			tvPhone.setText( phone );
 		}
-		if ( TextUtils.isEmpty( qq ) )
+		if ( TextUtils.isEmpty( qq ) || qq.equals( "0" ) )
 		{
 			tvQQ.setVisibility(View.GONE);
 		}
@@ -113,7 +113,7 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 			tvQQ.setVisibility(View.VISIBLE);
 			tvQQ.setText( qq );
 		}
-		if ( TextUtils.isEmpty( email ) )
+		if ( TextUtils.isEmpty( email ) || email.equalsIgnoreCase( "NULL" ) )
 		{
 			tvEmail.setVisibility(View.GONE);
 		}
@@ -132,7 +132,11 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 			ivEdit.setVisibility( View.GONE );
 		}
 		
-		if ( isRemind && ( TextUtils.isEmpty( phone ) || TextUtils.isEmpty( qq ) || TextUtils.isEmpty( email ) ) )
+		if ( isRemind && ( TextUtils.isEmpty( phone ) 
+				|| TextUtils.isEmpty( qq ) || TextUtils.isEmpty( email ) )
+				|| phone.equalsIgnoreCase( "NULL" )
+				|| qq.equals( "0" )
+				|| email.equalsIgnoreCase( "NULL" ))
 		{
 			dialog = new PerfectDataRemindDialog( this, this );
 			dialog.show();

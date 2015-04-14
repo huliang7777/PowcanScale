@@ -415,7 +415,7 @@ public class MeasureResultDb extends BaseDb
 		MeasureResult measureResult = null;
 		ArrayList<MeasureResult> list = new ArrayList<MeasureResult>();
 		String sql = "select " + TABLE_COLUMNS + " from " + TABLE_NAME + " where 1=1 "
-				+ " and " + COLUMN_ACCOUNT + " =? order by " + COLUMN_DATE + " asc limit 0," + num;
+				+ " and " + COLUMN_ACCOUNT + " =? order by " + COLUMN_ID + " desc limit 0," + num;
 		
 		Log.d(TAG, "getMeasureResults : " + sql);
 		try 

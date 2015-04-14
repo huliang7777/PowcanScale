@@ -51,6 +51,9 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 	private EditText etQQ;
 	private EditText etEmail;
 	private ImageView imgSelect;
+	private View llPhone;
+	private View llQq;
+	private View llEmail;
 	
 	private String gender;
 	private String birthday;
@@ -83,9 +86,22 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		gender = userInfo.getGender();
 		birthday = userInfo.getBirthday();
 		height = userInfo.getHeight();
-		phone = userInfo.getHeight();
-		qq = userInfo.getHeight();
-		email = userInfo.getHeight();
+		phone = userInfo.getPhone();
+		qq = userInfo.getQq();
+		email = userInfo.getEmail();
+		
+		if ( TextUtils.isEmpty( phone ) || phone.equalsIgnoreCase( "NULL" ) )
+		{
+			phone = "";
+		}
+		if ( TextUtils.isEmpty( qq ) || qq.equals( "0" ) )
+		{
+			qq = "";
+		}
+		if ( TextUtils.isEmpty( email ) || email.equalsIgnoreCase( "NULL" ) )
+		{
+			email = "";
+		}
 		
 		if ( TextUtils.isEmpty( from ) )
 		{
@@ -101,6 +117,12 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		etGender = (EditText) findViewById(R.id.et_gender);
 		etBirthday = (EditText) findViewById(R.id.et_birthday);
 		etHeight = (EditText) findViewById(R.id.et_height);
+		etPhone = (EditText) findViewById(R.id.et_phone);
+		etQQ = (EditText) findViewById(R.id.et_qq);
+		etEmail = (EditText) findViewById(R.id.et_email);
+		llPhone = findViewById(R.id.ll_phone);
+		llQq = findViewById(R.id.ll_qq);
+		llEmail = findViewById(R.id.ll_email);
 		imgSelect = (ImageView) findViewById(R.id.img_select);
 	}
 
@@ -117,18 +139,18 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		
 		if ( from.equals( "UserInfoDetail" ) )
 		{
-			etPhone.setVisibility( View.VISIBLE );
-			etQQ.setVisibility( View.VISIBLE );
-			etEmail.setVisibility( View.VISIBLE );
+			llPhone.setVisibility( View.VISIBLE );
+			llQq.setVisibility( View.VISIBLE );
+			llEmail.setVisibility( View.VISIBLE );
 			etPhone.setText( phone );
 			etQQ.setText( qq );
 			etEmail.setText( email );
 		}
 		else
 		{
-			etPhone.setVisibility( View.GONE );
-			etQQ.setVisibility( View.GONE );
-			etEmail.setVisibility( View.GONE );
+			llPhone.setVisibility( View.GONE );
+			llQq.setVisibility( View.GONE );
+			llEmail.setVisibility( View.GONE );
 		}
 	}
 

@@ -204,7 +204,7 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 			return;
 		}
 		loadData();
-		tvDistanceGoal.setText( Math.abs( curWeight - goalWeight ) + "KG" );
+		tvDistanceGoal.setText( Math.round( Math.abs( curWeight - goalWeight ) * 100 ) / 100 + "KG" );
 		tvWeight.setText( curWeight + "KG" );
 		tvContinueDay.setText( continueDay + "天" );
 	}

@@ -222,7 +222,7 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
 		mAdapter = new UserListAdapter(mContext, users);
 		mDrawerListView.setAdapter( mAdapter );
 		
-		UserInfo user = CurUserInfo.getInstance( getActivity() ).getCurUser();
+		UserInfo user = CurUserInfo.getInstance( mContext ).getCurUser();
         String username = user.getUsername();
 		tvName.setText( username );
 		

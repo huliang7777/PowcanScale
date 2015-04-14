@@ -142,6 +142,8 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 		setData();
 		
 		dbUserInfo.updateGoalWeight( curUser.getAccount() , String.valueOf( goalWeight ) );
+		curUser.setGoalWeight( String.valueOf( goalWeight ) );
+		SpUtil.getInstance(SetGoalActivity.this ).saveCurrUser( curUser );
 		
 		dialog.dismiss();
 		dialog = null;

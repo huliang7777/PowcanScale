@@ -175,6 +175,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	protected void onResume() {
 		super.onResume();
 		registerSensor();
+		isDeal = false;
 
         // Ensures Bluetooth is enabled on the device.  If Bluetooth is not currently enabled,
         // fire an intent to display a dialog asking the user to grant permission to enable it.
@@ -252,11 +253,18 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
                 if ( !isDeal )
                 {
                 	isDeal = true;
-                	if ( mConnected )
-                	{
-                		mConnected = false;
+                	if ( mConnected && mBluetoothLeService != null && mServiceConnection != null )
+            		{
                 		unbindService( mServiceConnection );
-                	}
+            			mBluetoothLeService.disconnect();
+            			
+            		}
+//                	mHandler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            isDeal = false;
+//                        }
+//                    }, SCAN_PERIOD * 2);
                 	
                 	mLeDevices.clear();
 					scanLeDevice(true);
@@ -352,7 +360,6 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
                 updateConnectionState(R.string.disconnected);
-                unbindService( mServiceConnection );
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 // Show all the supported services and characteristics on the user interface.
                 displayGattServices(mBluetoothLeService.getSupportedGattServices());
@@ -388,6 +395,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
         		
         		Log.d(TAG, "display weight-bodyFatRate-waterContent: " + weight + "-" + bodyFatRate + "-" + waterContent );
         		mCenterFragment.setWeightData( weight, bodyFatRate, waterContent );
+        		reloadData();
         	}
         }
     }

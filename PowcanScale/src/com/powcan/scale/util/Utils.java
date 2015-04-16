@@ -65,6 +65,13 @@ public class Utils {
         return (int) (dpValue * scale + 0.5f);  
     }
     
+    public static String formatFractionDigits( float d, int count) 
+    {
+		NumberFormat nf = NumberFormat.getNumberInstance();
+		nf.setMaximumFractionDigits(count);
+		return nf.format( d );
+	}
+    
     @SuppressLint("SimpleDateFormat")
 	public static int calAge( String birthday )
 	{

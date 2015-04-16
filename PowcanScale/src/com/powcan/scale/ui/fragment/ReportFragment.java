@@ -19,6 +19,7 @@ import com.powcan.scale.db.MeasureResultDb;
 import com.powcan.scale.db.UserInfoDb;
 import com.powcan.scale.ui.base.BaseFragment;
 import com.powcan.scale.util.SpUtil;
+import com.powcan.scale.util.Utils;
 
 public class ReportFragment extends BaseFragment implements OnClickListener 
 {
@@ -140,7 +141,7 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 	public void onInitViewData() 
 	{
 		tvContent.setText( "运动方案" );
-		tvDistanceGoal.setText( Math.abs( curWeight - goalWeight ) + "KG" );
+		tvDistanceGoal.setText( Utils.formatFractionDigits( Math.abs( curWeight - goalWeight ), 2 ) + "KG" );
 		tvWeight.setText( curWeight + "KG" );
 		tvContinueDay.setText( continueDay + "天" );
 	}
@@ -204,7 +205,7 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 			return;
 		}
 		loadData();
-		tvDistanceGoal.setText( Math.round( Math.abs( curWeight - goalWeight ) * 100 ) / 100 + "KG" );
+		tvDistanceGoal.setText( Utils.formatFractionDigits( Math.abs( curWeight - goalWeight ), 2 ) + "KG" );
 		tvWeight.setText( curWeight + "KG" );
 		tvContinueDay.setText( continueDay + "天" );
 	}

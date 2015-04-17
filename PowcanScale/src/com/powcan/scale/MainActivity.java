@@ -175,7 +175,6 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	protected void onResume() {
 		super.onResume();
 		registerSensor();
-		isDeal = false;
 
         // Ensures Bluetooth is enabled on the device.  If Bluetooth is not currently enabled,
         // fire an intent to display a dialog asking the user to grant permission to enable it.
@@ -247,11 +246,11 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
             super.handleMessage(msg); 
             switch (msg.what) { 
             case SENSOR_SHAKE: 
-                Toast.makeText(MainActivity.this, "检测到摇晃，执行操作！", Toast.LENGTH_SHORT).show(); 
                 Log.i(TAG, "检测到摇晃，执行操作！"); 
                 
                 if ( !isDeal )
                 {
+                	Toast.makeText(MainActivity.this, "检测到摇晃，执行操作！", Toast.LENGTH_SHORT).show(); 
                 	isDeal = true;
                 	if ( mConnected && mBluetoothLeService != null && mServiceConnection != null )
             		{
@@ -259,13 +258,6 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
             			mBluetoothLeService.disconnect();
             			
             		}
-//                	mHandler.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            isDeal = false;
-//                        }
-//                    }, SCAN_PERIOD * 2);
-                	
                 	mLeDevices.clear();
 					scanLeDevice(true);
                 }
@@ -280,6 +272,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
                     @Override
                     public void run() {
                         mScanning = false;
+                        isDeal = false;
                         mBluetoothAdapter.stopLeScan(mLeScanCallback);
                     }
                 }, SCAN_PERIOD);

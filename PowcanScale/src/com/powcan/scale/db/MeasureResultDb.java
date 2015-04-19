@@ -99,7 +99,7 @@ public class MeasureResultDb extends BaseDb
 					measureResult.getBodyFatRate(), measureResult.getMuscleProportion(), measureResult.getPhysicalAge(),
 					measureResult.getSubcutaneousFat(), measureResult.getVisceralFat(), measureResult.getSubBasalMetabolism(),
 					measureResult.getEuropeBasalMetabolism(), measureResult.getBoneMass(), measureResult.getWaterContent(),
-					measureResult.getDate(), 0 });
+					measureResult.getDateTime(), measureResult.getUpload() });
 			
 			cursor = db.rawQuery( "select last_insert_rowid() from " + TABLE_NAME, null );       
 	        if( cursor.moveToFirst() )
@@ -142,7 +142,7 @@ public class MeasureResultDb extends BaseDb
 					measureResult.getBodyFatRate(), measureResult.getMuscleProportion(), measureResult.getPhysicalAge(),
 					measureResult.getSubcutaneousFat(), measureResult.getVisceralFat(), measureResult.getSubBasalMetabolism(),
 					measureResult.getEuropeBasalMetabolism(), measureResult.getBoneMass(), measureResult.getWaterContent(),
-					measureResult.getAccount(), measureResult.getDate() });
+					measureResult.getAccount(), measureResult.getDateTime() });
 		} 
 		catch (SQLException e) 
 		{
@@ -353,6 +353,58 @@ public class MeasureResultDb extends BaseDb
 		return list;
 	}
 	
+	public ArrayList<MeasureResult> getMeasureResults( String account, String startDate, String endDate, String update ) 
+	{
+		MeasureResult measureResult = null;
+		ArrayList<MeasureResult> list = new ArrayList<MeasureResult>();
+		checkDb();
+		String sql = "select " + TABLE_COLUMNS + " from " + TABLE_NAME + " where 1=1 "
+				+ " and " + COLUMN_ACCOUNT + " =? "
+				+ " and " + COLUMN_DATE + " >=? and " + COLUMN_DATE + " <= ?"
+				+ " and " + COLUMN_UPLOAD + " =? order by " + COLUMN_ID + " desc ";
+		
+		Log.d(TAG, "getMeasureResults : " + sql);
+		try 
+		{
+			cursor = db.rawQuery(sql, new String[]{ account, startDate, endDate, update } );
+						
+			if ( cursor.moveToFirst() ) 
+			{
+				int count = cursor.getCount();
+				for (int i = 0; i < count; i++) 
+				{
+					measureResult = new MeasureResult();
+					measureResult.setId( cursor.getInt( 0 ) );
+					measureResult.setAccount( cursor.getString( 1 ) );
+					measureResult.setWeight( cursor.getFloat( 2 ) );
+					measureResult.setBmi( cursor.getFloat( 3 ) );
+					measureResult.setBodyFatRate( cursor.getFloat( 4 ) );
+					measureResult.setMuscleProportion( cursor.getFloat( 5 ) );
+					measureResult.setPhysicalAge( cursor.getFloat( 6 ) );
+					measureResult.setSubcutaneousFat( cursor.getFloat( 7 ) );
+					measureResult.setVisceralFat( cursor.getFloat( 8 ) );
+					measureResult.setSubBasalMetabolism( cursor.getFloat( 9 ) );
+					measureResult.setEuropeBasalMetabolism( cursor.getFloat( 10 ) );
+					measureResult.setBoneMass( cursor.getFloat( 11 ) );
+					measureResult.setWaterContent( cursor.getFloat( 12 ) );
+					measureResult.setDate( cursor.getString( 13 ) );
+					measureResult.setUpload( cursor.getInt( 14 ) );
+					
+					list.add( measureResult );
+					cursor.moveToNext();
+				}
+			}
+			cursor.close();
+			cursor = null;
+		} 
+		catch (SQLException e) 
+		{
+			Log.d("err", "get list failed");
+		}
+		
+		return list;
+	}
+	
 	public HashMap<String, Float> getMeasureResults( String account, String startDate, String endDate ) 
 	{
 		HashMap<String, Float> map = new HashMap<String, Float>();
@@ -375,7 +427,7 @@ public class MeasureResultDb extends BaseDb
 				for (int i = 0; i < count; i++) 
 				{
 					Float weight = cursor.getFloat( 0 );
-					String date = cursor.getString( 1 );
+					String date = cursor.getString( 1 ).substring( 0, 10 );
 					
 					if ( TextUtils.isEmpty( curDate ) )
 					{

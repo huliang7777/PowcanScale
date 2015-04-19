@@ -128,6 +128,19 @@ public class Utils {
     	return year + "-" + String.format("%02d", month) + "-" + String.format("%02d", day);
     }
     
+    public static String getCurDateTime()
+    {
+    	Calendar calendar = Calendar.getInstance();
+    	int year = calendar.get( Calendar.YEAR );
+    	int month = calendar.get( Calendar.MONTH ) + 1;
+    	int day = calendar.get( Calendar.DAY_OF_MONTH );
+    	int hour = calendar.get( Calendar.HOUR_OF_DAY );
+    	int minute = calendar.get( Calendar.MINUTE );
+    	int second = calendar.get( Calendar.SECOND );
+    	return year + "-" + String.format("%02d", month) + "-" + String.format("%02d", day) 
+    		+ " " + String.format("%02d", hour) + ":" + String.format("%02d", minute) + ":" + String.format("%02d", second) ;
+    }
+    
     public static String getWeightRange( int height, String gender, float percent )
     {
     	// 健康体重计算方式

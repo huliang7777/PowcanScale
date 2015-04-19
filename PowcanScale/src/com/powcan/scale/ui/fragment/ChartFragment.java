@@ -204,8 +204,8 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		
 		// 处理数据
 		ArrayList<MeasureResult> measureResults = new ArrayList<MeasureResult>();
-		if ( !results.isEmpty() )
-		{
+//		if ( !results.isEmpty() )
+//		{
 			int length = 5;
 			int size = results.size();
 			tvDesc.setText( "最近" + length + "次测量" );
@@ -232,12 +232,12 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 			
 			chartView.setVisibility(View.VISIBLE);
 			showChart( measureResults );
-		}
-		else
-		{
-			tvDesc.setText( "" );
-			chartView.setVisibility(View.GONE);
-		}
+//		}
+//		else
+//		{
+//			tvDesc.setText( "" );
+//			chartView.setVisibility(View.GONE);
+//		}
 		
 	}
 	
@@ -262,8 +262,8 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 
 		// 处理数据
 		ArrayList<MeasureResult> measureResults = new ArrayList<MeasureResult>();
-		if ( !map.isEmpty() )
-		{
+//		if ( !map.isEmpty() )
+//		{
 			MeasureResult measureResult = null;
 			for( int i=0; i< dates.length; i++ )
 			{
@@ -285,11 +285,11 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 			}
 			chartView.setVisibility(View.VISIBLE);
 			showChart( measureResults );
-		}
-		else
-		{
-			chartView.setVisibility(View.GONE);
-		}
+//		}
+//		else
+//		{
+//			chartView.setVisibility(View.GONE);
+//		}
 		
 	}
 	
@@ -309,8 +309,8 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		HashMap<String, Float> map = dbMeasureResult.getMeasureResults( account, firstDate, lastDate );
 		// 处理数据
 		ArrayList<MeasureResult> measureResults = new ArrayList<MeasureResult>();
-		if ( !map.isEmpty() )
-		{
+//		if ( !map.isEmpty() )
+//		{
 			MeasureResult measureResult = null;
 			String date = null;
 			int week = dayOfWeek;
@@ -344,11 +344,11 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 			}
 			chartView.setVisibility(View.VISIBLE);
 			showChart( measureResults );
-		}
-		else
-		{
-			chartView.setVisibility(View.GONE);
-		}
+//		}
+//		else
+//		{
+//			chartView.setVisibility(View.GONE);
+//		}
 	}
 	
 	private void dealQuarterData()
@@ -363,8 +363,8 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		HashMap<String, Float> map = dbMeasureResult.getMeasureResults( account, firstDate, lastDate );
 		// 处理数据
 		ArrayList<MeasureResult> measureResults = new ArrayList<MeasureResult>();
-		if ( !map.isEmpty() )
-		{
+//		if ( !map.isEmpty() )
+//		{
 			MeasureResult measureResult = null;
 			String date = null;
 			
@@ -393,11 +393,11 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 			}
 			chartView.setVisibility(View.VISIBLE);
 			showChart( measureResults );
-		}
-		else
-		{
-			chartView.setVisibility(View.GONE);
-		}
+//		}
+//		else
+//		{
+//			chartView.setVisibility(View.GONE);
+//		}
 		
 	}
 	
@@ -413,8 +413,8 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		HashMap<String, Float> map = dbMeasureResult.getMeasureResults( account, firstDate, lastDate );
 		// 处理数据
 		ArrayList<MeasureResult> measureResults = new ArrayList<MeasureResult>();
-		if ( !map.isEmpty() )
-		{
+//		if ( !map.isEmpty() )
+//		{
 			MeasureResult measureResult = null;
 			String date = null;
 			float totalWeight = 0;
@@ -448,11 +448,11 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 			}
 			chartView.setVisibility(View.VISIBLE);
 			showChart( measureResults );
-		}
-		else
-		{
-			chartView.setVisibility(View.GONE);
-		}
+//		}
+//		else
+//		{
+//			chartView.setVisibility(View.GONE);
+//		}
 	}
 	
 	private void showChart( ArrayList<MeasureResult> measureResults )

@@ -99,6 +99,10 @@ public class ChartData {
 				maxY = point.y;
 			}
 		}
+		if ( maxY == 0.0 )
+		{
+			maxY = 50.0f;
+		}
 		
 		double step = maxY/10.0;
 		

@@ -127,7 +127,16 @@ public class MeasureResult
 		this.waterContent = waterContent;
 	}
 
-	public String getDate() {
+	public String getDate() 
+	{
+		if ( date.length() > 10 )
+		{
+			return date.substring( 0, 10 );
+		}
+		return date; 
+	}
+	
+	public String getDateTime() {
 		return date;
 	}
 

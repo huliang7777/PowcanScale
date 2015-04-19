@@ -220,7 +220,7 @@ public class HomeFragment extends BaseFragment
 		measureResult.setBodyFatRate(bodyFatRate);
 		measureResult.setWaterContent(waterContent);
 		measureResult.setBmi( bmi );
-		measureResult.setDate( Utils.getCurDate() );
+		measureResult.setDate( Utils.getCurDateTime() );
 		
 		final int id = dbMeasureResult.insertMeasureResult( measureResult );
 		suggest();
@@ -254,6 +254,7 @@ public class HomeFragment extends BaseFragment
 				request.infat = "0.0";
 				request.bodyage = "0.0";
 				request.amr = "0.0";
+				request.measure_time = measureResult.getDateTime();
 				
 				LGNResponse response = NetRequest.getInstance(getActivity()).send(request, LGNResponse.class);
 				if (response != null && response.RES == 901 )

@@ -2,6 +2,7 @@ package com.powcan.scale;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,6 +24,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -36,12 +38,20 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.powcan.scale.bean.CurUserInfo;
+import com.powcan.scale.bean.MeasureResult;
 import com.powcan.scale.bean.UserInfo;
+import com.powcan.scale.bean.http.DNRRequest;
+import com.powcan.scale.bean.http.DNRResponse;
+import com.powcan.scale.bean.http.GNTRequest;
+import com.powcan.scale.bean.http.GNTResponse;
+import com.powcan.scale.bean.http.LGNRequest;
 import com.powcan.scale.bean.http.LGNResponse;
 import com.powcan.scale.bean.http.RECRequest;
 import com.powcan.scale.ble.BluetoothLeService;
 import com.powcan.scale.ble.SampleGattAttributes;
+import com.powcan.scale.db.MeasureResultDb;
 import com.powcan.scale.db.UserInfoDb;
+import com.powcan.scale.dialog.LoadingDialog;
 import com.powcan.scale.net.NetRequest;
 import com.powcan.scale.ui.LoginActivity;
 import com.powcan.scale.ui.base.BaseActivity;
@@ -50,6 +60,7 @@ import com.powcan.scale.ui.fragment.CenterFragment.OnViewPagerChangeListener;
 import com.powcan.scale.ui.fragment.LeftFragment;
 import com.powcan.scale.ui.fragment.LeftFragment.NavigationDrawerCallbacks;
 import com.powcan.scale.ui.fragment.RightFragment;
+import com.powcan.scale.util.Md5Utils;
 import com.powcan.scale.util.SpUtil;
 import com.powcan.scale.util.Utils;
 import com.powcan.scale.widget.SlidingMenu;
@@ -63,7 +74,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     private static final int REQUEST_ENABLE_BT = 1;
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
-	private static final int SENSOR_SHAKE = 10; 
+	private static final int SENSOR_SHAKE = 10;
+	private static final int GET_LAST_DATAS = 0x0001; 
+	private static final int UPLOAD_LOCAL_DATAS = 0x0002; 
 	
 	private SlidingMenu mSlidingMenu;
 	private LeftFragment mLeftFragment;
@@ -87,7 +100,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 
 	private UserInfo curUser;
 	private UserInfoDb dbUserInfo;
+	private MeasureResultDb dbMeasureResult;
 	private boolean isDeal = false;
+	private LoadingDialog mDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +113,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 		MobclickAgent.updateOnlineConfig(this);
 		
 		dbUserInfo = new UserInfoDb( this );
+		dbMeasureResult = new MeasureResultDb( this );
+		mDialog = new LoadingDialog( this , "数据同步中..." );
+		sychData();
 	}
 
 	@Override
@@ -124,6 +142,72 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 		
 		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+	}
+	
+	/**
+	 * 同步数据
+	 */
+	private void sychData()
+	{
+		mDialog.show();
+		new AsyncTask<Void, Void, String>() {
+
+			@Override
+			protected String doInBackground(Void... arg0) 
+			{
+				String account = mSpUtil.getAccount();
+				GNTRequest request = new GNTRequest();
+				request.account = account;
+
+				GNTResponse response = NetRequest.getInstance( MainActivity.this )
+						.send(request, GNTResponse.class);
+				if ( response != null && response.RES == 1201 )
+				{
+					String serverTime = response.MMT;
+					MeasureResult measure = dbMeasureResult.getLastMeasureResult( account );
+					if ( measure != null && serverTime.compareTo( measure.getDateTime() ) < 0 )
+					{
+						return UPLOAD_LOCAL_DATAS + "," + serverTime;
+					}
+					else if ( measure != null && serverTime.compareTo( measure.getDateTime() ) > 0 )
+					{
+						return GET_LAST_DATAS + "," + measure.getDateTime();
+					}
+					
+					return response.MMT;
+				}
+				
+				return "";
+			}
+
+			@Override
+			protected void onPostExecute(String result) {
+				super.onPostExecute( result );
+				String []array = result.split( "," );
+				int flag = Integer.valueOf( array[ 0 ] );
+//				if ( flag == GET_LAST_DATAS ) 
+//				{
+//					Message msg = new Message();
+//					msg.what = GET_LAST_DATAS;
+//					msg.obj = array[ 1 ];
+//					mHandler.sendMessage( msg );
+//				}
+//				else if ( flag == UPLOAD_LOCAL_DATAS ) 
+//				{
+//					Message msg = new Message();
+//					msg.what = UPLOAD_LOCAL_DATAS;
+//					msg.obj = array[ 1 ];
+//					mHandler.sendMessage( msg );
+//				}
+//				else 
+//				{
+//					String msg = "数据同步失败，请重试！";
+//					showToastShort(msg);
+//					mDialog.hide();
+//				}
+			}
+
+		}.execute();
 	}
 
 	@Override
@@ -262,6 +346,14 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 					scanLeDevice(true);
                 }
                 break; 
+            case GET_LAST_DATAS:
+            	String datetime = (String) msg.obj;
+            	getLastDatas( datetime );
+            	break;
+            case UPLOAD_LOCAL_DATAS:
+            	datetime = (String) msg.obj;
+            	uploadLocalDatas( datetime );
+            	break;
             } 
         } 
 
@@ -284,7 +376,126 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
                 mBluetoothAdapter.stopLeScan(mLeScanCallback);
             }
         }
-    }; 
+    };
+    
+    private void getLastDatas( final String datetime )
+    {
+    	new AsyncTask<Void, Void, Boolean>() {
+
+			@Override
+			protected Boolean doInBackground(Void... arg0) 
+			{
+				String account = mSpUtil.getAccount();
+				DNRRequest request = new DNRRequest();
+				request.account = account;
+				request.from_time = datetime;
+				request.to_time = Utils.getCurDateTime();
+
+				DNRResponse response = NetRequest.getInstance(getActivity())
+						.send(request, DNRResponse.class);
+				if ( response != null && response.RES == 1101 ) 
+				{
+					Log.d(TAG, "记录下载成功");
+					int num = response.NUM;
+					String height = SpUtil.getInstance( MainActivity.this ).getHeight();
+					MeasureResult measure = null;
+					for ( int i=0;i<num;i++ )
+					{
+						measure = new MeasureResult();
+						float weight = Float.valueOf( response.WET.get( i ) );
+						float bmi = weight / ( (Float.valueOf( height ) / 100) * (Float.valueOf( height ) / 100) );
+						bmi = (float)Math.round( bmi * 100 ) / 100;
+						measure.setAccount( account );
+						measure.setWeight( weight );
+						measure.setBmi( bmi );
+						measure.setWaterContent( Float.valueOf( response.WAT.get( i ) ) );
+						measure.setBodyFatRate( Float.valueOf( response.FAT.get( i ) ) );
+						measure.setDate( response.DATE.get( i ) );
+						measure.setUpload( 1 );
+						dbMeasureResult.insertMeasureResult( measure );
+					}
+				}
+				return true;
+			}
+
+			@Override
+			protected void onPostExecute(Boolean result) {
+				super.onPostExecute( result );
+				if ( result ) 
+				{
+					String msg = "数据同步成功！";
+					showToastShort(msg);
+				}
+				else 
+				{
+					String msg = "数据同步失败，请重试！";
+					showToastShort(msg);
+				}
+				mDialog.hide();
+			}
+
+		}.execute();
+    }
+    
+    private void uploadLocalDatas( final String datetime )
+    {
+    	new AsyncTask<Void, Void, Boolean>() {
+
+			@Override
+			protected Boolean doInBackground(Void... arg0) 
+			{
+				String account = mSpUtil.getAccount();
+				ArrayList<MeasureResult>  measureResults = dbMeasureResult.getMeasureResults( account, datetime, Utils.getCurDateTime(), "0" ); 
+				int size = measureResults.size();
+				for ( int i=0; i<size; i++ )
+				{
+					final MeasureResult result = measureResults.get(i);
+
+					RECRequest request = new RECRequest();
+					request.account = account;
+					request.weight = "" + result.getWeight();
+					request.fat = "" + result.getBodyFatRate();
+					request.water = "" + result.getWaterContent();
+					request.muscle = "0.0";
+					request.bone = "0.0";
+					request.bmr = "0.0";
+					request.sfat = "0.0";
+					request.infat = "0.0";
+					request.bodyage = "0.0";
+					request.amr = "0.0";
+					request.measure_time = result.getDateTime();
+
+					LGNResponse response = NetRequest
+							.getInstance(getActivity()).send(request,
+									LGNResponse.class);
+					if ( response != null && response.RES == 901 ) 
+					{
+						Log.d( TAG, "数据上传成功");
+						dbMeasureResult.updateMeasureResult(result.getId(), 1);
+					}
+				}
+				
+				return true;
+			}
+
+			@Override
+			protected void onPostExecute(Boolean result) {
+				super.onPostExecute( result );
+				if ( result ) 
+				{
+					String msg = "数据同步成功！";
+					showToastShort(msg);
+				}
+				else 
+				{
+					String msg = "数据同步失败，请重试！";
+					showToastShort(msg);
+				}
+				mDialog.hide();
+			}
+
+		}.execute();
+    }
 
     // Device scan callback.
     private BluetoothAdapter.LeScanCallback mLeScanCallback =
@@ -494,5 +705,16 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     {
     	mCenterFragment.reloadData();
     	mLeftFragment.reloadData();
+    }
+    
+    @Override
+    protected void onDestroy() 
+    {
+    	super.onDestroy();
+    	if ( mDialog != null )
+    	{
+    		mDialog.dismiss();
+    		mDialog = null;
+    	}
     }
 }

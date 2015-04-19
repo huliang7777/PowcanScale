@@ -12,6 +12,7 @@ public class RECRequest extends BaseRequest {
 	public String infat;//	float	内脏脂肪等级数据
 	public String bodyage;//	int	身体年龄
 	public String amr;//	float	另外一个身体代谢率
+	public String measure_time;//	datetime 记录产生时的本地时间（app时间，格式，字符串形式”yyyy-mm-ddhh:mm:ss”）
 	
 	public RECRequest() {
 		cmd = "REC";

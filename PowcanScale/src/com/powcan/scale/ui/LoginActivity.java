@@ -225,41 +225,42 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
 	protected void gotoProfile() 
 	{
-		measureResults = dbMeasureResult.getMeasureResults( getUsername(), "0" );
-		int size = measureResults.size();
-		for ( int i=0;i<size;i++ )
-		{
-			final MeasureResult result = measureResults.get( i );
-			
-			new Timer().schedule( new TimerTask() {
-				
-				@Override
-				public void run() 
-				{
-					String account = mSpUtil.getAccount();
-					
-					RECRequest request = new RECRequest();
-					request.account = account;
-					request.weight = "" + result.getWeight();
-					request.fat =  "" + result.getBodyFatRate();
-					request.water = "" + result.getWaterContent();
-					request.muscle = "0.0";
-					request.bone = "0.0";
-					request.bmr = "0.0";
-					request.sfat = "0.0";
-					request.infat = "0.0";
-					request.bodyage = "0.0";
-					request.amr = "0.0";
-					
-					LGNResponse response = NetRequest.getInstance(getActivity()).send(request, LGNResponse.class);
-					if (response != null && response.RES == 901 )
-					{
-						Log.d( "HomeFragment", "数据上传成功" );
-						dbMeasureResult.updateMeasureResult( result.getId(), 1 );
-					}
-				}
-			}, 100 * i );
-		}
+//		measureResults = dbMeasureResult.getMeasureResults( getUsername(), "0" );
+//		int size = measureResults.size();
+//		for ( int i=0;i<size;i++ )
+//		{
+//			final MeasureResult result = measureResults.get( i );
+//			
+//			new Timer().schedule( new TimerTask() {
+//				
+//				@Override
+//				public void run() 
+//				{
+//					String account = mSpUtil.getAccount();
+//					
+//					RECRequest request = new RECRequest();
+//					request.account = account;
+//					request.weight = "" + result.getWeight();
+//					request.fat =  "" + result.getBodyFatRate();
+//					request.water = "" + result.getWaterContent();
+//					request.muscle = "0.0";
+//					request.bone = "0.0";
+//					request.bmr = "0.0";
+//					request.sfat = "0.0";
+//					request.infat = "0.0";
+//					request.bodyage = "0.0";
+//					request.amr = "0.0";
+//					request.measure_time = result.getDateTime();
+//					
+//					LGNResponse response = NetRequest.getInstance(getActivity()).send(request, LGNResponse.class);
+//					if (response != null && response.RES == 901 )
+//					{
+//						Log.d( "HomeFragment", "数据上传成功" );
+//						dbMeasureResult.updateMeasureResult( result.getId(), 1 );
+//					}
+//				}
+//			}, 100 * i );
+//		}
 		
 		Intent intent = new Intent(this, ProfileActivity.class);
 		startActivity(intent);

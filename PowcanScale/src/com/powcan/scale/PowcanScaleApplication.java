@@ -55,4 +55,12 @@ public class PowcanScaleApplication extends Application
 		}
 		System.exit(0);
 	}
+	
+	public void clear()
+	{
+		for (Activity activity : activityList) 
+		{
+			activity.finish();
+		}
+	}
 }

@@ -80,6 +80,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	public void onInitViewData() {
 		account = getIntent().getStringExtra("account");
 		from = getIntent().getStringExtra("from");
+		from = TextUtils.isEmpty( from ) ? "" : from;
 		if (!TextUtils.isEmpty(account) && !account.equals("0")) {
 			etUsername.setText(account);
 		}
@@ -217,10 +218,16 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
 	protected void gotoMain() 
 	{
+		if ( from.equals( "LeftFragment" ) )
+		{
+			PowcanScaleApplication.getInstance().clear();
+		}
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
-
-		finish();
+		if ( !from.equals( "LeftFragment" ) )
+		{
+			finish();
+		}
 	}
 
 	protected void gotoProfile() 
@@ -278,7 +285,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	{
 		if (keyCode == KeyEvent.KEYCODE_BACK) 
 		{
-			if ( !TextUtils.isEmpty( from ) && from.equals("exit") ) 
+			if ( !TextUtils.isEmpty( from ) && !from.equals( "LeftFragment" ) && from.equals("exit") ) 
 			{
 				PowcanScaleApplication.getInstance().exit();
 			}

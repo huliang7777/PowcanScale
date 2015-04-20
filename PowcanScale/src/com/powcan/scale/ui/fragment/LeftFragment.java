@@ -209,6 +209,7 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
 				break;
 			case R.id.img_add:
 				intent = new Intent(mContext, LoginActivity.class);
+				intent.putExtra( "from", "LeftFragment" );
 				startActivity(intent);
 				break;
 		}

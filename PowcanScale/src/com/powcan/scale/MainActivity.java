@@ -2,11 +2,7 @@ package com.powcan.scale;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -44,7 +40,6 @@ import com.powcan.scale.bean.http.DNRRequest;
 import com.powcan.scale.bean.http.DNRResponse;
 import com.powcan.scale.bean.http.GNTRequest;
 import com.powcan.scale.bean.http.GNTResponse;
-import com.powcan.scale.bean.http.LGNRequest;
 import com.powcan.scale.bean.http.LGNResponse;
 import com.powcan.scale.bean.http.RECRequest;
 import com.powcan.scale.ble.BluetoothLeService;
@@ -53,14 +48,12 @@ import com.powcan.scale.db.MeasureResultDb;
 import com.powcan.scale.db.UserInfoDb;
 import com.powcan.scale.dialog.LoadingDialog;
 import com.powcan.scale.net.NetRequest;
-import com.powcan.scale.ui.LoginActivity;
 import com.powcan.scale.ui.base.BaseActivity;
 import com.powcan.scale.ui.fragment.CenterFragment;
 import com.powcan.scale.ui.fragment.CenterFragment.OnViewPagerChangeListener;
 import com.powcan.scale.ui.fragment.LeftFragment;
 import com.powcan.scale.ui.fragment.LeftFragment.NavigationDrawerCallbacks;
 import com.powcan.scale.ui.fragment.RightFragment;
-import com.powcan.scale.util.Md5Utils;
 import com.powcan.scale.util.SpUtil;
 import com.powcan.scale.util.Utils;
 import com.powcan.scale.widget.SlidingMenu;
@@ -208,11 +201,13 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 						String msg = "数据同步失败，请重试！";
 						showToastShort(msg);
 						mDialog.hide();
+						reloadData();
 					}
 				}
 				else
 				{
 					mDialog.hide();
+					reloadData();
 				}
 			}
 
@@ -325,7 +320,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 			curUser = dbUserInfo.getUserInfo( account );
 			SpUtil.getInstance( this ).reset();
 			SpUtil.getInstance( this ).saveCurrUser( curUser );
-			reloadData();
+			sychData();
 		}
 	}
 	
@@ -434,7 +429,6 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 				{
 					String msg = "数据同步成功！";
 					showToastShort(msg);
-					reloadData();
 				}
 				else 
 				{
@@ -442,6 +436,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 					showToastShort(msg);
 				}
 				mDialog.hide();
+				reloadData();
 			}
 
 		}.execute();
@@ -502,6 +497,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 					showToastShort(msg);
 				}
 				mDialog.hide();
+				reloadData();
 			}
 
 		}.execute();

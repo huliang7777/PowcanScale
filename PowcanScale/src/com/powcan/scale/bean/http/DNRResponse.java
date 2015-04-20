@@ -15,5 +15,5 @@ public class DNRResponse extends BaseResponse {
 	public List<String> IFT;// String 内脏脂肪等级数据（数组）
 	public List<String> BDA;// String 身体年龄（数组）
 	public List<String> AMR;// String 另外一个身体代谢率（数组）
-	public List<String> DATE;// String 测量时间（数组）
+	public List<String> TIM;// String 测量时间（数组）
 }

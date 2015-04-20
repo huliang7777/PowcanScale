@@ -25,6 +25,7 @@ import com.powcan.scale.db.MeasureResultDb;
 import com.powcan.scale.db.UserInfoDb;
 import com.powcan.scale.ui.LoginActivity;
 import com.powcan.scale.ui.base.BaseFragment;
+import com.powcan.scale.ui.profile.ProfileActivity;
 import com.powcan.scale.ui.profile.UserInfoDetailActivity;
 import com.powcan.scale.ui.settings.SettingsActivity;
 
@@ -200,7 +201,10 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
 		switch ( view.getId() ) 
 		{
 			case R.id.ll_curUser:
-				Intent intent = new Intent(mContext, UserInfoDetailActivity.class);
+//				Intent intent = new Intent(mContext, UserInfoDetailActivity.class);
+//				startActivity(intent);
+				Intent intent = new Intent( mContext, ProfileActivity.class );
+				intent.putExtra( "from", "UserInfoDetail" );
 				startActivity(intent);
 				break;
 			case R.id.img_add:

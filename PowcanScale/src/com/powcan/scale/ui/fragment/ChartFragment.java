@@ -251,8 +251,8 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 //			measureResult = new MeasureResult();
 //			measureResult.setAccount(account);
 //			
-//			measureResult.setWeight( (int)( Math.random() * 100 / 10 ) + 40 );
-//			measureResult.setDate( dates[i] );
+//			measureResult.setWeight( (int)( Math.random() * 100 / 10 ) + 50 );
+//			measureResult.setDate( dates[i] + " 00:00:00" );
 //
 //			dbMeasureResult.insertMeasureResult( measureResult );
 //		}

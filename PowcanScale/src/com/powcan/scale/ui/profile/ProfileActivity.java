@@ -8,7 +8,9 @@ import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -17,6 +19,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.powcan.scale.MainActivity;
 import com.powcan.scale.PowcanScaleApplication;
@@ -174,6 +178,14 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		imgSelect.setOnClickListener( this );
 		etHeight.setOnClickListener( this );
 		imgBack.setOnClickListener( this );
+		
+		etUsername.addTextChangedListener( mTextWatcher );
+		etGender.addTextChangedListener( mTextWatcher );
+		etBirthday.addTextChangedListener( mTextWatcher );
+		etHeight.addTextChangedListener( mTextWatcher );
+		etPhone.addTextChangedListener( mTextWatcher );
+		etQQ.addTextChangedListener( mTextWatcher );
+		etEmail.addTextChangedListener( mTextWatcher );
 	}
 
 	@Override
@@ -351,6 +363,8 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 					dbUserInfo.updateUserInfo( userInfo );
 					SpUtil.getInstance( ProfileActivity.this ).saveCurrUser(userInfo);
 					showToast("更新资料部分成功，手机号码重复");
+					btnSave.setEnabled( false );
+					btnSave.setBackgroundColor( getResources().getColor( R.color.light_gray ) );
 				}
 				else if ( result == 403 )
 				{
@@ -358,6 +372,8 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 					dbUserInfo.updateUserInfo( userInfo );
 					SpUtil.getInstance( ProfileActivity.this ).saveCurrUser(userInfo);
 					showToast("更新资料部分成功，QQ重复");
+					btnSave.setEnabled( false );
+					btnSave.setBackgroundColor( getResources().getColor( R.color.light_gray ) );
 				}
 				else if ( result == 404 )
 				{
@@ -365,6 +381,8 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 					dbUserInfo.updateUserInfo( userInfo );
 					SpUtil.getInstance( ProfileActivity.this ).saveCurrUser(userInfo);
 					showToast("更新资料部分成功，邮箱重复");
+					btnSave.setEnabled( false );
+					btnSave.setBackgroundColor( getResources().getColor( R.color.light_gray ) );
 				}
 				else
 				{
@@ -420,4 +438,46 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 
 		return super.onKeyDown(keyCode, event);
 	}
+
+	TextWatcher mTextWatcher = new TextWatcher() 
+	{
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) 
+		{
+			
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
+		}
+
+		@Override
+		public void afterTextChanged(Editable s) 
+		{
+			String username = etUsername.getText().toString();
+			String birthday = etBirthday.getText().toString();
+			String tempPhone = etPhone.getText().toString();
+			String tempQq = etQQ.getText().toString();
+			String tempEmail = etEmail.getText().toString();
+			
+			if ( !username.equals( userInfo.getUsername() )
+			|| !gender.equals( userInfo.getGender() )
+			|| !birthday.equals( userInfo.getBirthday() )
+			|| !height.equals( userInfo.getHeight() )
+			|| !tempPhone.equals( userInfo.getPhone() )
+			|| !tempQq.equals( userInfo.getQq() )
+			|| !tempEmail.equals( userInfo.getEmail() ) )
+			{
+				btnSave.setEnabled( true );
+				btnSave.setBackgroundColor( getResources().getColor( R.color.radio_color ) );
+			}
+			else
+			{
+				btnSave.setEnabled( false );
+				btnSave.setBackgroundColor( getResources().getColor( R.color.light_gray ) );
+			}
+		}
+	};
 }

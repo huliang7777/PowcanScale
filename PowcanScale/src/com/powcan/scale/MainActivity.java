@@ -163,7 +163,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 						.send(request, GNTResponse.class);
 				if ( response != null && response.RES == 1201 )
 				{
-					String serverTime = response.MMT;
+					String serverTime = response.SST;
 					MeasureResult measure = dbMeasureResult.getLastMeasureResult( account );
 					if ( measure != null && serverTime.compareTo( measure.getDateTime() ) < 0 )
 					{
@@ -173,8 +173,10 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 					{
 						return GET_LAST_DATAS + "," + measure.getDateTime();
 					}
-					
-					return response.MMT;
+					else if ( measure == null )
+					{
+						return GET_LAST_DATAS + "," + "0000-00-00 00:00:00";
+					}
 				}
 				
 				return "";
@@ -183,28 +185,35 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 			@Override
 			protected void onPostExecute(String result) {
 				super.onPostExecute( result );
-				String []array = result.split( "," );
-				int flag = Integer.valueOf( array[ 0 ] );
-//				if ( flag == GET_LAST_DATAS ) 
-//				{
-//					Message msg = new Message();
-//					msg.what = GET_LAST_DATAS;
-//					msg.obj = array[ 1 ];
-//					mHandler.sendMessage( msg );
-//				}
-//				else if ( flag == UPLOAD_LOCAL_DATAS ) 
-//				{
-//					Message msg = new Message();
-//					msg.what = UPLOAD_LOCAL_DATAS;
-//					msg.obj = array[ 1 ];
-//					mHandler.sendMessage( msg );
-//				}
-//				else 
-//				{
-//					String msg = "数据同步失败，请重试！";
-//					showToastShort(msg);
-//					mDialog.hide();
-//				}
+				if ( !TextUtils.isEmpty( result ) )
+				{
+					String []array = result.split( "," );
+					int flag = Integer.valueOf( array[ 0 ] );
+					if ( flag == GET_LAST_DATAS ) 
+					{
+						Message msg = new Message();
+						msg.what = GET_LAST_DATAS;
+						msg.obj = array[ 1 ];
+						mHandler.sendMessage( msg );
+					}
+					else if ( flag == UPLOAD_LOCAL_DATAS ) 
+					{
+						Message msg = new Message();
+						msg.what = UPLOAD_LOCAL_DATAS;
+						msg.obj = array[ 1 ];
+						mHandler.sendMessage( msg );
+					}
+					else 
+					{
+						String msg = "数据同步失败，请重试！";
+						showToastShort(msg);
+						mDialog.hide();
+					}
+				}
+				else
+				{
+					mDialog.hide();
+				}
 			}
 
 		}.execute();
@@ -393,7 +402,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 
 				DNRResponse response = NetRequest.getInstance(getActivity())
 						.send(request, DNRResponse.class);
-				if ( response != null && response.RES == 1101 ) 
+				if ( response != null && response.RES == 1001 ) 
 				{
 					Log.d(TAG, "记录下载成功");
 					int num = response.NUM;
@@ -410,7 +419,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 						measure.setBmi( bmi );
 						measure.setWaterContent( Float.valueOf( response.WAT.get( i ) ) );
 						measure.setBodyFatRate( Float.valueOf( response.FAT.get( i ) ) );
-						measure.setDate( response.DATE.get( i ) );
+						measure.setDate( response.TIM.get( i ) );
 						measure.setUpload( 1 );
 						dbMeasureResult.insertMeasureResult( measure );
 					}
@@ -425,6 +434,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 				{
 					String msg = "数据同步成功！";
 					showToastShort(msg);
+					reloadData();
 				}
 				else 
 				{

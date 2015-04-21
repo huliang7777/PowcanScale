@@ -11,15 +11,18 @@ import com.powcan.scale.db.UserInfoDb;
 import com.powcan.scale.dialog.SelectDataDialog;
 import com.powcan.scale.dialog.SelectDataDialog.ItemClickEvent;
 import com.powcan.scale.ui.base.BaseActivity;
+import com.powcan.scale.ui.profile.ProfileActivity;
 import com.powcan.scale.util.SpUtil;
 import com.powcan.scale.util.Utils;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,6 +36,7 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 	private TextView tvGoalWeight;
 	private TextView tvSugGoalWeight;
 	private Button btnSet;
+	private ImageButton btnUser;
 	
 	private UserInfo curUser;
 	private UserInfoDb dbUserInfo;
@@ -92,11 +96,21 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 		tvGoalWeight = (TextView) findViewById(R.id.tv_goalweight);
 		tvSugGoalWeight = (TextView) findViewById(R.id.tv_goalweight_suggestion);
 		btnSet = (Button) findViewById(R.id.btn_set);
+		btnUser = (ImageButton) findViewById( R.id.btn_user );
 	}
 
 	@Override
 	public void onInitViewData() 
 	{
+		setData();
+	}
+	
+	@Override
+	protected void onResume() 
+	{
+		super.onResume();
+		String account = SpUtil.getInstance(this).getAccount();
+		curUser = dbUserInfo.getUserInfo( account );
 		setData();
 	}
 	
@@ -107,7 +121,7 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 		tvCurWeight.setText( "当前体重为" + curWeight + "KG（标准）" );
 		tvSugCurWeight.setText( "专家建议:您的标准体重区间为" + ranges[0] + "KG~" + ranges[1] + "KG" );
 		tvGoalWeight.setText( "目标体重为" + goalWeight + "KG" );
-		tvSugGoalWeight.setText( "距离目标体重还有" + Math.abs( curWeight - goalWeight ) + "KG" );
+		tvSugGoalWeight.setText( "距离目标体重还有" + Utils.formatTwoFractionDigits( Math.abs( curWeight - goalWeight ) ) + "KG" );
 	}
 
 	@Override
@@ -115,6 +129,7 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 	{
 		imgBack.setOnClickListener( this );
 		btnSet.setOnClickListener( this );
+		btnUser.setOnClickListener( this );
 	}
 
 	@Override
@@ -129,6 +144,11 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 			case R.id.btn_set:
 				dialog = new SelectDataDialog( this, list, "选择目标体重", goalWeight / 5 - 1, this );
 				dialog.show();
+				break;
+			case R.id.btn_user:
+				Intent intent = new Intent( this, ProfileActivity.class );
+				intent.putExtra( "from", "UserInfoDetail" );
+				startActivity(intent);
 				break;
 		}
 	}

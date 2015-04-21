@@ -186,7 +186,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 					userInfo.setPhone(response.PHN);
 					userInfo.setQq(response.QQN);
 					userInfo.setEmail(response.EML);
-					userInfo.setGoalWeight("0");
 				}
 				return userInfo;
 			}

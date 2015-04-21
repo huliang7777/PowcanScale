@@ -27,7 +27,10 @@ import com.powcan.scale.ui.LoginActivity;
 import com.powcan.scale.ui.base.BaseFragment;
 import com.powcan.scale.ui.profile.ProfileActivity;
 import com.powcan.scale.ui.profile.UserInfoDetailActivity;
+import com.powcan.scale.ui.settings.SetGoalActivity;
 import com.powcan.scale.ui.settings.SettingsActivity;
+import com.powcan.scale.util.SpUtil;
+import com.powcan.scale.util.Utils;
 
 public class LeftFragment extends BaseFragment implements OnClickListener {
 
@@ -203,9 +206,11 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
 			case R.id.ll_curUser:
 //				Intent intent = new Intent(mContext, UserInfoDetailActivity.class);
 //				startActivity(intent);
-				Intent intent = new Intent( mContext, ProfileActivity.class );
-				intent.putExtra( "from", "UserInfoDetail" );
-				startActivity(intent);
+//				Intent intent = new Intent( mContext, ProfileActivity.class );
+//				intent.putExtra( "from", "UserInfoDetail" );
+//				startActivity(intent);
+				Intent intent = new Intent( mContext, SetGoalActivity.class );
+				startActivity( intent );
 				break;
 			case R.id.img_add:
 				intent = new Intent(mContext, LoginActivity.class);
@@ -227,7 +232,7 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
 		mAdapter = new UserListAdapter(mContext, users);
 		mDrawerListView.setAdapter( mAdapter );
 		
-		UserInfo user = CurUserInfo.getInstance( mContext ).getCurUser();
+		UserInfo user = CurUserInfo.getInstance( mContext ).getCurUser();//dbUserInfo.getUserInfo( CurUserInfo.getInstance( mContext ).getCurUser().getAccount() );
         String username = user.getUsername();
 		tvName.setText( username );
 		
@@ -239,8 +244,8 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
 		MeasureResult result = dbMeasureResult.getLastMeasureResult( user.getAccount() );
 		if ( result != null )
 		{
-			tvData.setText( "上次体检：" + result.getDate() + "\n距减重目标还有" + Math.abs( (int)result.getWeight() - Integer.valueOf( user.getGoalWeight() ) ) + "KG" );
-			tvWeight.setText( String.format( "体重%dKG" , (int)result.getWeight() ) );
+			tvData.setText( "上次体检：" + result.getDate() + "\n距减重目标还有" + Utils.formatTwoFractionDigits( Math.abs( result.getWeight() - Float.valueOf( user.getGoalWeight() ) ) ) + "KG" );
+			tvWeight.setText( String.format( "体重%sKG" , Utils.formatTwoFractionDigits( result.getWeight() ) ) );
 			tvWeight.setVisibility(View.VISIBLE);
 		}
 		else

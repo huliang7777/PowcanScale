@@ -21,7 +21,7 @@ import android.widget.Toast;
 public class SettingsActivity extends BaseActivity implements OnClickListener
 {
 	private ImageView imgBack;
-	private View rlSetGoal;
+//	private View rlSetGoal;
 	private View rlMeasureRemind;
 	private View rlVersionUpdate;
 	private View rlSuggest;
@@ -49,7 +49,7 @@ public class SettingsActivity extends BaseActivity implements OnClickListener
 	public void onFindViews() 
 	{
 		imgBack = (ImageView) findViewById(R.id.img_back);
-		rlSetGoal = findViewById(R.id.rl_set_goal);
+//		rlSetGoal = findViewById(R.id.rl_set_goal);
 		rlMeasureRemind = findViewById(R.id.rl_measure_remind);
 		rlAboutUs = findViewById(R.id.rl_about_us);
 		rlHelp = findViewById(R.id.rl_help);
@@ -68,7 +68,7 @@ public class SettingsActivity extends BaseActivity implements OnClickListener
 	public void onBindListener() 
 	{
 		imgBack.setOnClickListener( this );
-		rlSetGoal.setOnClickListener( this );
+//		rlSetGoal.setOnClickListener( this );
 		rlMeasureRemind.setOnClickListener( this );
 		rlAboutUs.setOnClickListener( this );
 		rlHelp.setOnClickListener( this );
@@ -86,13 +86,13 @@ public class SettingsActivity extends BaseActivity implements OnClickListener
 				finish();
 				break;
 	
-			case R.id.rl_set_goal:
-				Intent intent = new Intent( this, SetGoalActivity.class );
-				startActivity( intent );
-				break;
+//			case R.id.rl_set_goal:
+//				Intent intent = new Intent( this, SetGoalActivity.class );
+//				startActivity( intent );
+//				break;
 				
 			case R.id.rl_measure_remind:
-				intent = new Intent( this, MeasureRemindActivity.class );
+				Intent intent = new Intent( this, MeasureRemindActivity.class );
 				startActivity( intent );
 				break;
 				

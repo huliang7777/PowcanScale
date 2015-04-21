@@ -6,6 +6,7 @@ import com.umeng.analytics.MobclickAgent;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.text.TextUtils;
 
 public class SpUtil {
 	private static final String NAME = "preferences";
@@ -178,7 +179,11 @@ public class SpUtil {
 		setHeight( userInfo.getHeight() );
 		setPhone( userInfo.getPhone() );
 		setQQ( userInfo.getQq() );
-		setGoalWeight( userInfo.getGoalWeight() );
+		String goalWeight = userInfo.getGoalWeight();
+		if ( !TextUtils.isEmpty( goalWeight ) && !"null".equalsIgnoreCase( goalWeight ) && !"0".equalsIgnoreCase( goalWeight ) )
+		{
+			setGoalWeight( userInfo.getGoalWeight() );
+		}
 	}
 	
 	public UserInfo getCurrUser()

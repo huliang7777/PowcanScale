@@ -1,5 +1,7 @@
 package com.powcan.scale.bean;
 
+import android.text.TextUtils;
+
 public class UserInfo {
 	private Integer id;
 	private String account;
@@ -104,7 +106,7 @@ public class UserInfo {
 	}
 	
 	public String getGoalWeight() {
-		return goalWeight;
+		return TextUtils.isEmpty( goalWeight ) ? "0" : goalWeight;
 	}
 
 	public void setGoalWeight(String goalWeight) {

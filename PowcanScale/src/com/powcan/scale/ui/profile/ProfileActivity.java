@@ -284,17 +284,17 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		}
 		if ( from.equals( "UserInfoDetail" ) )
 		{
-			if ( !TextUtils.isEmpty( phone ) && !phoneMatcher.matches() ) 
+			if ( !TextUtils.isEmpty( tempPhone ) && !phoneMatcher.matches() ) 
 			{
 				showToast("手机号码输入有误！");
 				return;
 			} 
-			else if ( !TextUtils.isEmpty( qq ) && !qqMatcher.matches() ) 
+			else if ( !TextUtils.isEmpty( tempQq ) && !qqMatcher.matches() ) 
 			{
 				showToast("qq输入有误！");
 				return;
 			} 
-			else if ( !TextUtils.isEmpty( email ) && !emailMatcher.matches() ) 
+			else if ( !TextUtils.isEmpty( tempEmail ) && !emailMatcher.matches() ) 
 			{
 				showToast("邮箱输入有误！");
 				return;
@@ -331,6 +331,10 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 					utu.phone = userInfo.getPhone();
 					utu.qq = userInfo.getQq();
 					utu.email = userInfo.getEmail();
+					
+					utu.phone = utu.phone.equals( "" ) ? "NULL" : utu.phone;
+					utu.qq = utu.qq.equals( "" ) ? "NULL" : utu.qq;
+					utu.email = utu.email.equals( "" ) ? "NULL" : utu.email;
 				}
 				
 				BaseResponse regResponse = (BaseResponse) NetRequest.getInstance(getActivity()).send(utu, BaseResponse.class);

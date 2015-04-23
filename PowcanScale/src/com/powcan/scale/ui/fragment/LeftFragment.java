@@ -240,6 +240,10 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
 		{
 			ivImage.setImageResource(R.drawable.icon_female);
 		}
+		else
+		{
+			ivImage.setImageResource(R.drawable.icon_male);
+		}
 		
 		MeasureResult result = dbMeasureResult.getLastMeasureResult( user.getAccount() );
 		if ( result != null )

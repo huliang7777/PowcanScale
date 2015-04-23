@@ -85,6 +85,10 @@ public class UserListAdapter extends BaseAdapter {
 		{
 			ivImage.setImageResource(R.drawable.icon_female);
 		}
+		else
+		{
+			ivImage.setImageResource(R.drawable.icon_male);
+		}
 		
 		MeasureResult result = measureMap.get( user.getAccount() );
 		if ( result != null )

@@ -3,6 +3,7 @@ package com.powcan.scale;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -712,6 +713,20 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     	mCenterFragment.reloadData();
     	mLeftFragment.reloadData();
     }
+	
+	private long firstClickTime = 0;
+
+	@Override
+	public void onBackPressed() {
+		long secondTime = System.currentTimeMillis();
+		if (secondTime - firstClickTime > 2000) {
+			showToast("再按一次退出程序...");
+			firstClickTime = secondTime;
+			return;
+		} else {
+			finish();
+		}
+	}
     
     @Override
     protected void onDestroy() 

@@ -9,6 +9,9 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
+import android.os.Vibrator;
 
 public class AlarmMeasure extends BroadcastReceiver 
 {
@@ -32,6 +35,7 @@ public class AlarmMeasure extends BroadcastReceiver
 			CharSequence contentTitle = "测量提醒";
 			CharSequence contentText = "到点了啦，可以测量体重了....";
 			notification.flags = Notification.FLAG_AUTO_CANCEL;
+			notification.defaults = Notification.DEFAULT_LIGHTS;
 			Intent notificationIntent = new Intent( context, MainActivity.class );
 			PendingIntent contentIntent = PendingIntent.getActivity( context, 0,
 					notificationIntent, 0);
@@ -39,6 +43,15 @@ public class AlarmMeasure extends BroadcastReceiver
 					contentIntent);
 			// 用mNotificationManager的notify方法通知用户生成标题栏消息通知
 			mNotificationManager.notify(1, notification);
+			
+			MediaPlayer mMediaPlayer = MediaPlayer.create( context,
+					RingtoneManager.getActualDefaultRingtoneUri( context, RingtoneManager.TYPE_NOTIFICATION ) );
+			mMediaPlayer.setVolume( 1.0f, 1.0f );
+			mMediaPlayer.setLooping( false );
+			mMediaPlayer.start();
+			
+			Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+			vibrator.vibrate(200);
 		}  
 	}
 

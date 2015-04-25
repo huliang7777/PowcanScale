@@ -33,7 +33,7 @@
             android:textColor="@color/deep_gray"
             android:textSize="@dimen/title" />
 
-        <ImageButton
+        <Button
             android:id="@+id/btn_user"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/edittext_height"
@@ -41,7 +41,8 @@
             android:background="@null"
             android:minWidth="@dimen/button"
             android:padding="@dimen/space"
-            android:src="@drawable/icon_user" />
+            android:text="修改资料"
+            android:textColor="@color/deep_gray" />
     </RelativeLayout>
 
     <View

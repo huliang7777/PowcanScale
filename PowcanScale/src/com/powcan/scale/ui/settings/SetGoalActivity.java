@@ -36,7 +36,7 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 	private TextView tvGoalWeight;
 	private TextView tvSugGoalWeight;
 	private Button btnSet;
-	private ImageButton btnUser;
+	private Button btnUser;
 	
 	private UserInfo curUser;
 	private UserInfoDb dbUserInfo;
@@ -96,7 +96,7 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 		tvGoalWeight = (TextView) findViewById(R.id.tv_goalweight);
 		tvSugGoalWeight = (TextView) findViewById(R.id.tv_goalweight_suggestion);
 		btnSet = (Button) findViewById(R.id.btn_set);
-		btnUser = (ImageButton) findViewById( R.id.btn_user );
+		btnUser = (Button) findViewById( R.id.btn_user );
 	}
 
 	@Override

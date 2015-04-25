@@ -702,7 +702,19 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     {
     	if(keyCode == KeyEvent.KEYCODE_BACK)
 		{
-    		PowcanScaleApplication.getInstance().exit();
+    		if(System.currentTimeMillis() - firstClickTime < 2000)
+			{
+    			PowcanScaleApplication.getInstance().exit();
+				finish();
+				return super.onKeyDown(keyCode, event);
+			}
+			else
+			{
+				showToast("再按一次退出程序...");
+				firstClickTime = System.currentTimeMillis();
+				return true;
+			}
+    		
 		}
     	
     	return super.onKeyDown(keyCode, event);
@@ -716,17 +728,6 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	
 	private long firstClickTime = 0;
 
-	@Override
-	public void onBackPressed() {
-		long secondTime = System.currentTimeMillis();
-		if (secondTime - firstClickTime > 2000) {
-			showToast("再按一次退出程序...");
-			firstClickTime = secondTime;
-			return;
-		} else {
-			finish();
-		}
-	}
     
     @Override
     protected void onDestroy() 

@@ -1,5 +1,9 @@
 package com.powcan.scale.receiver;
 
+import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import com.powcan.scale.MainActivity;
 import com.powcan.scale.R;
 
@@ -9,6 +13,9 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.os.Vibrator;
@@ -35,7 +42,7 @@ public class AlarmMeasure extends BroadcastReceiver
 			CharSequence contentTitle = "测量提醒";
 			CharSequence contentText = "到点了啦，可以测量体重了....";
 			notification.flags = Notification.FLAG_AUTO_CANCEL;
-			notification.defaults = Notification.DEFAULT_LIGHTS;
+			
 			Intent notificationIntent = new Intent( context, MainActivity.class );
 			PendingIntent contentIntent = PendingIntent.getActivity( context, 0,
 					notificationIntent, 0);
@@ -44,14 +51,70 @@ public class AlarmMeasure extends BroadcastReceiver
 			// 用mNotificationManager的notify方法通知用户生成标题栏消息通知
 			mNotificationManager.notify(1, notification);
 			
-			MediaPlayer mMediaPlayer = MediaPlayer.create( context,
-					RingtoneManager.getActualDefaultRingtoneUri( context, RingtoneManager.TYPE_NOTIFICATION ) );
-			mMediaPlayer.setVolume( 1.0f, 1.0f );
-			mMediaPlayer.setLooping( false );
-			mMediaPlayer.start();
+//			final MediaPlayer mMediaPlayer = MediaPlayer.create( context, 
+//					RingtoneManager.getActualDefaultRingtoneUri( context, RingtoneManager.TYPE_RINGTONE) );
+//			
+//			
+//			if ( mMediaPlayer != null )
+//			{
+//				notification.defaults = Notification.DEFAULT_LIGHTS;
+//				mMediaPlayer.setVolume( 1.0f, 1.0f );
+//				mMediaPlayer.setLooping( false );
+//				mMediaPlayer.start();
+//				
+//				new Timer().schedule( new TimerTask() {
+//					
+//					@Override
+//					public void run() {
+//						if ( mMediaPlayer.isPlaying() )
+//						{
+//							mMediaPlayer.pause();
+//						}
+//						mMediaPlayer.stop();
+//						mMediaPlayer.release();
+//					}
+//				}, 5000 );
+//			}
+//			else
+//			{
+//				notification.defaults = Notification.DEFAULT_SOUND;
+//			}
+			
+			AssetManager assetManager = context.getAssets();
+			AssetFileDescriptor fileDescriptor;
+			try {
+				fileDescriptor = assetManager.openFd("measure.mp3");
+				final MediaPlayer mMediaPlayer = new MediaPlayer();
+				mMediaPlayer.setVolume( 1.0f, 1.0f );
+				mMediaPlayer.setLooping( false );
+				mMediaPlayer.setDataSource( fileDescriptor.getFileDescriptor(),
+	                    fileDescriptor.getStartOffset(),
+	                    fileDescriptor.getLength() );
+				
+				mMediaPlayer.prepare();
+				mMediaPlayer.start();
+				
+				
+				new Timer().schedule( new TimerTask() {
+				
+					@Override
+					public void run() {
+						if ( mMediaPlayer.isPlaying() )
+						{
+							mMediaPlayer.pause();
+						}
+						mMediaPlayer.stop();
+						mMediaPlayer.release();
+					}
+				}, 5000 );
+			} 
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
 			
 			Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-			vibrator.vibrate(200);
+			vibrator.vibrate(5000);
 		}  
 	}
 

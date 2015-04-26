@@ -227,6 +227,7 @@ public class MeasureRemindActivity extends BaseActivity implements OnClickListen
 		Log.d( TAG, "alarmMeasure-time : " + time );
 		
 		String []times = time.split(":");
+		int reqCode = Integer.valueOf( times[0] ) * 100 + Integer.valueOf( times[1] );
 		
 		Calendar calendar = Calendar.getInstance( Locale.getDefault() );
 	    calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf( times[0] ) );
@@ -239,7 +240,7 @@ public class MeasureRemindActivity extends BaseActivity implements OnClickListen
 	    } 
 	    Intent intent = new Intent( "com.powcan.scale.ALARM_MEASURE" );
 	    intent.setClass( this, AlarmMeasure.class);
-	    PendingIntent sender = PendingIntent.getBroadcast( this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT );
+	    PendingIntent sender = PendingIntent.getBroadcast( this, reqCode, intent, PendingIntent.FLAG_CANCEL_CURRENT );
 	    
 	    AlarmManager am = ( AlarmManager )getSystemService( ALARM_SERVICE );
 	    
@@ -301,15 +302,15 @@ public class MeasureRemindActivity extends BaseActivity implements OnClickListen
 			{
 				final Remind remind = datas.get( oprtIndex );
 				String[] time = remind.getTime().split( ":" );
-				if ( remind.isOn() )
-				{
-					alarmMeasure( remind.getTime(), 0, false );
-				}
 				new TimeDialog( this, new OnTimeSetListener() {
 					
 					@Override
 					public void onTimeSet(TimePicker view, int hourOfDay, int minute) 
 					{
+						if ( remind.isOn() )
+						{
+							alarmMeasure( remind.getTime(), 0, false );
+						}
 						remind.setTime( String.format( "%02d", hourOfDay ) + ":" + String.format( "%02d", minute ) );
 						remind.setOn( false );
 						adapter.notifyDataSetChanged();

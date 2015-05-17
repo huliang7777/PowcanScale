@@ -16,6 +16,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * 用户列表界面适配类
+ * @author Administrator
+ *
+ */
 public class UserListAdapter extends BaseAdapter {
 
 	private Context mContext;
@@ -64,6 +69,9 @@ public class UserListAdapter extends BaseAdapter {
 		return position;
 	}
 
+	/**
+	 * 获得并构造帐号界面view
+	 */
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		convertView = mInflater.inflate(R.layout.item_user, null);

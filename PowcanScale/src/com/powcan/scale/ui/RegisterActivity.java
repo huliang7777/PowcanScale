@@ -33,6 +33,11 @@ import com.powcan.scale.util.Md5Utils;
 import com.powcan.scale.util.SpUtil;
 import com.powcan.scale.util.Utils;
 
+/**
+ * 注册界面
+ * @author Administrator
+ *
+ */
 public class RegisterActivity extends BaseActivity implements OnClickListener, ItemClickEvent {
 
 	private static final String TAG = RegisterActivity.class.getSimpleName();
@@ -52,17 +57,26 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, I
 	private UserInfoDb dbUserInfo;
 	private UserInfo userInfo;
 	
+	/**
+	 * 创建界面方法
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register);
 	}
 	
+	/**
+	 * 初始化数据
+	 */
 	@Override
 	public void onInit() {
 		dbUserInfo = new UserInfoDb( this ); 
 	}
 
+	/**
+	 * 查找子view
+	 */
 	@Override
 	public void onFindViews() {
 		tvAccount = (TextView) findViewById(R.id.tv_account);
@@ -75,12 +89,18 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, I
 		btnToLogin = (TextView) findViewById(R.id.btn_to_login);
 	}
 
+	/**
+	 * 初始化view界面显示数据
+	 */
 	@Override
 	public void onInitViewData() 
 	{
 		this.listAccount = new ArrayList<Integer>();
 	}
 
+	/**
+	 * 绑定事件监听
+	 */
 	@Override
 	public void onBindListener() {
 		btnCommit.setOnClickListener(this);
@@ -88,6 +108,9 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, I
 		btnToLogin.setOnClickListener(this);
 	}
 
+	/**
+	 * 点击事件处理方法
+	 */
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -108,6 +131,10 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, I
 		}
 	}
 
+	/**
+	 * 检查用户输入信息的合法性
+	 * @return
+	 */
 	private boolean check() {
 		String account = tvAccount.getText().toString();
 		String password = etPassword.getText().toString();
@@ -166,6 +193,9 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, I
 		return check;
 	}
 	
+	/**
+	 * 跳转到主界面
+	 */
 	protected void gotoProfile() 
 	{
 		Intent intent = new Intent(this, ProfileActivity.class);
@@ -179,6 +209,9 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, I
 		super.onBackPressed();
 	}
 
+	/**
+	 * 帐号选择回调
+	 */
 	@Override
 	public void onItemClick(int which) 
 	{
@@ -188,6 +221,9 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, I
 		dialog = null;
 	}
 
+	/**
+	 * 请求后台获得可以注册的帐号
+	 */
 	private void reqRegisterAccount()
 	{
 		if ( listAccount != null && listAccount.size() > 0 )
@@ -252,6 +288,9 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, I
 		}.execute();
 	}
 	
+	/**
+	 * 请求好进行用户注册
+	 */
 	private void reqRegister()
 	{
 		userInfo = new UserInfo();

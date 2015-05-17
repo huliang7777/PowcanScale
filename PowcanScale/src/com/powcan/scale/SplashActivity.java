@@ -26,6 +26,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Window;
 
+/**
+ * 启动界面
+ * @author Administrator
+ *
+ */
 public class SplashActivity extends Activity {
 
 	private final int SPLASH_DISPLAY_LENGHT = 2000;
@@ -33,7 +38,11 @@ public class SplashActivity extends Activity {
 	private UserInfoDb dbUserInfo;
 	private MeasureResultDb dbMeasureResult;
 	private ArrayList<MeasureResult> measureResults;
-
+	
+	/**
+	 * 创建界面方法
+	 * 后台进行帐号登录验证
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -42,7 +51,8 @@ public class SplashActivity extends Activity {
 		
 		dbUserInfo = new UserInfoDb( this );
 		curUser = SpUtil.getInstance(this).getCurrUser();
-				
+		
+		// 帐号验证
 		if( curUser != null && !curUser.getAccount().equals("0") && !curUser.getPassword().equals("") )
 		{
 			dbMeasureResult = new MeasureResultDb( this );
@@ -116,52 +126,21 @@ public class SplashActivity extends Activity {
 			}, SPLASH_DISPLAY_LENGHT);
 		}
 	}
-
+	
+	/**
+	 * 跳转到主界面
+	 */
 	protected void gotoMain() 
 	{
-//		measureResults = dbMeasureResult.getMeasureResults( curUser.getAccount(), "0" );
-//		int size = measureResults.size();
-//		for ( int i=0;i<size;i++ )
-//		{
-//			final MeasureResult result = measureResults.get( i );
-//			
-//			new Timer().schedule( new TimerTask() {
-//				
-//				@Override
-//				public void run() 
-//				{
-//					String account = SpUtil.getInstance( SplashActivity.this ).getAccount();
-//					
-//					RECRequest request = new RECRequest();
-//					request.account = account;
-//					request.weight = "" + result.getWeight();
-//					request.fat =  "" + result.getBodyFatRate();
-//					request.water = "" + result.getWaterContent();
-//					request.muscle = "0.0";
-//					request.bone = "0.0";
-//					request.bmr = "0.0";
-//					request.sfat = "0.0";
-//					request.infat = "0.0";
-//					request.bodyage = "0.0";
-//					request.amr = "0.0";
-//					request.measure_time = result.getDateTime();
-//					
-//					LGNResponse response = NetRequest.getInstance( SplashActivity.this ).send(request, LGNResponse.class);
-//					if (response != null && response.RES == 901 )
-//					{
-//						Log.d( "HomeFragment", "数据上传成功" );
-//						dbMeasureResult.updateMeasureResult( result.getId(), 1 );
-//					}
-//				}
-//			}, 100 * i );
-//		}
-		
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
 		
 		finish();
 	}
 	
+	/**
+	 * 跳转到登录界面
+	 */
 	protected void gotoLogin() 
 	{
 		Intent intent = new Intent(this, LoginActivity.class);
@@ -170,6 +149,9 @@ public class SplashActivity extends Activity {
 		finish();
 	}
 	
+	/**
+	 * 跳转到用户信息填写界面
+	 */
 	protected void gotoProfile() 
 	{
 		Intent intent = new Intent(this, ProfileActivity.class);

@@ -36,8 +36,11 @@ import android.os.IBinder;
 import android.util.Log;
 
 /**
+ * 蓝牙连接服务类
  * Service for managing connection and data communication with a GATT server hosted on a
  * given Bluetooth LE device.
+ * @author Administrator
+ *
  */
 public class BluetoothLeService extends Service {
     private final static String TAG = BluetoothLeService.class.getSimpleName();
@@ -70,6 +73,9 @@ public class BluetoothLeService extends Service {
 
     // Implements callback methods for GATT events that the app cares about.  For example,
     // connection change and services discovered.
+    /**
+     * 蓝牙连接回调接口类
+     */
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
@@ -115,12 +121,21 @@ public class BluetoothLeService extends Service {
             broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
         }
     };
-
+    
+    /**
+     * 发送状态更新的广播
+     * @param action 广播类型
+     */
     private void broadcastUpdate(final String action) {
         final Intent intent = new Intent(action);
         sendBroadcast(intent);
     }
-
+    
+    /**
+     * 发送状态更新的广播
+     * @param action 广播类型
+     * @param characteristic 蓝牙数据通讯类
+     */
     private void broadcastUpdate(final String action,
                                  final BluetoothGattCharacteristic characteristic) {
         final Intent intent = new Intent(action);
@@ -232,7 +247,12 @@ public class BluetoothLeService extends Service {
         }
         sendBroadcast(intent);
     }
-
+    
+    /**
+     * 服务binder类
+     * @author Administrator
+     *
+     */
     public class LocalBinder extends Binder {
         public BluetoothLeService getService() {
             return BluetoothLeService.this;
@@ -257,7 +277,7 @@ public class BluetoothLeService extends Service {
 
     /**
      * Initializes a reference to the local Bluetooth adapter.
-     *
+     * 初始化蓝牙适配对象	
      * @return Return true if the initialization is successful.
      */
     public boolean initialize() {
@@ -281,6 +301,7 @@ public class BluetoothLeService extends Service {
     }
 
     /**
+     * 连接脂肪称蓝牙服务
      * Connects to the GATT server hosted on the Bluetooth LE device.
      *
      * @param address The device address of the destination device.
@@ -324,6 +345,7 @@ public class BluetoothLeService extends Service {
     }
 
     /**
+     * 断开蓝牙连接
      * Disconnects an existing connection or cancel a pending connection. The disconnection result
      * is reported asynchronously through the
      * {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
@@ -338,6 +360,7 @@ public class BluetoothLeService extends Service {
     }
 
     /**
+     * 关闭蓝牙通讯
      * After using a given BLE device, the app must call this method to ensure resources are
      * released properly.
      */
@@ -350,6 +373,7 @@ public class BluetoothLeService extends Service {
     }
 
     /**
+     * 读取蓝牙数据通讯数据
      * Request a read on a given {@code BluetoothGattCharacteristic}. The read result is reported
      * asynchronously through the {@code BluetoothGattCallback#onCharacteristicRead(android.bluetooth.BluetoothGatt, android.bluetooth.BluetoothGattCharacteristic, int)}
      * callback.
@@ -364,6 +388,10 @@ public class BluetoothLeService extends Service {
         mBluetoothGatt.readCharacteristic(characteristic);
     }
     
+    /**
+     * 写入蓝牙通讯数据给蓝牙服务器
+     * @param characteristic
+     */
     public void writeCharacteristic(BluetoothGattCharacteristic characteristic) {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
             Log.w(TAG, "BluetoothAdapter not initialized");
@@ -377,6 +405,7 @@ public class BluetoothLeService extends Service {
     }
 
     /**
+     * 将数据发送蓝牙数据通知
      * Enables or disables notification on a give characteristic.
      *
      * @param characteristic Characteristic to act on.
@@ -402,6 +431,10 @@ public class BluetoothLeService extends Service {
         }
     }
 
+    /**
+     * 获得数据
+     * @return
+     */
 	private byte[] getValues() {
 		byte[] mac = CHexConver.hexStr2Bytes(mBluetoothDeviceAddress);
 		
@@ -427,6 +460,7 @@ public class BluetoothLeService extends Service {
 	}
 
     /**
+     * 获取支持的蓝牙列表
      * Retrieves a list of supported GATT services on the connected device. This should be
      * invoked only after {@code BluetoothGatt#discoverServices()} completes successfully.
      *

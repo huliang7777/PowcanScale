@@ -7,7 +7,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-
+/**
+ * 选中性别弹出框
+ * @author Administrator
+ *
+ */
 public class SelectGenderDialog extends Dialog implements android.view.View.OnClickListener
 {
 	private Context mContext;
@@ -28,6 +32,9 @@ public class SelectGenderDialog extends Dialog implements android.view.View.OnCl
 		init();
 	}
 	
+	/**
+	 * 初始化选择性别数据
+	 */
 	private void init()
 	{
 		LayoutInflater inflater = LayoutInflater.from( mContext );
@@ -50,11 +57,19 @@ public class SelectGenderDialog extends Dialog implements android.view.View.OnCl
         }
 	}
 	
+	/**
+	 * 性别选中按钮回调接口
+	 * @author Administrator
+	 *
+	 */
 	public interface GenderSelectEvent
 	{
 		public void onGenderSelect( int which );
 	}
 
+	/**
+	 * 响应按钮点击事件
+	 */
 	@Override
 	public void onClick(View v) 
 	{

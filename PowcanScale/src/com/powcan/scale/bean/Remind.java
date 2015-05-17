@@ -1,8 +1,22 @@
 package com.powcan.scale.bean;
 
+/**
+ * 测量提醒类
+ * @author Administrator
+ *
+ */
 public class Remind {
+	/**
+	 * 提醒时间
+	 */
 	private String time;
-	private String content;
+	/**
+	 * 显示内容
+	 */
+	private String content; 
+	/**
+	 * 是否打开
+	 */
 	private boolean isOn;
 
 	public String getTime() {

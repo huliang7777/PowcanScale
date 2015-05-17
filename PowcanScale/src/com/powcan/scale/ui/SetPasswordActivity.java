@@ -19,6 +19,11 @@ import com.powcan.scale.net.NetRequest;
 import com.powcan.scale.ui.base.BaseActivity;
 import com.powcan.scale.util.Md5Utils;
 
+/**
+ * 设置密码
+ * @author Administrator
+ *
+ */
 public class SetPasswordActivity extends BaseActivity implements OnClickListener {
 
 	private Button btnCommit;
@@ -29,18 +34,27 @@ public class SetPasswordActivity extends BaseActivity implements OnClickListener
 	private LoadingDialog loadingDialog;
 	private String account;
 
+	/**
+	 * 创建界面方法
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setpwd);
 	}
 
+	/**
+	 * 初始化数据
+	 */
 	@Override
 	public void onInit() 
 	{
 		account = getIntent().getStringExtra( "account" );
 	}
 
+	/**
+	 * 查找子view
+	 */
 	@Override
 	public void onFindViews() {
 //		etAccount = (EditText) findViewById(R.id.et_account);
@@ -53,11 +67,17 @@ public class SetPasswordActivity extends BaseActivity implements OnClickListener
 	public void onInitViewData() {
 	}
 
+	/**
+	 * 绑定事件监听
+	 */
 	@Override
 	public void onBindListener() {
 		btnCommit.setOnClickListener(this);
 	}
 
+	/**
+	 * 点击事件处理方法
+	 */
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -69,6 +89,10 @@ public class SetPasswordActivity extends BaseActivity implements OnClickListener
 		}
 	}
 
+	/**
+	 * 检查用户输入数据合法性
+	 * @return
+	 */
 	private boolean check() 
 	{
 //		String account = etAccount.getText().toString();
@@ -105,7 +129,9 @@ public class SetPasswordActivity extends BaseActivity implements OnClickListener
 		return check;
 	}
 
-
+	/**
+	 * 请求后台进行密码设置
+	 */
 	private void requestFindPwd() 
 	{
 //		final String account = etAccount.getText().toString();

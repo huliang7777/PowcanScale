@@ -19,7 +19,9 @@ package com.powcan.scale.ble;
 import java.util.HashMap;
 
 /**
- * This class includes a small subset of standard GATT attributes for demonstration purposes.
+ * 与脂肪称蓝牙通讯的协议熟悉类
+ * @author Administrator
+ *
  */
 public class SampleGattAttributes {
     private static HashMap<String, String> attributes = new HashMap();

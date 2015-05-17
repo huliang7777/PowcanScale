@@ -20,6 +20,11 @@ import com.powcan.scale.R;
 import com.powcan.scale.util.SpUtil;
 import com.umeng.analytics.MobclickAgent;
 
+/**
+ * 基础activity类
+ * @author Administrator
+ *
+ */
 public abstract class BaseActivity extends FragmentActivity {
 
 	protected boolean mSlideFinish = false;
@@ -38,6 +43,9 @@ public abstract class BaseActivity extends FragmentActivity {
 	
 	public SpUtil mSpUtil;
 
+	/**
+	 * 界面创建回调方法
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,7 +54,10 @@ public abstract class BaseActivity extends FragmentActivity {
 		
 		PowcanScaleApplication.getInstance().addActivity(this);
 	}
-
+	
+	/**
+	 * 设置界面类型回调方法
+	 */
 	@Override
 	public void setContentView(int layoutResID) {
 		super.setContentView(layoutResID);
@@ -58,6 +69,9 @@ public abstract class BaseActivity extends FragmentActivity {
 		onBindListener();
 	}
 
+	/**
+	 * 设置返回监听
+	 */
 	public OnClickListener mBackClickListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
@@ -65,20 +79,10 @@ public abstract class BaseActivity extends FragmentActivity {
 		}
 	};
 	
-	public void setUp() {
-		View up = findViewById(R.id.iv_up);
-		if (up != null) {
-			up.setVisibility(View.VISIBLE);
-			up.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					finish();
-				}
-			});
-		}
-	}
-	
+	/**
+	 * 设置标题
+	 * @param title
+	 */
 	public void setTitle(String title) {
 		TextView tvTitle = (TextView) findViewById(R.id.tv_title);
 		if (tvTitle != null) {
@@ -87,52 +91,36 @@ public abstract class BaseActivity extends FragmentActivity {
 	}
 
 	/**
-	 * 初始化 优先顺序：<br/>
-	 * <font color=red>onInit();</font><br/>
-	 * onFindViews();<br/>
-	 * onInitViewData();<br/>
-	 * onBindListener();<br/>
+	 * 初始化 
 	 */
 	public abstract void onInit();
 
 	/**
-	 * 查找控件 <br/>
-	 * 优先顺序：<br/>
-	 * onInit();<br/>
-	 * <font color=red>onFindViews();</font><br/>
-	 * onInitViewData();<br/>
-	 * onBindListener();<br/>
+	 * 查找控件
 	 */
 	public abstract void onFindViews();
 
 	/**
-	 * 初始化控件内容 优先顺序：<br/>
-	 * onInit();<br/>
-	 * onFindViews();<br/>
-	 * <font color=red>onInitViewData();</font><br/>
-	 * onBindListener();<br/>
+	 * 初始化控件内容 
 	 */
 	public abstract void onInitViewData();
 
 	/**
-	 * 注册控件事件 优先顺序：<br/>
-	 * onInit();<br/>
-	 * onFindViews();<br/>
-	 * onInitViewData();<br/>
-	 * <font color=red>onBindListener();</font><br/>
+	 * 注册控件事件
 	 */
 	public abstract void onBindListener();
 
 	/**
-	 * 打开滑动退出此Activity的功能 <功能详细描述>
-	 * 
+	 * 打开滑动退出此Activity的功能
 	 * @param isOpen
-	 * @see [类、类#方法、类#成员]
 	 */
 	public void setSlide2Finish(boolean isOpen) {
 		mSlideFinish = isOpen;
 	}
-
+	
+	/**
+	 * 触摸时间回调方法
+	 */
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
 		boolean res = super.dispatchTouchEvent(ev);
@@ -157,28 +145,23 @@ public abstract class BaseActivity extends FragmentActivity {
 	}
 
 	/**
-	 * 结束此activity时动画 从左边移到右边 <功能详细描述>
+	 * 结束此activity时动画 从左边移到右边 
 	 * 
-	 * @see [类、类#方法、类#成员]
 	 */
 	public void finishWithLeftAnim() {
 		finishAnimId = R.anim.from_left_out;
 	}
 
 	/**
-	 * 结束此activity时动画 从上往下移动 <功能详细描述>
-	 * 
-	 * @see [类、类#方法、类#成员]
+	 * 结束此activity时动画 从上往下移动
 	 */
 	public void finishWithDownAnim() {
 		finishAnimId = R.anim.from_up_out;
 	}
 
 	/**
-	 * Toast 短时间显示 <功能详细描述>
-	 * 
+	 * Toast 短时间显示
 	 * @param message
-	 * @see [类、类#方法、类#成员]
 	 */
 	public void showToastShort(String message) {
 		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
@@ -189,20 +172,16 @@ public abstract class BaseActivity extends FragmentActivity {
 	}
 
 	/**
-	 * Toast 长时间显示 <功能详细描述>
-	 * 
+	 * Toast 长时间显示
 	 * @param message
-	 * @see [类、类#方法、类#成员]
 	 */
 	public void showToastLong(String message) {
 		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 	}
 
 	/**
-	 * Toast <功能详细描述>
-	 * 
+	 * Toast
 	 * @param str资源ID
-	 * @see [类、类#方法、类#成员]
 	 */
 	public void showToast(int strResID) {
 		String msgStr = this.getResources().getString(strResID);
@@ -225,6 +204,10 @@ public abstract class BaseActivity extends FragmentActivity {
 		return this;
 	}
 
+	/**
+	 * 在主线程中更新界面
+	 * @param runnable
+	 */
 	protected void runOnUiThreadSafety(final Runnable runnable) {
 		Activity activity = getActivity();
 		if (activity == null) {
@@ -240,6 +223,9 @@ public abstract class BaseActivity extends FragmentActivity {
 		}
 	}
 
+	/**
+	 * 关闭进度弹出框
+	 */
 	protected void toCloseProgressMsg() {
 		runOnUiThreadSafety(new Runnable() {
 			@Override
@@ -249,18 +235,30 @@ public abstract class BaseActivity extends FragmentActivity {
 		});
 	}
 
+	/**
+	 * 获得进度弹出框
+	 * @param msg
+	 * @return
+	 */
 	protected Dialog getProgressDialog(String msg) {
 		ProgressDialog dialog = new ProgressDialog(getActivity());
 		dialog.setMessage(msg);
 		return dialog;
 	}
 
+	/**
+	 * 关闭进度弹出框
+	 */
 	private void closeProgressDialog() {
 		if (progressDialog != null && progressDialog.isShowing() && progressDialog.getWindow() != null) {
 			progressDialog.dismiss();
 		}
 	}
 
+	/**
+	 * 更新进度弹出框数据
+	 * @param msg
+	 */
 	protected void toShowProgressMsg(final String msg) {
 		runOnUiThreadSafety(new Runnable() {
 			@Override

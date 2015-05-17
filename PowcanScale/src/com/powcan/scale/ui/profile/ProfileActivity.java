@@ -41,7 +41,7 @@ import com.powcan.scale.util.SpUtil;
 import com.powcan.scale.util.Utils;
 
 /**
- * 动画参考：http://cyrilmottier.com/2014/05/20/custom-animations-with-fragments/
+ * 用户信息完善界面
  * @author Administrator
  */
 public class ProfileActivity extends BaseActivity implements OnClickListener, GenderSelectEvent, ItemClickEvent
@@ -77,12 +77,18 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 	
 	private String from;
 	
+	/**
+	 * 创建界面方法
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile);
 	}
-
+	
+	/**
+	 * 初始化数据
+	 */
 	@Override
 	public void onInit() 
 	{
@@ -116,6 +122,9 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		}
 	}
 
+	/**
+	 * 查找子view
+	 */
 	@Override
 	public void onFindViews() 
 	{
@@ -134,6 +143,9 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		imgBack = (ImageView) findViewById(R.id.img_back);
 	}
 
+	/**
+	 * 初始化view界面显示数据
+	 */
 	@Override
 	public void onInitViewData() 
 	{
@@ -171,6 +183,9 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		}
 	}
 
+	/**
+	 * 绑定事件监听
+	 */
 	@Override
 	public void onBindListener() {
 		btnSave.setOnClickListener( this );
@@ -188,6 +203,9 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		etEmail.addTextChangedListener( mTextWatcher );
 	}
 
+	/**
+	 * 点击事件处理方法
+	 */
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -237,6 +255,9 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		}
 	}
 
+	/**
+	 * 请求后台进行用户数据保存
+	 */
 	private void reqSaveUserInfo() 
 	{
 		String username = etUsername.getText().toString();
@@ -398,7 +419,10 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 			
 		}.execute();
 	}
-
+	
+	/**
+	 * 跳转到主界面
+	 */
 	protected void gotoMain() {
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
@@ -406,6 +430,9 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		finish();
 	}
 
+	/**
+	 * 性别选择接口回调
+	 */
 	@Override
 	public void onGenderSelect(int which) 
 	{
@@ -421,6 +448,9 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		genderDialog.dismiss();
 	}
 
+	/**
+	 * 身高选择接口回调
+	 */
 	@Override
 	public void onItemClick(int iHeight) 
 	{
@@ -429,6 +459,9 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 		heightDialog.dismiss();
 	}
 	
+	/**
+	 * 返回事件监听
+	 */
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) 
 	{
@@ -442,7 +475,10 @@ public class ProfileActivity extends BaseActivity implements OnClickListener, Ge
 
 		return super.onKeyDown(keyCode, event);
 	}
-
+	
+	/**
+	 * 输入框监听，数据更改显示保存按钮，否则置灰
+	 */
 	TextWatcher mTextWatcher = new TextWatcher() 
 	{
 		@Override

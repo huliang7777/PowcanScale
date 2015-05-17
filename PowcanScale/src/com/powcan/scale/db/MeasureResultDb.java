@@ -11,9 +11,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 /**
- * 正则替换
- * COLUMN_([^, & ^$]*);
- * COLUMN_$1 = "$1 ";
+ * 测量数据数据库操作类
  * @author Administrator
  *
  */
@@ -84,6 +82,11 @@ public class MeasureResultDb extends BaseDb
 		return TABLE_NAME;
 	}
 
+	/**
+	 * 插入测量数据
+	 * @param measureResult
+	 * @return
+	 */
 	public int insertMeasureResult(MeasureResult measureResult) 
 	{
 		int id = 0;
@@ -115,6 +118,10 @@ public class MeasureResultDb extends BaseDb
 		return id;
 	}
 	
+	/**
+	 * 更新测量数据
+	 * @param measureResult
+	 */
 	public void updateMeasureResult(MeasureResult measureResult) 
 	{
 		checkDb();
@@ -151,6 +158,11 @@ public class MeasureResultDb extends BaseDb
 		Log.d(TAG, "update success");
 	}
 	
+	/**
+	 * 根据测量数据状态
+	 * @param id 唯一标识
+	 * @param update 状态
+	 */
 	public void updateMeasureResult( int id, int update ) 
 	{
 		checkDb();
@@ -171,6 +183,12 @@ public class MeasureResultDb extends BaseDb
 		Log.d(TAG, "update success");
 	}
 	
+	/**
+	 * 获得测量数据
+	 * @param account 帐号
+	 * @param date 时间
+	 * @return 测量数据
+	 */
 	public MeasureResult getMeasureResult( String account, String date ) 
 	{
 		MeasureResult measureResult = null;
@@ -212,6 +230,11 @@ public class MeasureResultDb extends BaseDb
 		return measureResult;
 	}
 	
+	/**
+	 * 获得最近的测量数据
+	 * @param account 帐号
+	 * @return 测量数据
+	 */
 	public MeasureResult getLastMeasureResult( String account ) 
 	{
 		MeasureResult measureResult = null;
@@ -253,6 +276,11 @@ public class MeasureResultDb extends BaseDb
 		return measureResult;
 	}
 	
+	/**
+	 * 获得用户所有的测量数据
+	 * @param account 用户帐号
+	 * @return 用户所有的测量数据
+	 */
 	public ArrayList<MeasureResult> getMeasureResults( String account ) 
 	{
 		MeasureResult measureResult = null;
@@ -302,6 +330,12 @@ public class MeasureResultDb extends BaseDb
 		return list;
 	}
 	
+	/**
+	 * 根据状态获取用户的所有测量数据
+	 * @param account 用户帐号
+	 * @param update 状态
+	 * @return 所有测量数据
+	 */
 	public ArrayList<MeasureResult> getMeasureResults( String account, String update ) 
 	{
 		MeasureResult measureResult = null;
@@ -353,6 +387,14 @@ public class MeasureResultDb extends BaseDb
 		return list;
 	}
 	
+	/**
+	 * 根据起始时间获得用户的测量数据
+	 * @param account 用户帐号
+	 * @param startDate 起始时间
+	 * @param endDate 结束时间
+	 * @param update 状态
+	 * @return 测量数据
+	 */
 	public ArrayList<MeasureResult> getMeasureResults( String account, String startDate, String endDate, String update ) 
 	{
 		MeasureResult measureResult = null;
@@ -405,6 +447,13 @@ public class MeasureResultDb extends BaseDb
 		return list;
 	}
 	
+	/**
+	 * 根据起始时间获得用户的所有测量数据map
+	 * @param account 用户帐号
+	 * @param startDate 起始时间
+	 * @param endDate 结束时间
+	 * @return 所有测量数据map
+	 */
 	public HashMap<String, Float> getMeasureResults( String account, String startDate, String endDate ) 
 	{
 		HashMap<String, Float> map = new HashMap<String, Float>();
@@ -462,6 +511,12 @@ public class MeasureResultDb extends BaseDb
 		return map;
 	}
 	
+	/**
+	 * 根据帐号以及数据获取最新的几条数据
+	 * @param account 帐号
+	 * @param num 数量
+	 * @return 几条测量数据
+	 */
 	public ArrayList<MeasureResult> getMeasureResults( String account, int num ) 
 	{
 		checkDb();

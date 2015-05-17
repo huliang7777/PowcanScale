@@ -30,6 +30,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+/**
+ * 测量提醒界面
+ * @author Administrator
+ *
+ */
 public class MeasureRemindActivity extends BaseActivity implements OnClickListener, ItemClickEvent
 {
 	private static final String TAG = MeasureRemindActivity.class.getSimpleName();
@@ -62,6 +67,9 @@ public class MeasureRemindActivity extends BaseActivity implements OnClickListen
 	private ArrayList<String> operators = new ArrayList<String>();
 	private int oprtIndex = -1;
 	
+	/**
+	 * 创建界面方法
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -69,6 +77,9 @@ public class MeasureRemindActivity extends BaseActivity implements OnClickListen
 		setContentView(R.layout.activity_measure_remind);
 	}
 
+	/**
+	 * 初始化数据
+	 */
 	@Override
 	public void onInit() 
 	{
@@ -106,6 +117,9 @@ public class MeasureRemindActivity extends BaseActivity implements OnClickListen
 		operators.add( "删除" );
 	}
 
+	/**
+	 * 查找子view
+	 */
 	@Override
 	public void onFindViews() 
 	{
@@ -120,6 +134,9 @@ public class MeasureRemindActivity extends BaseActivity implements OnClickListen
 //		nightSwitch =  findViewById(R.id.rl_night_switch);
 	}
 
+	/**
+	 * 初始化view界面显示数据
+	 */
 	@Override
 	public void onInitViewData() 
 	{
@@ -127,6 +144,9 @@ public class MeasureRemindActivity extends BaseActivity implements OnClickListen
 		list.setAdapter( adapter );
 	}
 	
+	/**
+	 * 绑定事件监听
+	 */
 	@Override
 	public void onBindListener() 
 	{
@@ -170,6 +190,9 @@ public class MeasureRemindActivity extends BaseActivity implements OnClickListen
 		});
 	}
 
+	/**
+	 * 点击事件处理方法
+	 */
 	@Override
 	public void onClick(View v) 
 	{
@@ -259,6 +282,10 @@ public class MeasureRemindActivity extends BaseActivity implements OnClickListen
 	    }
 	}
 	
+	/**
+	 * 构造提醒数据
+	 * @return
+	 */
 	private String genRemind()
 	{
 		StringBuffer strBuff = new StringBuffer( MORNING_TIME );
@@ -274,6 +301,9 @@ public class MeasureRemindActivity extends BaseActivity implements OnClickListen
 		return strBuff.toString();
 	}
 	
+	/**
+	 * 构造提醒是否开关数据
+	 */
 	private String genRemindSwitch()
 	{
 		StringBuffer strBuff = new StringBuffer();
@@ -293,10 +323,14 @@ public class MeasureRemindActivity extends BaseActivity implements OnClickListen
 		return strBuff.toString();
 	}
 
+	/**
+	 * 提醒用户自定义项操作回调
+	 */
 	@Override
 	public void onItemClick( int which ) 
 	{
-		if ( which == 0 )
+		// 修改时间
+		if ( which == 0 )  
 		{
 			if ( oprtIndex > 2 )
 			{
@@ -322,6 +356,7 @@ public class MeasureRemindActivity extends BaseActivity implements OnClickListen
 				}, Integer.valueOf( time[ 0 ] ), Integer.valueOf( time[ 1 ] ), true ).show();
 			}
 		}
+		// 删除提醒
 		else if ( which == 1 )
 		{
 			if ( oprtIndex > 2 )

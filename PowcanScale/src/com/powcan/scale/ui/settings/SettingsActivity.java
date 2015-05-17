@@ -18,6 +18,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+/**
+ * 应用设置界面
+ * @author Administrator
+ *
+ */
 public class SettingsActivity extends BaseActivity implements OnClickListener
 {
 	private ImageView imgBack;
@@ -31,6 +36,9 @@ public class SettingsActivity extends BaseActivity implements OnClickListener
 	
 	private FeedbackAgent mFeedbackAgent;
 	
+	/**
+	 * 创建界面方法
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -38,6 +46,9 @@ public class SettingsActivity extends BaseActivity implements OnClickListener
 		setContentView(R.layout.activity_settings);
 	}
 
+	/**
+	 * 初始化数据
+	 */
 	@Override
 	public void onInit() 
 	{
@@ -45,6 +56,9 @@ public class SettingsActivity extends BaseActivity implements OnClickListener
         mFeedbackAgent.sync();
 	}
 
+	/**
+	 * 查找子view
+	 */
 	@Override
 	public void onFindViews() 
 	{
@@ -64,6 +78,9 @@ public class SettingsActivity extends BaseActivity implements OnClickListener
 		
 	}
 
+	/**
+	 * 绑定事件监听
+	 */
 	@Override
 	public void onBindListener() 
 	{
@@ -77,6 +94,9 @@ public class SettingsActivity extends BaseActivity implements OnClickListener
 		btnExit.setOnClickListener( this );
 	}
 
+	/**
+	 * 点击事件处理方法
+	 */
 	@Override
 	public void onClick(View v) 
 	{
@@ -124,6 +144,9 @@ public class SettingsActivity extends BaseActivity implements OnClickListener
 		}
 	}
 	
+	/**
+	 * 检查更新
+	 */
 	private void toCheckUpdateVersion() {
     	// 检查更新
 		UmengUpdateAgent.setUpdateAutoPopup(false);

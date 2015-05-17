@@ -42,7 +42,7 @@
                 android:background="@color/white"
                 android:orientation="vertical" >
 
-                <com.powcan.scale.widget.ProgressView
+                <com.third.library.widget.ProgressView
                     android:id="@+id/weight_view"
                     android:layout_width="160dp"
                     android:layout_height="160dp"

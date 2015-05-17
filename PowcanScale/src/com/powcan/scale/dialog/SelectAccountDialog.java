@@ -17,6 +17,11 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
+/**
+ * 帐号选择弹出框
+ * @author Administrator
+ *
+ */
 public class SelectAccountDialog extends Dialog 
 {
 	private Context mContext;
@@ -41,6 +46,9 @@ public class SelectAccountDialog extends Dialog
 		init();
 	}
 	
+	/**
+	 * 帐号选择弹出框初始化
+	 */
 	private void init()
 	{
 		LayoutInflater inflater = LayoutInflater.from( mContext );
@@ -62,6 +70,9 @@ public class SelectAccountDialog extends Dialog
         setListener();
 	}
 
+	/**
+	 * 设置弹出框按钮回调
+	 */
 	private void setListener()
 	{
 		listAccount.setOnItemClickListener( new OnItemClickListener() {
@@ -79,6 +90,11 @@ public class SelectAccountDialog extends Dialog
 		});
 	}
 	
+	/**
+	 * 帐号选择按钮回调接口
+	 * @author Administrator
+	 *
+	 */
 	public interface ItemClickEvent
 	{
 		public void onItemClick( int which );

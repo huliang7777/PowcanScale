@@ -19,6 +19,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
+/**
+ * 选择数据弹出框
+ * @author Administrator
+ *
+ */
 public class SelectDataDialog extends Dialog 
 {
 	private Context mContext;
@@ -49,6 +54,9 @@ public class SelectDataDialog extends Dialog
 		init();
 	}
 	
+	/**
+	 * 初始化界面数据
+	 */
 	private void init()
 	{
 		LayoutInflater inflater = LayoutInflater.from( mContext );
@@ -74,6 +82,9 @@ public class SelectDataDialog extends Dialog
         setListener();
 	}
 
+	/**
+	 * 设置按钮返回回调
+	 */
 	private void setListener()
 	{
 		listAccount.setOnItemClickListener( new OnItemClickListener() {

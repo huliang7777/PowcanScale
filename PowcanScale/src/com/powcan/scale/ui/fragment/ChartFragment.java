@@ -14,13 +14,18 @@ import android.widget.TextView;
 
 import com.powcan.scale.R;
 import com.powcan.scale.bean.MeasureResult;
-import com.powcan.scale.bean.chart.ChartData;
 import com.powcan.scale.db.MeasureResultDb;
 import com.powcan.scale.ui.base.BaseFragment;
 import com.powcan.scale.util.SpUtil;
 import com.powcan.scale.util.Utils;
-import com.powcan.scale.widget.chart.FancyChart;
+import com.third.library.bean.chart.ChartData;
+import com.third.library.widget.chart.FancyChart;
 
+/**
+ * 图表界面
+ * @author Administrator
+ *
+ */
 public class ChartFragment extends BaseFragment implements OnClickListener 
 {
 	private int index;
@@ -42,16 +47,28 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		super();
 	}
 
+	/**
+	 * 获得当前类实例
+	 * @param index
+	 * @return
+	 */
 	public static ChartFragment getInstance(int index) {
 		ChartFragment fragment = new ChartFragment();
 		fragment.setIndex(index);
 		return fragment;
 	}
 
+	/**
+	 * 设置索引
+	 * @param index
+	 */
 	private void setIndex(int index) {
 		this.index = index;
 	}
 
+	/**
+	 * 创建view
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -59,6 +76,9 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		return view;
 	}
 
+	/**
+	 * 初始化
+	 */
 	@Override
 	public void onInit() 
 	{
@@ -68,7 +88,9 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		dbMeasureResult = new MeasureResultDb( mContext );
 	}
 	
-
+	/**
+	 * 查找子view
+	 */
 	@Override
 	public void onFindViews() 
 	{
@@ -87,7 +109,10 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 	public void onInitViewData() 
 	{
 	}
-
+	
+	/**
+	 * 绑定监听事件
+	 */
 	@Override
 	public void onBindListener() 
 	{
@@ -100,12 +125,15 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		btnDay.callOnClick();
 	}
 
+	/**
+	 * 设置点击事件处理方法
+	 */
 	@Override
 	public void onClick(View v) 
 	{
 		switch ( v.getId() ) 
 		{
-			case R.id.btn_day:
+			case R.id.btn_day: // 天报表
 				if ( selected == 0 )
 				{
 					return;
@@ -116,7 +144,7 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 				btnDay.setTextColor(mContext.getResources().getColor( R.color.white ));
 				
 			break;
-			case R.id.btn_week:
+			case R.id.btn_week: // 周报表
 				if ( selected == 1 )
 				{
 					return;
@@ -127,7 +155,7 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 				btnWeek.setTextColor(mContext.getResources().getColor( R.color.white ));
 				
 				break;
-			case R.id.btn_month:
+			case R.id.btn_month: // 月报表
 				if ( selected == 2 )
 				{
 					return;
@@ -137,7 +165,7 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 				btnMonth.setBackgroundResource(R.color.radio_color);
 				btnMonth.setTextColor(mContext.getResources().getColor( R.color.white ));
 				break;
-			case R.id.btn_quarter:
+			case R.id.btn_quarter: // 季度报表
 				if ( selected == 3 )
 				{
 					return;
@@ -147,7 +175,7 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 				btnQuarter.setBackgroundResource(R.color.radio_color);
 				btnQuarter.setTextColor(mContext.getResources().getColor( R.color.white ));
 				break;
-			case R.id.btn_year:
+			case R.id.btn_year: // 年报表
 				if ( selected == 4 )
 				{
 					return;
@@ -161,6 +189,9 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		changeContent();
 	}
 	
+	/**
+	 * 重置按钮状态
+	 */
 	private void resetButton()
 	{
 		btnDay.setBackgroundResource(R.drawable.bg_rectangle);
@@ -175,6 +206,9 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		btnYear.setTextColor(mContext.getResources().getColor( R.color.radio_color ));
 	}
 	
+	/**
+	 * 根据选中的状态，改变报表数据
+	 */
 	private void changeContent()
 	{
 		chartView.clearValues();
@@ -198,11 +232,15 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		}
 	}
 	
+	/**
+	 * 处理当天报表数据，并显示报表
+	 */
 	private void dealDayData()
 	{
+		// 从数据库查找最近5次测量数据
 		ArrayList<MeasureResult> results = dbMeasureResult.getMeasureResults( account, 5 );
 		
-		// 处理数据
+		// 处理数据，生成显示报表所需数据
 		ArrayList<MeasureResult> measureResults = new ArrayList<MeasureResult>();
 //		if ( !results.isEmpty() )
 //		{
@@ -241,6 +279,9 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		
 	}
 	
+	/**
+	 * 处理当周报表数据，并显示报表
+	 */
 	private void dealWeekData()
 	{
 		String []dates = Utils.getCurWeekDate();
@@ -258,9 +299,10 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 //		}
 		tvDesc.setText( dates[ 0 ] + "~" + dates[6] );
 		
+		// 查找当前一周的数据
 		HashMap<String, Float> map = dbMeasureResult.getMeasureResults( account, dates[ 0 ], dates[6] );
 
-		// 处理数据
+		// 处理数据，生成显示报表所需数据
 		ArrayList<MeasureResult> measureResults = new ArrayList<MeasureResult>();
 //		if ( !map.isEmpty() )
 //		{
@@ -293,6 +335,9 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		
 	}
 	
+	/**
+	 * 处理当月报表数据，并显示报表
+	 */
 	private void dealMonthData()
 	{
 		int []monthDays = Utils.getCurMonthDate();
@@ -306,8 +351,9 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		
     	tvDesc.setText( firstDate + "~" + lastDate );
     	
+    	// 查找当月的测量数据
 		HashMap<String, Float> map = dbMeasureResult.getMeasureResults( account, firstDate, lastDate );
-		// 处理数据
+		// 处理数据，生成显示报表所需数据
 		ArrayList<MeasureResult> measureResults = new ArrayList<MeasureResult>();
 //		if ( !map.isEmpty() )
 //		{
@@ -351,6 +397,9 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 //		}
 	}
 	
+	/**
+	 * 处理当季度报表数据，并显示报表
+	 */
 	private void dealQuarterData()
 	{
 		int []quarterDates = Utils.getQuarterDate( -1 );
@@ -360,8 +409,9 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		
     	tvDesc.setText( firstDate + "~" + lastDate );
     	
+    	// 获取当前季度的所有测量数据
 		HashMap<String, Float> map = dbMeasureResult.getMeasureResults( account, firstDate, lastDate );
-		// 处理数据
+		// 处理数据，生成显示报表所需数据
 		ArrayList<MeasureResult> measureResults = new ArrayList<MeasureResult>();
 //		if ( !map.isEmpty() )
 //		{
@@ -401,6 +451,9 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		
 	}
 	
+	/**
+	 * 处理当年报表数据，并显示报表
+	 */
 	private void dealYearData()
 	{
 		int []quarterDates = Utils.getYearDate();
@@ -410,8 +463,9 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		
     	tvDesc.setText( firstDate + "~" + lastDate );
     	
+    	// 获得当前一年的测量数据
 		HashMap<String, Float> map = dbMeasureResult.getMeasureResults( account, firstDate, lastDate );
-		// 处理数据
+		// 处理数据，生成显示报表所需数据
 		ArrayList<MeasureResult> measureResults = new ArrayList<MeasureResult>();
 //		if ( !map.isEmpty() )
 //		{
@@ -455,6 +509,9 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 //		}
 	}
 	
+	/**
+	 * 根据数据显示报表
+	 */
 	private void showChart( ArrayList<MeasureResult> measureResults )
 	{
 		ChartData data = new ChartData(ChartData.LINE_COLOR_GREEN);
@@ -463,13 +520,19 @@ public class ChartFragment extends BaseFragment implements OnClickListener
 		for(int i=0; i<size; i++) 
 		{
 			mMeasureResult = measureResults.get(i);
+			// 将测量数据设置到报表中
 			data.addPoint( i, (int)mMeasureResult.getWeight() );
 			data.addXValue( i, mMeasureResult.getDate() );
 		}
+		// 添加数据
 		chartView.addData(data);
+		// 更新报表界面
 		chartView.postInvalidate();
 	}
 	
+	/**
+	 * 重新加载数据
+	 */
 	@Override
 	public void reloadData()
 	{

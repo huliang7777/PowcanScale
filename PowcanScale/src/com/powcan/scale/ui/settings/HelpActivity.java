@@ -9,6 +9,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
+/**
+ * 帮助界面
+ * @author Administrator
+ *
+ */
 public class HelpActivity extends BaseActivity implements OnClickListener
 {
 	private ImageView imgBack;

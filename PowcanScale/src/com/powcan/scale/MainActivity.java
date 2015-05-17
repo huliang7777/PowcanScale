@@ -57,10 +57,13 @@ import com.powcan.scale.ui.fragment.LeftFragment.NavigationDrawerCallbacks;
 import com.powcan.scale.ui.fragment.RightFragment;
 import com.powcan.scale.util.SpUtil;
 import com.powcan.scale.util.Utils;
-import com.powcan.scale.widget.SlidingMenu;
+import com.third.library.widget.SlidingMenu;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 
+/**
+ * 主界面
+ */
 public class MainActivity extends BaseActivity implements NavigationDrawerCallbacks {
 	
 	protected static final String TAG = MainActivity.class.getSimpleName();
@@ -73,8 +76,11 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	private static final int UPLOAD_LOCAL_DATAS = 0x0002; 
 	
 	private SlidingMenu mSlidingMenu;
+	// 左边用户界面
 	private LeftFragment mLeftFragment;
+	// 右边界面
 	private RightFragment mRightFragment;
+	// 中间界面
 	private CenterFragment mCenterFragment;
 	
 	private Vibrator vibrator;
@@ -98,6 +104,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	private boolean isDeal = false;
 	private LoadingDialog mDialog;
 
+	/**
+	 * 界面创建回调方法
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -109,9 +118,13 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 		dbUserInfo = new UserInfoDb( this );
 		dbMeasureResult = new MeasureResultDb( this );
 		mDialog = new LoadingDialog( this , "数据同步中..." );
+		// 同步数据
 		sychData();
 	}
 
+	/**
+	 * 初始化方法
+	 */
 	@Override
 	public void onInit() {
 		// Use this check to determine whether BLE is supported on the device.  Then you can
@@ -214,12 +227,18 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 
 		}.execute();
 	}
-
+	
+	/**
+	 * 查找控件
+	 */
 	@Override
 	public void onFindViews() {
 		mSlidingMenu = (SlidingMenu) findViewById(R.id.sm);
 	}
 
+	/**
+	 * 初始化主界面数据
+	 */
 	@Override
 	public void onInitViewData() {
 //		int width = UiHelper.getDisplayMetrics(this).widthPixels;
@@ -243,6 +262,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 
 	}
 
+	/**
+	 * 绑定事件监听
+	 */
 	@Override
 	public void onBindListener() {
 		mCenterFragment.setOnViewPagerChangeListener(new OnViewPagerChangeListener() {
@@ -260,6 +282,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 		});
 	}
 	
+	/**
+	 * 界面显示回调方法
+	 */
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -284,6 +309,10 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
         reloadData();
 	}
 
+	/**
+	 * 蓝牙连接广播接收filter
+	 * @return
+	 */
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_CONNECTED);
@@ -293,25 +322,41 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
         return intentFilter;
     }
 
+    /**
+     * 注册震动事件
+     */
 	private void registerSensor() {
 		mSensorManager.registerListener(sensorEventListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 	}
 	
+	/**
+	 * 界面暂停回调方法
+	 * 反注册各种事件监听
+	 */
 	@Override
 	protected void onPause() {
 		super.onPause();
 		mSensorManager.unregisterListener(sensorEventListener);
         unregisterReceiver(mGattUpdateReceiver);
 	}
-
+	
+	/**
+	 * 显示左边view
+	 */
 	public void showLeftViewToogle() {
 		mSlidingMenu.showLeftViewToogle();
 	}
 
+	/**
+	 * 显示右边view
+	 */
 	public void showRightViewToogle() {
 		mSlidingMenu.showRightViewToogle();
 	}
-
+	
+	/**
+	 * 界面选中回调处理
+	 */
 	@Override
 	public void onNavigationDrawerItemSelected(int position, Object obj) 
 	{
@@ -326,7 +371,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	}
 	
 	/**
-     * 动作执行
+     * 动作执行，进行蓝牙连接
      */ 
     private Handler mHandler = new Handler() { 
  
@@ -362,6 +407,10 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
             } 
         } 
 
+        /**
+         * 扫描设备
+         * @param enable 是否扫描
+         */
         private void scanLeDevice(final boolean enable) {
             if (enable) {
                 // Stops scanning after a pre-defined scan period.
@@ -383,6 +432,10 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
         }
     };
     
+    /**
+     * 从服务器获取最小数据
+     * @param datetime 时间
+     */
     private void getLastDatas( final String datetime )
     {
     	new AsyncTask<Void, Void, Boolean>() {
@@ -443,6 +496,10 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 		}.execute();
     }
     
+    /**
+     * 更新本地数据
+     * @param datetime
+     */
     private void uploadLocalDatas( final String datetime )
     {
     	new AsyncTask<Void, Void, Boolean>() {
@@ -504,6 +561,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 		}.execute();
     }
 
+    /**
+     * 蓝牙连接回调方法处理接口类
+     */
     // Device scan callback.
     private BluetoothAdapter.LeScanCallback mLeScanCallback =
             new BluetoothAdapter.LeScanCallback() {
@@ -534,6 +594,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
         }
     };
 
+    /**
+     * 蓝牙连接服务类
+     */
     // Code to manage Service lifecycle.
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
@@ -560,6 +623,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     // ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
     // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read
     //                        or notification operations.
+    /**
+     * 蓝牙状态广播监听类
+     */
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -581,7 +647,12 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
             }
         }
     };
-
+    
+    /**
+     * 获取脂肪称数据，显示到界面
+     * @param data byte数组数据
+     * @param hex 16进制数据
+     */
     private void displayData(byte[] data, String hex) {
     	Log.d(TAG, "display Data: " + Arrays.toString(data));
         if (hex != null) 
@@ -611,6 +682,10 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
         }
     }
 
+    /**
+     * 更新连接状态：断开，连接等
+     * @param resourceId 字体资源id
+     */
     private void updateConnectionState(final int resourceId) {
         runOnUiThread(new Runnable() {
             @Override
@@ -626,6 +701,10 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     // Demonstrates how to iterate through the supported GATT Services/Characteristics.
     // In this sample, we populate the data structure that is bound to the ExpandableListView
     // on the UI.
+    /**
+     * 读取蓝牙的数据
+     * @param gattServices gat服务
+     */
     private void displayGattServices(List<BluetoothGattService> gattServices) {
         if (gattServices == null) return;
         String uuid = null;
@@ -661,6 +740,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
         }
     }
     
+    /**
+     * 手机摇晃监听事件处理类
+     */
     private SensorEventListener sensorEventListener = new SensorEventListener() {
 		
 		@Override
@@ -687,6 +769,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 		}
 	};
 
+	/**
+	 * 界面回调处理方法
+	 */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // User chose not to enable Bluetooth.
@@ -697,6 +782,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
         super.onActivityResult(requestCode, resultCode, data);
     }
     
+    /**
+     * 监听返回键处理，连续按2次返回退出
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) 
     {
@@ -720,6 +808,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     	return super.onKeyDown(keyCode, event);
     }
     
+    /**
+     * 加载数据
+     */
     public void reloadData()
     {
     	mCenterFragment.reloadData();
@@ -728,7 +819,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 	
 	private long firstClickTime = 0;
 
-    
+    /**
+     * 界面注销回调方法
+     */
     @Override
     protected void onDestroy() 
     {

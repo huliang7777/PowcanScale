@@ -10,6 +10,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+/**
+ * 加载弹出框
+ * @author Administrator
+ *
+ */
 public class LoadingDialog extends Dialog 
 {
 	private Context mContext;
@@ -25,6 +30,9 @@ public class LoadingDialog extends Dialog
 		init();
 	}
 	
+	/**
+	 * 初始化加载界面
+	 */
 	private void init()
 	{
 		LayoutInflater inflater = LayoutInflater.from( mContext );

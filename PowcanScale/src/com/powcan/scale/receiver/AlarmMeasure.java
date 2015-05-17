@@ -20,10 +20,18 @@ import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.os.Vibrator;
 
+/**
+ * 测量提醒广播接收类
+ * @author Administrator
+ *
+ */
 public class AlarmMeasure extends BroadcastReceiver 
 {
 	private static final String ACTION = "com.powcan.scale.ALARM_MEASURE";
 	
+	/**
+	 * 提醒处理，发送通知
+	 */
 	@Override
 	public void onReceive( Context context, Intent intent ) 
 	{

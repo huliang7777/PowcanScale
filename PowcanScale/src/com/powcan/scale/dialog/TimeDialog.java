@@ -4,6 +4,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 
 /**
+ * 重载系统时间选择窗口
  * 解决两次执行onTimeSet问题
  * @author Administrator
  *

@@ -19,6 +19,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
+/**
+ * 字符串数据选择弹出框
+ * @author Administrator
+ *
+ */
 public class SelectStrDataDialog extends Dialog 
 {
 	private Context mContext;

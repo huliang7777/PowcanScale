@@ -24,6 +24,11 @@ import com.powcan.scale.dialog.SelectStrDataDialog.ItemClickEvent;
 import com.powcan.scale.net.NetRequest;
 import com.powcan.scale.ui.base.BaseActivity;
 
+/**
+ * 找回密码界面
+ * @author Administrator
+ *
+ */
 public class FindPasswordActivity extends BaseActivity implements OnClickListener, ItemClickEvent {
 
 	private ImageView ivBack;
@@ -39,12 +44,18 @@ public class FindPasswordActivity extends BaseActivity implements OnClickListene
 	private String[] hints = { "请输入手机", "请输入QQ", "请输入邮箱" };
 	private String[] types = { "phone", "qq", "email" };
 
+	/**
+	 * 创建界面方法
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_findpwd);
 	}
 
+	/**
+	 * 初始化数据
+	 */
 	@Override
 	public void onInit() {
 		list = new ArrayList<String>();
@@ -55,6 +66,9 @@ public class FindPasswordActivity extends BaseActivity implements OnClickListene
 		type = 0;
 	}
 
+	/**
+	 * 查找子view
+	 */
 	@Override
 	public void onFindViews() {
 		ivBack = (ImageView) findViewById(R.id.iv_back);
@@ -68,6 +82,9 @@ public class FindPasswordActivity extends BaseActivity implements OnClickListene
 	public void onInitViewData() {
 	}
 
+	/**
+	 * 绑定事件监听
+	 */
 	@Override
 	public void onBindListener() {
 		btnCommit.setOnClickListener(this);
@@ -75,6 +92,9 @@ public class FindPasswordActivity extends BaseActivity implements OnClickListene
 		tvSelect.setOnClickListener(this);
 	}
 
+	/**
+	 * 点击事件处理方法
+	 */
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -93,6 +113,9 @@ public class FindPasswordActivity extends BaseActivity implements OnClickListene
 		}
 	}
 
+	/**
+	 * 检查用户输入是否合法	 
+	 * */
 	private boolean check() 
 	{
 		String account = etAccount.getText().toString();
@@ -132,7 +155,9 @@ public class FindPasswordActivity extends BaseActivity implements OnClickListene
 		return check;
 	}
 
-
+	/**
+	 * 请求后台找回密码
+	 */
 	private void requestFindPwd() 
 	{
 		final String account = etAccount.getText().toString();
@@ -182,6 +207,9 @@ public class FindPasswordActivity extends BaseActivity implements OnClickListene
 
 	}
 
+	/**
+	 * 选择帐号类型回调方法
+	 */
 	@Override
 	public void onItemClick( int which ) 
 	{

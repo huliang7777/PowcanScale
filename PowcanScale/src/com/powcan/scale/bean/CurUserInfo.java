@@ -4,6 +4,11 @@ import android.content.Context;
 
 import com.powcan.scale.util.SpUtil;
 
+/**
+ * 当前用户信息
+ * @author Administrator
+ *
+ */
 public class CurUserInfo 
 {
 	private static CurUserInfo instance;

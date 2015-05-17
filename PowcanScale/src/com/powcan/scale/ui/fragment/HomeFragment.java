@@ -24,8 +24,13 @@ import com.powcan.scale.net.NetRequest;
 import com.powcan.scale.ui.base.BaseFragment;
 import com.powcan.scale.util.SpUtil;
 import com.powcan.scale.util.Utils;
-import com.powcan.scale.widget.ProgressView;
+import com.third.library.widget.ProgressView;
 
+/**
+ * 测量数据显示界面view
+ * @author Administrator
+ *
+ */
 public class HomeFragment extends BaseFragment 
 {
 	private int index;
@@ -62,6 +67,11 @@ public class HomeFragment extends BaseFragment
 		super();
 	}
 
+	/**
+	 * 获得当前类实例
+	 * @param index
+	 * @return
+	 */
 	public static HomeFragment getInstance(int index) 
 	{
 		HomeFragment fragment = new HomeFragment();
@@ -69,11 +79,18 @@ public class HomeFragment extends BaseFragment
 		return fragment;
 	}
 
+	/**
+	 * 设置索引
+	 * @param index
+	 */
 	private void setIndex(int index) 
 	{
 		this.index = index;
 	}
 
+	/**
+	 * 创建view
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -81,6 +98,9 @@ public class HomeFragment extends BaseFragment
 		return view;
 	}
 
+	/**
+	 * 初始化
+	 */
 	@Override
 	public void onInit() 
 	{
@@ -88,6 +108,9 @@ public class HomeFragment extends BaseFragment
 		loadData();
 	}
 	
+	/**
+	 * 加载数据
+	 */
 	public void loadData()
 	{
 		weight = 0;
@@ -97,6 +120,7 @@ public class HomeFragment extends BaseFragment
 		minWeight = Float.valueOf( ranges[0] );
 		maxWeight = Float.valueOf( ranges[1] );
 		
+		// 获得最近一条测量数据，并显示到界面上
 		measureResult = dbMeasureResult.getLastMeasureResult( curUser.getAccount() );
 		if ( measureResult != null )
 		{
@@ -159,6 +183,9 @@ public class HomeFragment extends BaseFragment
 		}
 	}
 
+	/**
+	 * 查找子view
+	 */
 	@Override
 	public void onFindViews() {
 		View v = getView();
@@ -172,6 +199,9 @@ public class HomeFragment extends BaseFragment
 		tvSuggest = (TextView) v.findViewById(R.id.tv_suggest);
 	}
 
+	/**
+	 * 初始化view数据
+	 */
 	@Override
 	public void onInitViewData() 
 	{
@@ -207,6 +237,9 @@ public class HomeFragment extends BaseFragment
 
 	}
 
+	/**
+	 * 设置测量数据，并上传数据
+	 */
 	public void setWeightData( final float weight, final float bodyFatRate, final float waterContent ) 
 	{
 		this.weight = weight;
@@ -266,6 +299,9 @@ public class HomeFragment extends BaseFragment
 		}.start();
 	}
 	
+	/**
+	 * 数据测量动画执行类
+	 */
 	class ProgressRunable implements Runnable 
 	{
 		@Override
@@ -314,6 +350,9 @@ public class HomeFragment extends BaseFragment
 		}
 	}
 	
+	/**
+	 * 根据测量结果进行建议
+	 */
 	private void suggest()
 	{
 		float subWeight = ( maxWeight - minWeight ) / 4;
@@ -343,6 +382,9 @@ public class HomeFragment extends BaseFragment
 		}
 	}
 	
+	/**
+	 * 判断测量的结果
+	 */
 	private void judgeResult()
 	{
 		if ( bmi > 0.0 )
@@ -382,6 +424,9 @@ public class HomeFragment extends BaseFragment
 		}
 	}
 	
+	/**
+	 * 重新加载数据
+	 */
 	@Override
 	public void reloadData() 
 	{

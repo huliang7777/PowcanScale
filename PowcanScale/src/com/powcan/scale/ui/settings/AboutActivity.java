@@ -9,10 +9,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
+/**
+ * 关于界面
+ * @author Administrator
+ *
+ */
 public class AboutActivity extends BaseActivity implements OnClickListener
 {
 	private ImageView imgBack;
 
+	/**
+	 * 创建界面方法
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -25,6 +33,9 @@ public class AboutActivity extends BaseActivity implements OnClickListener
 	{
 	}
 
+	/**
+	 * 查找子view
+	 */
 	@Override
 	public void onFindViews() 
 	{
@@ -36,12 +47,18 @@ public class AboutActivity extends BaseActivity implements OnClickListener
 	{
 	}
 
+	/**
+	 * 绑定事件监听
+	 */
 	@Override
 	public void onBindListener() 
 	{
 		imgBack.setOnClickListener( this );
 	}
 
+	/**
+	 * 点击事件处理方法
+	 */
 	@Override
 	public void onClick(View v) 
 	{

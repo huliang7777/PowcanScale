@@ -1,9 +1,23 @@
 package com.powcan.scale.bean;
 
+/**
+ * 测量显示数据类
+ * @author Administrator
+ *
+ */
 public class Measure {
-	public String name;
-	public String data;
-	public String result;
+	/**
+	 * 名称
+	 */
+	public String name; 
+	/**
+	 * 数据
+	 */
+	public String data; 
+	/**
+	 * 结果提示
+	 */
+	public String result; 
 	
 	public Measure() {
 		

@@ -22,6 +22,11 @@ import com.powcan.scale.util.SpUtil;
 import com.powcan.scale.util.Utils;
 import com.umeng.analytics.MobclickAgent;
 
+/**
+ * 基础碎片界面类
+ * @author Administrator
+ *
+ */
 public abstract class BaseFragment extends Fragment {
 	protected Context mContext;
 

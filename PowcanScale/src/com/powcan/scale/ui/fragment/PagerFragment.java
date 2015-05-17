@@ -8,6 +8,11 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 
+/**
+ * 空view
+ * @author Administrator
+ *
+ */
 public class PagerFragment extends Fragment {
 	private int index;
 

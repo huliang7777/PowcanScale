@@ -12,6 +12,11 @@ import com.google.gson.Gson;
 import android.content.Context;
 import android.util.Log;
 
+/**
+ * 网络连接类
+ * @author Administrator
+ *
+ */
 public class NetRequest {
 	
 	public static final String TAG = NetRequest.class.getSimpleName();
@@ -24,11 +29,20 @@ public class NetRequest {
 	private static NetRequest instance_;
 	private Context mContext;
 
+	/**
+	 * 构造函数
+	 * @param context
+	 */
 	private NetRequest(Context context) {
 		this.mContext = context;
 		mGson = new Gson();
 	}
 
+	/**
+	 * 返回当前对象
+	 * @param context
+	 * @return
+	 */
 	public synchronized static NetRequest getInstance(Context context) {
 		Context applicationContext = context.getApplicationContext();
 		if (instance_ == null || instance_.mContext != applicationContext) {
@@ -38,15 +52,31 @@ public class NetRequest {
 		return instance_;
 	}
 	
+	/**
+	 * 发送数据
+	 * @param obj 数据对象
+	 * @return
+	 */
 	public String send(Object obj) {
 		return send(mGson.toJson(obj));
 	}
 	
+	/**
+	 * 泛型发送数据
+	 * @param obj
+	 * @param c
+	 * @return
+	 */
 	public <T> T send(Object obj, Class<T> c) {
 		String response = send(obj);
 		return mGson.fromJson(response, c);
 	}
 	
+	/**
+	 * 发送数据
+	 * @param content 字符串数据
+	 * @return
+	 */
 	public String send(String content) {
 		Log.d(TAG, "send request - " + content);
 		String response = null;

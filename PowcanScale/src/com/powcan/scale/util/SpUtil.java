@@ -8,17 +8,33 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.text.TextUtils;
 
-public class SpUtil {
+/**
+ * Preferences数据存储帮助类
+ * 主要存在当前用户的信息
+ * @author Administrator
+ *
+ */
+public class SpUtil 
+{
 	private static final String NAME = "preferences";
 
 	public static SpUtil instance = null;
 
 	private Context context;
 
+	/**
+	 * 构造函数
+	 * @param context
+	 */
 	private SpUtil(Context context) {
 		this.context = context;
 	}
 
+	/**
+	 * 获得该对象实例
+	 * @param context
+	 * @return
+	 */
 	public static SpUtil getInstance(Context context) {
 		Context applicationContext = context.getApplicationContext();
 		if (null == instance || instance.context != applicationContext) {
@@ -29,13 +45,21 @@ public class SpUtil {
 
 	private SharedPreferences sp;
 
+	/**
+	 * 获得SharedPreferences存储类
+	 * @return 返回SharedPreferences对象
+	 */
 	public SharedPreferences getSp() {
 		if (sp == null)
 			sp = context.getSharedPreferences(getSpFileName(),
 					Context.MODE_PRIVATE);
 		return sp;
 	}
-
+	
+	/**
+	 * 获得修复对象
+	 * @return Editor
+	 */
 	public Editor getEdit() {
 		return getSp().edit();
 	}
@@ -168,6 +192,10 @@ public class SpUtil {
 		getEdit().putBoolean( account + "-perfectDataRemind", perfectDataRemind ).commit();
 	}
 	
+	/**
+	 * 保存用户信息到SharedPreferences存储当中
+	 * @param userInfo 用户信息
+	 */
 	public void saveCurrUser( UserInfo userInfo )
 	{
 		setAccount( userInfo.getAccount() );
@@ -186,6 +214,10 @@ public class SpUtil {
 		}
 	}
 	
+	/**
+	 * 从SharedPreferences存储中获得当前用户信息
+	 * @return 用户信息
+	 */
 	public UserInfo getCurrUser()
 	{
 		UserInfo userInfo = new UserInfo();
@@ -202,6 +234,9 @@ public class SpUtil {
 		return userInfo;
 	}
 	
+	/**
+	 * 重置用户信息在SharedPreferences存储中
+	 */
 	public void reset()
 	{
 		setAccount( "" );
@@ -215,7 +250,11 @@ public class SpUtil {
 		setQQ( "" );
 		setGoalWeight( "" );
 	}
-
+	
+	/**
+	 * 检查是否在线
+	 * @param context
+	 */
 	public void checkOnlineParams(Context context) {
 		String enable = MobclickAgent.getConfigParams(context, "enable");
 		String canOpenTimes = MobclickAgent.getConfigParams(context, "canOpenTimes");
@@ -234,7 +273,7 @@ public class SpUtil {
 			}
 		}
 	}
-
+	
 	private void setOpenTimes(long times) {
 		getEdit().putLong("openTimes", times).commit();
 	}

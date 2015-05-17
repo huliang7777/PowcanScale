@@ -34,6 +34,11 @@ import com.powcan.scale.ui.profile.ProfileActivity;
 import com.powcan.scale.util.Md5Utils;
 import com.powcan.scale.util.SpUtil;
 
+/**
+ * 登录界面
+ * @author Administrator
+ *
+ */
 public class LoginActivity extends BaseActivity implements OnClickListener {
 
 	private Button btnCommit;
@@ -50,23 +55,27 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	private MeasureResultDb dbMeasureResult;
 	private ArrayList<MeasureResult> measureResults;
 
+	/**
+	 * 创建界面方法
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 	}
 
+	/**
+	 * 初始化数据
+	 */
 	@Override
 	public void onInit() {
-		// ActionBar actionBar = getSupportActionBar();
-		// actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-		// actionBar.setDisplayShowTitleEnabled(true);
-		// actionBar.setTitle("登录");
-
 		dbUserInfo = new UserInfoDb(this);
 		dbMeasureResult = new MeasureResultDb( this );
 	}
 
+	/**
+	 * 查找子view
+	 */
 	@Override
 	public void onFindViews() {
 		etUsername = (EditText) findViewById(R.id.et_username);
@@ -76,6 +85,9 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		tvForgetPassword = (TextView) findViewById(R.id.tv_forgetPassword);
 	}
 
+	/**
+	 * 初始化view界面显示数据
+	 */
 	@Override
 	public void onInitViewData() {
 		account = getIntent().getStringExtra("account");
@@ -89,6 +101,9 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		tvToRegister.getPaint().setAntiAlias( true ); // 抗锯齿
 	}
 
+	/**
+	 * 绑定事件监听
+	 */
 	@Override
 	public void onBindListener() {
 		btnCommit.setOnClickListener(this);
@@ -96,6 +111,9 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		tvForgetPassword.setOnClickListener(this);
 	}
 
+	/**
+	 * 点击事件处理方法
+	 */
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -116,6 +134,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 
+	/**
+	 * 检查用户名合法性
+	 * @return
+	 */
 	private boolean checkUsername() {
 		String username = getUsername();
 
@@ -124,8 +146,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 			showToast("请输入用户名");
 		} else if (username.contains(" ")) {
 			showToast("用户名不能包含空格");
-			// } else if (username.length() != 11) {
-			// showToast("手机号码长度不对");
 		} else {
 			check = true;
 		}
@@ -137,6 +157,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		return etUsername.getText().toString();
 	}
 
+	/**
+	 * 检查密码合法性
+	 * @return
+	 */
 	private boolean checkPassword() {
 		String password = getPassword();
 
@@ -158,6 +182,9 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		return etPassword.getText().toString();
 	}
 
+	/**
+	 * 请求后台进行登录
+	 */
 	private void requestLogin() {
 		final String username = getUsername();
 		final String password = getPassword();
@@ -214,7 +241,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		}.execute();
 
 	}
-
+	
+	/**
+	 * 跳转到主界面
+	 */
 	protected void gotoMain() 
 	{
 		if ( from.equals( "LeftFragment" ) )
@@ -229,6 +259,9 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 
+	/**
+	 * 跳转到用户信息完善界面
+	 */
 	protected void gotoProfile() 
 	{
 //		measureResults = dbMeasureResult.getMeasureResults( getUsername(), "0" );
@@ -279,6 +312,9 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		super.onBackPressed();
 	}
 
+	/**
+	 * 返回键回调处理
+	 */
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) 
 	{

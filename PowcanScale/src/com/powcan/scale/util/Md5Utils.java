@@ -70,7 +70,12 @@ public class Md5Utils {
         md5.update((str + salt).getBytes());
         return byte2hex(md5.digest());
     }
-
+    
+    /**
+     * 字节数组转16进制数
+     * @param bytes 字节数组
+     * @return 16进制数
+     */
     public static String byte2hex(byte[] bytes) {
         StringBuilder sign = new StringBuilder();
         for (int i = 0; i < bytes.length; i++) {
@@ -83,7 +88,12 @@ public class Md5Utils {
 
         return sign.toString();
     }
-
+    
+    /**
+     * 16进制转字节数组
+     * @param str 16进制数据
+     * @return 字节数组
+     */
     public static byte[] hex2byte(String str) {
         if (str == null) {
             return null;

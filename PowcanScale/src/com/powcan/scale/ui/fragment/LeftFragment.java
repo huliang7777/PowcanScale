@@ -32,6 +32,11 @@ import com.powcan.scale.ui.settings.SettingsActivity;
 import com.powcan.scale.util.SpUtil;
 import com.powcan.scale.util.Utils;
 
+/**
+ * 左边用户列表界面
+ * @author Administrator
+ *
+ */
 public class LeftFragment extends BaseFragment implements OnClickListener {
 
     /**
@@ -68,6 +73,9 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
 	private UserListAdapter mAdapter;
 	private MeasureResultDb dbMeasureResult;
 	
+	/**
+	 * 创建view
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -77,6 +85,9 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
 		return inflater.inflate(R.layout.fragment_navigation_drawer, null);
 	}
 
+	/**
+	 * 初始化
+	 */
 	@Override
 	public void onInit() {
 		// Read in the flag indicating whether or not the user has demonstrated awareness of the
@@ -91,6 +102,9 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
 		dbMeasureResult = new MeasureResultDb( mContext );
 	}
 
+	/**
+	 * 查找子view
+	 */
 	@Override
 	public void onFindViews() {
 		View mDrawer = getView();
@@ -105,11 +119,17 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
         llUser = mDrawer.findViewById(R.id.ll_curUser);
 	}
 
+	/**
+	 * 初始化view数据
+	 */
 	@Override
 	public void onInitViewData() {
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 	}
 	
+	/**
+	 * 绑定事件监听
+	 */
 	@Override
 	public void onBindListener() {
 		mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -134,6 +154,9 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
         imgAdd.setOnClickListener( this );
 	}
 
+	/**
+	 * attach到window
+	 */
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -144,18 +167,27 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
         }
     }
 
+    /**
+	 * 从window中detach
+	 */
     @Override
     public void onDetach() {
         super.onDetach();
         mCallbacks = null;
     }
 
+    /**
+	 * 保存实例状态
+	 */
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
     }
 
+    /**
+	 * 选中列表，进行用户切换
+	 */
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;
         
@@ -169,7 +201,10 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
             mCallbacks.onNavigationDrawerItemSelected(position, obj);
         }
     }
-
+    
+    /**
+     * 关闭drawer
+     */
     private void closeDrawer() {
         if (!mUserLearnedDrawer) {
             // The user manually opened the drawer; store this flag to prevent auto-showing
@@ -198,6 +233,9 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
     	reloadData();
     }
 
+    /**
+	 * 点击事件处理方法
+	 */
 	@Override
 	public void onClick(View view) 
 	{
@@ -220,6 +258,9 @@ public class LeftFragment extends BaseFragment implements OnClickListener {
 		}
 	}
 	
+	/**
+	 * 重新加载数据
+	 */
 	@Override
 	public void reloadData() 
 	{

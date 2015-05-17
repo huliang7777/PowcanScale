@@ -7,20 +7,65 @@ package com.powcan.scale.bean;
  */
 public class MeasureResult 
 {
+	/**
+	 * 唯一标识符
+	 */
 	private int id;
+	/**
+	 * 帐号
+	 */
 	private String account;
+	/**
+	 * 体重
+	 */
 	private float weight; 
-	private float bmi; 
-	private float bodyFatRate; // 体脂率
-	private float muscleProportion; // 肌肉比例
-	private float physicalAge; // 身体年龄
-	private float subcutaneousFat; // 皮下脂肪
-	private float visceralFat; // 内脏脂肪
-	private float subBasalMetabolism; // 基础代谢(亚)
-	private float europeBasalMetabolism; // 基础代谢(欧)
-	private float boneMass; // 骨量
-	private float waterContent; // 水含量
+	/**
+	 * bmi
+	 */
+	private float bmi;
+	/**
+	 * 体脂率
+	 */
+	private float bodyFatRate;
+	/**
+	 * 肌肉比例
+	 */
+	private float muscleProportion;
+	/**
+	 * 身体年龄
+	 */
+	private float physicalAge; 
+	/**
+	 * 皮下脂肪
+	 */
+	private float subcutaneousFat;
+	/**
+	 * 内脏脂肪
+	 */
+	private float visceralFat;
+	/**
+	 *  基础代谢(亚)
+	 */
+	private float subBasalMetabolism; 
+	/**
+	 * 基础代谢(欧)
+	 */
+	private float europeBasalMetabolism;
+	/**
+	 * 骨量
+	 */
+	private float boneMass; 
+	/**
+	 * 水含量
+	 */
+	private float waterContent;
+	/**
+	 * 时间
+	 */
 	private String date;
+	/**
+	 * 是否已经上传
+	 */
 	private int upload;
 
 	public int getId() {

@@ -10,6 +10,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+/**
+ * 数据界面适配类
+ * @author Administrator
+ *
+ */
 public class DataAdapter extends BaseAdapter {
 
 	private List<String> items;
@@ -35,6 +40,9 @@ public class DataAdapter extends BaseAdapter {
 		return position;
 	}
 
+	/**
+	 * 获得并构造帐号界面view
+	 */
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		convertView = mInflater.inflate(R.layout.item_account, null);

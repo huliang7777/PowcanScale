@@ -1,8 +1,18 @@
 package com.powcan.scale.bean.http;
 
+/**
+ * 基础响应参数定义类
+ * @author Administrator
+ *
+ */
 public class BaseResponse {
-
+	/**
+	 * 命令
+	 */
 	public String CMD;//	string	“GAT:zhifangcheng”
+	/**
+	 * 结果
+	 */
 	public int RES;//	int	
 	
 //	101：获取成功，至少获取到1个保康号 

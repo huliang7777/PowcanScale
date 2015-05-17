@@ -1,7 +1,18 @@
 package com.powcan.scale.bean.http;
 
+/**
+ * 根据输入IMEI号、手机号、qq或者email返回用户ID的请求参数定义类
+ * @author Administrator
+ *
+ */
 public class GTNRequest extends BaseRequest {
-	public String number;//	number	string	IMEI、phone、qq或email
+	/**
+	 * 帐号
+	 */
+	public String number;
+	/**
+	 * 类型
+	 */
 	public String type;
 	/*	enum	
 	“phone”：手机号

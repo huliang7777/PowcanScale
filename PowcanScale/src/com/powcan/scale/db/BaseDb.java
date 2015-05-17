@@ -6,6 +6,11 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+/**
+ * 基础数据库类
+ * @author Administrator
+ *
+ */
 public abstract class BaseDb {
 	
 	public static final String CREATE_TABLE_PREFIX = "CREATE TABLE IF NOT EXISTS ";
@@ -31,69 +36,37 @@ public abstract class BaseDb {
 
 	protected SQLiteDatabase db = null;
 
+	/**
+	 * 构造函数
+	 * @param context
+	 */
 	public BaseDb(Context context) {
 		helper = DbHelper.getInstance(context);
 		db = helper.getWritableDatabase();
 	}
-
-	public void beginTransaction() {
-		if (db == null || !db.isOpen()) {
-			db = helper.getWritableDatabase();
-		}
-		db.beginTransaction();
-	}
-
-	public void endTransaction() {
-		if (db == null || !db.isOpen()) {
-			db = helper.getWritableDatabase();
-		}
-		db.setTransactionSuccessful();
-		db.endTransaction();
-	}
-
+	
+	/**
+	 * 检查数据库是否连接
+	 */
 	protected void checkDb() {
 		if (db == null || !db.isOpen()) {
 			db = helper.getWritableDatabase();
 		}
 	}
-
+	
+	/**
+	 * 关闭游标
+	 */
 	public void closeDbAndCursor() {
 		if (cursor != null) {
 			cursor.close();
 			cursor = null;
 		}
-		/*
-		 * if (db != null) { db.close(); db = null; }
-		 */
 	}
 
-	protected void clearAllData() {
-		try {
-			checkDb();
-			String sql = "delete from " + getTableName() + ";";
-			Log.e("SQL", sql);
-			db.execSQL(sql);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			closeDbAndCursor();
-		}
-	}
-
-	protected boolean isHasData() {
-		checkDb();
-		String sql = "select * from " + getTableName() + " limit 1";
-		cursor = db.rawQuery(sql, null);
-		if (cursor != null) {
-			int count = cursor.getCount();
-			return count > 0 ? true : false;
-		}
-		return false;
-	}
-
+	/**
+	 * 获得表名虚方法
+	 * @return
+	 */
     public abstract String getTableName();
-//    
-//    public abstract String getCreateTableSQL();
-//    
-//    public abstract String getDropTableSQL();
 }

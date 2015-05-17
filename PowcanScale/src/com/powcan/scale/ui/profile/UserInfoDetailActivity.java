@@ -18,8 +18,9 @@ import com.powcan.scale.util.SpUtil;
 import com.powcan.scale.util.Utils;
 
 /**
- * 动画参考：http://cyrilmottier.com/2014/05/20/custom-animations-with-fragments/
+ * 用户信息详情界面
  * @author Administrator
+ *
  */
 public class UserInfoDetailActivity extends BaseActivity implements OnClickListener, PerfectDataEvent
 {
@@ -42,6 +43,9 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 	private PerfectDataRemindDialog dialog;
 	private boolean isRemind;
 	
+	/**
+	 * 创建界面方法
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -49,6 +53,9 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 		setContentView(R.layout.activity_user_detail);
 	}
 
+	/**
+	 * 初始化数据
+	 */
 	@Override
 	public void onInit() 
 	{
@@ -57,6 +64,9 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 		loadData();
 	}
 	
+	/**
+	 * 加载数据
+	 */
 	private void loadData()
 	{
 		String acc = SpUtil.getInstance(this).getAccount();
@@ -74,6 +84,9 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 		isRemind = SpUtil.getInstance( this ).getPerfectDataRemind( account );
 	}
 
+	/**
+	 * 查找子view
+	 */
 	@Override
 	public void onFindViews() 
 	{
@@ -89,6 +102,9 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 		tvEmail = (TextView) findViewById(R.id.tv_email);
 	}
 
+	/**
+	 * 初始化view界面显示数据
+	 */
 	@Override
 	public void onInitViewData() 
 	{
@@ -107,6 +123,9 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 		}
 	}
 
+	/**
+	 * 绑定事件监听
+	 */
 	@Override
 	public void onBindListener() 
 	{
@@ -114,6 +133,9 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 		ivEdit.setOnClickListener( this );
 	}
 
+	/**
+	 * 点击事件处理方法
+	 */
 	@Override
 	public void onClick(View view) 
 	{
@@ -129,7 +151,10 @@ public class UserInfoDetailActivity extends BaseActivity implements OnClickListe
 			break;
 		}
 	}
-
+	
+	/**
+	 * 用户信息完善回调接口方法
+	 */
 	@Override
 	public void onButtonSelect( int which, boolean remind ) 
 	{

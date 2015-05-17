@@ -2,20 +2,64 @@ package com.powcan.scale.bean;
 
 import android.text.TextUtils;
 
+/**
+ * 用户信息类
+ * @author Administrator
+ *
+ */
 public class UserInfo {
+	/**
+	 * 唯一标识
+	 */
 	private Integer id;
+	/**
+	 *  帐号
+	 */
 	private String account;
-	private String username;
-	private String password;
-	private String imei;
-	private String gender;
-	private String birthday;
-	private String height;
-	private String phone;
-	private String qq;
-	private String email;
-	private String goalWeight;
-	private String remind;
+	/**
+	 * 用户名
+	 */
+	private String username; 
+	/**
+	 * 密码
+	 */
+	private String password; 
+	/**
+	 *  设备标识
+	 */
+	private String imei; 
+	/**
+	 *  性别
+	 */
+	private String gender; 
+	/**
+	 *  生日
+	 */
+	private String birthday; 
+	/**
+	 *  身高
+	 */
+	private String height; 
+	/**
+	 *  电话
+	 */
+	private String phone; 
+	/**
+	 * QQ号码
+	 */
+	private String qq; 
+	/**
+	 *  邮箱
+	 */
+	private String email; 
+	/**
+	 *  目标体重
+	 */
+	private String goalWeight; 
+	/**
+	 *  提醒开关
+	 */
+	private String remind; 
 
 	public Integer getId() {
 		return id;

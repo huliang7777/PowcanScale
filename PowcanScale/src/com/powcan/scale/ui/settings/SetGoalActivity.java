@@ -26,6 +26,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * 设置目标体重界面
+ * @author Administrator
+ *
+ */
 public class SetGoalActivity extends BaseActivity implements OnClickListener, ItemClickEvent
 {
 	private static final String TAG = SetGoalActivity.class.getSimpleName();
@@ -49,6 +54,9 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 	
 	private SelectDataDialog dialog;
 	
+	/**
+	 * 创建界面方法
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -56,6 +64,9 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 		setContentView(R.layout.activity_set_goal);
 	}
 
+	/**
+	 * 初始化数据
+	 */
 	@Override
 	public void onInit() 
 	{
@@ -87,6 +98,9 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 		curWeight = measureResult.getWeight();
 	}
 
+	/**
+	 * 查找子view
+	 */
 	@Override
 	public void onFindViews() 
 	{
@@ -99,6 +113,9 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 		btnUser = (Button) findViewById( R.id.btn_user );
 	}
 
+	/**
+	 * 初始化view界面显示数据
+	 */
 	@Override
 	public void onInitViewData() 
 	{
@@ -114,6 +131,9 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 		setData();
 	}
 	
+	/**
+	 * 将数据显示在界面上
+	 */
 	private void setData()
 	{
 		String range = Utils.getWeightRange( Integer.valueOf( curUser.getHeight() ), curUser.getGender(), 0.1f );
@@ -124,6 +144,9 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 		tvSugGoalWeight.setText( "距离目标体重还有" + Utils.formatTwoFractionDigits( Math.abs( curWeight - goalWeight ) ) + "KG" );
 	}
 
+	/**
+	 * 绑定事件监听
+	 */
 	@Override
 	public void onBindListener() 
 	{
@@ -132,6 +155,9 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 		btnUser.setOnClickListener( this );
 	}
 
+	/**
+	 * 点击事件处理方法
+	 */
 	@Override
 	public void onClick(View v) 
 	{
@@ -153,6 +179,9 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 		}
 	}
 
+	/**
+	 * 体重选中回调方法
+	 */
 	@Override
 	public void onItemClick(int which) 
 	{
@@ -161,6 +190,7 @@ public class SetGoalActivity extends BaseActivity implements OnClickListener, It
 		goalWeight = list.get(which);
 		setData();
 		
+		// 将目标体重更新到用户信息中
 		dbUserInfo.updateGoalWeight( curUser.getAccount() , String.valueOf( goalWeight ) );
 		curUser.setGoalWeight( String.valueOf( goalWeight ) );
 		SpUtil.getInstance(SetGoalActivity.this ).saveCurrUser( curUser );

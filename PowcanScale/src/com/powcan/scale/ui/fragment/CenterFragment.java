@@ -22,6 +22,11 @@ import com.powcan.scale.bean.UserInfo;
 import com.powcan.scale.ui.base.BaseFragment;
 import com.powcan.scale.util.SpUtil;
 
+/**
+ * 主界面管理类
+ * @author Administrator
+ *
+ */
 public class CenterFragment extends Fragment implements OnClickListener {
 	private ViewPager mViewPager;
 	private ImageView mLeftToogle;
@@ -35,6 +40,9 @@ public class CenterFragment extends Fragment implements OnClickListener {
 
 	private ArrayList<BaseFragment> pagerItemList = new ArrayList<BaseFragment>();
 	
+	/**
+	 * 创建view
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -44,7 +52,11 @@ public class CenterFragment extends Fragment implements OnClickListener {
 		initView(view);
 		return view;
 	}
-
+	
+	/**
+	 * 查找子view
+	 * @param view
+	 */
 	private void findView(View view) {
 		mViewPager = (ViewPager) view.findViewById(R.id.vp);
 		mLeftToogle = (ImageView) view.findViewById(R.id.iv_center_left);
@@ -52,7 +64,11 @@ public class CenterFragment extends Fragment implements OnClickListener {
         mConnectionState = (TextView) view.findViewById(R.id.connection_state);
         tvName = (TextView) view.findViewById(R.id.tv_name);
 	}
-
+	
+	/**
+	 * 初始化iew数据
+	 * @param view
+	 */
 	private void initView(View view) {
 		mLeftToogle.setOnClickListener(this);
 		mRightToogle.setOnClickListener(this);
@@ -95,6 +111,9 @@ public class CenterFragment extends Fragment implements OnClickListener {
 		tvName.setText( CurUserInfo.getInstance( getActivity() ).getCurUser().getUsername() );
 	}
 
+	/**
+	 * 设置点击事件处理类
+	 */
 	@Override
 	public void onClick(View v) {
 		int id = v.getId();
@@ -110,18 +129,35 @@ public class CenterFragment extends Fragment implements OnClickListener {
 		}
 	}
 
+	/**
+	 * 设置界面改变监听
+	 * @param listener
+	 */
 	public void setOnViewPagerChangeListener(OnViewPagerChangeListener listener) {
 		this.listener = listener;
 	}
 
+	/**
+	 * 是否为第一页
+	 * @return
+	 */
 	public boolean isFirst() {
 		return mViewPager.getCurrentItem() == 0;
 	}
 
+	/**
+	 * 是否为最后页
+	 * @return
+	 */
 	public boolean isLast() {
 		return mViewPager.getCurrentItem() == pagerItemList.size() - 1;
 	}
 
+	/**
+	 * 碎片page视图适配类
+	 * @author Administrator
+	 *
+	 */
 	private class MyPagerAdapter extends FragmentStatePagerAdapter {
 
 		public MyPagerAdapter(FragmentManager fm) {
@@ -142,17 +178,28 @@ public class CenterFragment extends Fragment implements OnClickListener {
 
 	/**
 	 * Interface when the page have changed.
+	 * viewpager监听接口
 	 */
 	public interface OnViewPagerChangeListener {
 		void onPageChage(int position);
 	}
 
+	/**
+	 * 更新连接状态
+	 * @param resourceId
+	 */
 	public void updateConnectionState(int resourceId) {
 		if (mConnectionState != null) {
 			mConnectionState.setText(resourceId);
 		}
 	}
 
+	/**
+	 * 设置测量数据
+	 * @param weight
+	 * @param bodyFatRate
+	 * @param waterContent
+	 */
 	public void setWeightData( float weight, float bodyFatRate, float waterContent )
 	{
 		HomeFragment fragment = (HomeFragment)(pagerItemList.get(0));
@@ -162,6 +209,9 @@ public class CenterFragment extends Fragment implements OnClickListener {
 		chartFragment.reloadData();
 	}
 	
+	/**
+	 * 加载数据
+	 */
 	public void reloadData()
 	{
 		tvName.setText( CurUserInfo.getInstance( getActivity() ).getCurUser().getUsername() );

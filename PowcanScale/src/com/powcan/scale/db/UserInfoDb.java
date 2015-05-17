@@ -8,6 +8,11 @@ import android.content.Context;
 import android.database.SQLException;
 import android.util.Log;
 
+/**
+ * 用户信息数据库操作类
+ * @author Administrator
+ *
+ */
 public class UserInfoDb extends BaseDb {
 	private static final String TAG = UserInfoDb.class.getSimpleName();
 	private static final String TABLE_NAME = "UserInfo ";
@@ -63,7 +68,11 @@ public class UserInfoDb extends BaseDb {
 	public String getTableName() {
 		return TABLE_NAME;
 	}
-
+	
+	/**
+	 * 插入用户信息数据
+	 * @param userInfo 用户信息
+	 */
 	public void insertUserInfo(UserInfo userInfo) {
 		checkDb();
 		String sql = "insert into " + TABLE_NAME + BRACKET_LEFT + TABLE_COLUMNS_WITHOUT_ID
@@ -84,6 +93,10 @@ public class UserInfoDb extends BaseDb {
 		Log.d(TAG, "insert success");
 	}
 	
+	/**
+	 * 更新用户信息
+	 * @param userInfo 用户信息
+	 */
 	public void updateUserInfo(UserInfo userInfo) 
 	{
 		checkDb();
@@ -107,6 +120,11 @@ public class UserInfoDb extends BaseDb {
 		Log.d(TAG, "update success");
 	}
 	
+	/**
+	 * 更新目标体重
+	 * @param account 帐号
+	 * @param goalWeight 目标体重
+	 */
 	public void updateGoalWeight( String account, String goalWeight) 
 	{
 		checkDb();
@@ -125,6 +143,11 @@ public class UserInfoDb extends BaseDb {
 		Log.d(TAG, "updateGoalWeight success");
 	}
 	
+	/**
+	 * 根据帐号获取用户信息
+	 * @param account 帐号
+	 * @return 用户信息
+	 */
 	public UserInfo getUserInfo( String account ) 
 	{
 		UserInfo userInfo = null;
@@ -163,6 +186,10 @@ public class UserInfoDb extends BaseDb {
 		return userInfo;
 	}
 	
+	/**
+	 * 插入或者更新用户信息
+	 * @param userInfo 用户信息
+	 */
 	public void insertOrUpdateUserInfo( UserInfo userInfo )
 	{
 		UserInfo user = getUserInfo( userInfo.getAccount() );
@@ -176,6 +203,11 @@ public class UserInfoDb extends BaseDb {
 		}
 	}
 
+	/**
+	 * 根据帐号获得所有的用户信息
+	 * @param account 帐号
+	 * @return 所有用户信息
+	 */
 	public ArrayList<UserInfo> getUserInfoes( String account ) 
 	{
 		UserInfo userInfo = null;

@@ -8,6 +8,11 @@ import android.view.ViewGroup;
 
 import com.powcan.scale.R;
 
+/**
+ * 右边空view
+ * @author Administrator
+ *
+ */
 public class RightFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

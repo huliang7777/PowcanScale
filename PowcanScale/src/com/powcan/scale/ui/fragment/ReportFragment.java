@@ -21,6 +21,11 @@ import com.powcan.scale.ui.base.BaseFragment;
 import com.powcan.scale.util.SpUtil;
 import com.powcan.scale.util.Utils;
 
+/**
+ * 报告界面
+ * @author Administrator
+ *
+ */
 public class ReportFragment extends BaseFragment implements OnClickListener 
 {
 	private int index;
@@ -49,16 +54,28 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 		super();
 	}
 
+	/**
+	 * 获得当前类实例
+	 * @param index
+	 * @return
+	 */
 	public static ReportFragment getInstance(int index) {
 		ReportFragment fragment = new ReportFragment();
 		fragment.setIndex(index);
 		return fragment;
 	}
 
+	/**
+	 * 设置索引
+	 * @param index
+	 */
 	private void setIndex(int index) {
 		this.index = index;
 	}
 
+	/**
+	 * 创建view
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -66,6 +83,9 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 		return view;
 	}
 
+	/**
+	 * 初始化
+	 */
 	@Override
 	public void onInit() 
 	{
@@ -78,10 +98,14 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 		loadData();
 	}
 	
+	/**
+	 * 加载数据
+	 */
 	public void loadData()
 	{
 		String account = mSpUtil.getAccount();
 		curUser = dbUserInfo.getUserInfo( account );
+		// 查找当前用户的所以测量数据
 		measureResults = dbMeasureResult.getMeasureResults( account );
 		measureResult = dbMeasureResult.getLastMeasureResult( account );
 		if ( measureResult == null )
@@ -95,6 +119,9 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 		calContinueDay();
 	}
 	
+	/**
+	 * 计算连续减肥的最长天数
+	 */
 	private void calContinueDay()
 	{
 		int size = measureResults.size();
@@ -124,6 +151,9 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 		}
 	}
 
+	/**
+	 * 查找子view
+	 */
 	@Override
 	public void onFindViews() 
 	{
@@ -137,6 +167,9 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 		tvContent = (TextView) v.findViewById(R.id.tv_content);
 	}
 
+	/**
+	 * 初始化view数据
+	 */
 	@Override
 	public void onInitViewData() 
 	{
@@ -146,6 +179,9 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 		tvContinueDay.setText( continueDay + "天" );
 	}
 
+	/**
+	 * 绑定监听事件
+	 */
 	@Override
 	public void onBindListener() 
 	{
@@ -154,6 +190,9 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 		btnNutrition.setOnClickListener( this );
 	}
 
+	/**
+	 * 设置点击事件处理方法
+	 */
 	@Override
 	public void onClick(View v) 
 	{
@@ -176,6 +215,9 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 		changeContent();
 	}
 	
+	/**
+	 * 改变界面内容
+	 */
 	private void changeContent()
 	{
 		if ( isSport )
@@ -196,6 +238,9 @@ public class ReportFragment extends BaseFragment implements OnClickListener
 		}
 	}
 	
+	/**
+	 * 重新加载数据
+	 */
 	@Override
 	public void reloadData() 
 	{

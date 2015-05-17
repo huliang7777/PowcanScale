@@ -3,20 +3,19 @@ package com.powcan.scale.ble;
 import java.util.Locale;
 
 /**
- * 16����ֵ��String/Byte֮���ת��
- * @author JerryLi
- * @email lijian@dzs.mobi
- * @data 2011-10-16
- * */
+ * 16进制转换
+ * @author Administrator
+ *
+ */
 public class CHexConver
 {
 	private final static char[] mChars = "0123456789ABCDEF".toCharArray();
 	private final static String mHexStr = "0123456789ABCDEF";  
-	/** 
-	 * ���16�����ַ��Ƿ���Ч
-	 * @param sHex String 16�����ַ�
-	 * @return boolean
-	 */  
+	/**
+	 * 检查16进制数据是否正确
+	 * @param sHex 16进制数据
+	 * @return
+	 */
 	public static boolean checkHexStr(String sHex){  
     	String sTmp = sHex.toString().trim().replace(" ", "").toUpperCase(Locale.US);
     	int iLen = sTmp.length();
@@ -31,11 +30,11 @@ public class CHexConver
     		return false;
     }
 	
-	/** 
-	 * �ַ�ת����ʮ������ַ�
-	 * @param str String ��ת����ASCII�ַ�
-	 * @return String ÿ��Byte֮��ո�ָ�����: [61 6C 6B]
-	 */  
+	/**
+	 * 将字符串转成16进制数据 
+	 * @param str
+	 * @return
+	 */
     public static String str2HexStr(String str){  
         StringBuilder sb = new StringBuilder();
         byte[] bs = str.getBytes();  
@@ -48,11 +47,11 @@ public class CHexConver
         return sb.toString().trim();  
     }
     
-    /** 
-     * ʮ������ַ�ת���� ASCII�ַ�
-	 * @param str String Byte�ַ�
-	 * @return String ��Ӧ���ַ�
-     */  
+    /**
+     * 16进制数据转成字符串  
+     * @param hexStr
+     * @return
+     */
     public static String hexStr2Str(String hexStr){  
     	hexStr = hexStr.toString().trim().replace(" ", "").toUpperCase(Locale.US);
         char[] hexs = hexStr.toCharArray();  
@@ -68,10 +67,10 @@ public class CHexConver
     }
     
     /**
-     * bytesת����ʮ������ַ�
-     * @param b byte[] byte����
-     * @param iLen int ȡǰNλ���� N=iLen
-     * @return String ÿ��Byteֵ֮��ո�ָ�
+     * 字节数据转成16进制数据
+     * @param b
+     * @param iLen
+     * @return
      */
 	public static String byte2HexStr(byte[] b, int iLen){
         StringBuilder sb = new StringBuilder();
@@ -84,17 +83,15 @@ public class CHexConver
     }
     
     /**
-     * bytes�ַ�ת��ΪByteֵ
-     * @param src String Byte�ַ�ÿ��Byte֮��û�зָ���(�ַ�Χ:0-9 A-F)
-     * @return byte[]
+     * 16进制数据转字节数组
+     * @param src
+     * @return
      */
 	public static byte[] hexStr2Bytes(String src){
-    	/*������ֵ���й淶������*/
     	src = src.trim().replace(" ", "").replace(":", "").toUpperCase(Locale.US);
-    	//����ֵ��ʼ��
     	int m=0,n=0;
-        int iLen=src.length()/2; //���㳤��
-        byte[] ret = new byte[iLen]; //����洢�ռ�
+        int iLen=src.length()/2; 
+        byte[] ret = new byte[iLen]; 
         
         for (int i = 0; i < iLen; i++){
             m=i*2+1;
@@ -105,9 +102,9 @@ public class CHexConver
     }
 
     /**
-     * String���ַ�ת����unicode��String
-     * @param strText String ȫ���ַ�
-     * @return String ÿ��unicode֮���޷ָ���
+     * 字符串转成Unicode编码格式字符串
+     * @param strText
+     * @return
      * @throws Exception
      */
     public static String strToUnicode(String strText)
@@ -123,7 +120,7 @@ public class CHexConver
             strHex = Integer.toHexString(intAsc);
             if (intAsc > 128)
             	str.append("\\u");
-            else // ��λ��ǰ�油00
+            else 
             	str.append("\\u00");
             str.append(strHex);
         }
@@ -131,10 +128,9 @@ public class CHexConver
     }
     
     /**
-     * unicode��Stringת����String���ַ�
-     * @param hex String 16����ֵ�ַ� ��һ��unicodeΪ2byte��
-     * @return String ȫ���ַ�
-     * @see CHexConver.unicodeToString("\\u0068\\u0065\\u006c\\u006c\\u006f")
+     * unicode编码的字符串转成字符串
+     * @param hex
+     * @return
      */
     public static String unicodeToString(String hex){
         int t = hex.length() / 6;
@@ -142,9 +138,7 @@ public class CHexConver
         StringBuilder str = new StringBuilder();
         for (int i = 0; i < t; i++){
             String s = hex.substring(i * 6, (i + 1) * 6);
-            // ��16���Ƶ�stringתΪint
             iTmp = (Integer.valueOf(s.substring(2, 4), 16) << 8) | Integer.valueOf(s.substring(4), 16);
-            // ��intת��Ϊ�ַ�
             str.append(new String(Character.toChars(iTmp)));
         }
         return str.toString();

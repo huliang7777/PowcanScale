@@ -9,6 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 
+/**
+ * 完善数据提醒弹出框
+ * @author Administrator
+ *
+ */
 public class PerfectDataRemindDialog extends Dialog 
 {
 	private Context mContext;
@@ -26,6 +31,9 @@ public class PerfectDataRemindDialog extends Dialog
 		init();
 	}
 	
+	/**
+	 * 初始化界面
+	 */
 	private void init()
 	{
 		LayoutInflater inflater = LayoutInflater.from( mContext );
@@ -39,6 +47,9 @@ public class PerfectDataRemindDialog extends Dialog
         setListener();
 	}
 	
+	/**
+	 * 设置界面按钮回调
+	 */
 	private void setListener()
 	{
 		btnOk.setOnClickListener( new android.view.View.OnClickListener() {
@@ -62,6 +73,11 @@ public class PerfectDataRemindDialog extends Dialog
 		});
 	}
 	
+	/**
+	 * 按钮回调接口
+	 * @author Administrator
+	 *
+	 */
 	public interface PerfectDataEvent
 	{
 		public void onButtonSelect( int which, boolean remind );

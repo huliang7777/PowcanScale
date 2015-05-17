@@ -23,6 +23,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+/**
+ * 选择身高弹出框
+ * @author Administrator
+ *
+ */
 public class SelectHeightDialog extends Dialog
 {
 	private Context mContext;
@@ -65,6 +70,9 @@ public class SelectHeightDialog extends Dialog
 		init();
 	}
 	
+	/**
+	 * 初始化选择身高界面数据
+	 */
 	private void init()
 	{
 		LayoutInflater inflater = LayoutInflater.from( mContext );
@@ -108,6 +116,9 @@ public class SelectHeightDialog extends Dialog
         setListener();
 	}
 
+	/**
+	 * 设置按钮返回回调
+	 */
 	private void setListener()
 	{
 		this.setOnCancelListener( new OnCancelListener() {
@@ -165,6 +176,11 @@ public class SelectHeightDialog extends Dialog
 		});
 	}
 	
+	/**
+	 * 按钮回调接口
+	 * @author Administrator
+	 *
+	 */
 	public interface ItemClickEvent
 	{
 		public void onItemClick( int height );

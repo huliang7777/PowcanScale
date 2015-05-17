@@ -36,6 +36,11 @@ import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+/**
+ * 工具类
+ * @author Administrator
+ *
+ */
 public class Utils {
 	public static final String TAG = "PushDemoActivity";
 	public static final String RESPONSE_METHOD = "method";
@@ -56,15 +61,24 @@ public class Utils {
 	
 	public static final int[][] quarterMonths = { {1,2,3}, {4,5,6}, {7,8,9}, {10,11,12} };
 	
-	 /** 
-     * 根据手机的分辨率从 dp 的单位 转成为 px(像素) 
-     */  
+	 /**
+	  * 根据手机的分辨率从 dp 的单位 转成为 px(像素)   
+	  * @param context 界面上下文
+	  * @param dpValue dp单位数据
+	  * @return 像素单位数据
+	  */
     public static int dip2px(Context context, float dpValue) 
     {  
         final float scale = context.getResources().getDisplayMetrics().density;  
         return (int) (dpValue * scale + 0.5f);  
     }
     
+    /**
+     * 保留小数点几位小数
+     * @param d 数据
+     * @param count 几位小数
+     * @return 数据
+     */
     public static String formatFractionDigits( float d, int count) 
     {
 		NumberFormat nf = NumberFormat.getNumberInstance();
@@ -72,6 +86,11 @@ public class Utils {
 		return nf.format( d );
 	}
     
+    /**
+     * 根据生日计算年龄
+     * @param birthday 生日
+     * @return 年龄
+     */
     @SuppressLint("SimpleDateFormat")
 	public static int calAge( String birthday )
 	{
@@ -119,6 +138,10 @@ public class Utils {
 		return age;
 	}
     
+    /**
+     * 获得当前日期
+     * @return 日期
+     */
     public static String getCurDate()
     {
     	Calendar calendar = Calendar.getInstance();
@@ -128,6 +151,10 @@ public class Utils {
     	return year + "-" + String.format("%02d", month) + "-" + String.format("%02d", day);
     }
     
+    /**
+     * 获得当前日期时间
+     * @return 日期时间
+     */
     public static String getCurDateTime()
     {
     	Calendar calendar = Calendar.getInstance();
@@ -141,6 +168,13 @@ public class Utils {
     		+ " " + String.format("%02d", hour) + ":" + String.format("%02d", minute) + ":" + String.format("%02d", second) ;
     }
     
+    /**
+     * 根据身高和年龄获取体重的范围
+     * @param height 身高
+     * @param gender 年龄
+     * @param percent 范围的上下比例
+     * @return 体重范围数据
+     */
     public static String getWeightRange( int height, String gender, float percent )
     {
     	// 健康体重计算方式
@@ -162,6 +196,10 @@ public class Utils {
     	return minWeight + "-" + maxWeight;
     }
     
+    /**
+     * 获得当前周的所有日期
+     * @return 当前周的日期始末
+     */
     public static String[] getCurWeekDate()
     {
     	String [] dates = new String[ 7 ];
@@ -194,6 +232,10 @@ public class Utils {
         return dates;
     }
     
+    /**
+     * 获得当前月的信息
+     * @return 当前月的信息
+     */
     public static int[] getCurMonthDate()
     {
     	Calendar calendar = Calendar.getInstance();
@@ -207,6 +249,11 @@ public class Utils {
     	return new int[]{ year, month, endDay, dayOfWeek };
     }
     
+    /**
+     * 获得当前月季度的信息
+     * @param m 月
+     * @return 季度信息
+     */
     public static int[] getQuarterDate( int m )
     {
     	int[] dates = new int[7];
@@ -230,6 +277,10 @@ public class Utils {
     	return dates;
     }
     
+    /**
+     * 获得年的信息
+     * @return 年信息
+     */
     public static int[] getYearDate()
     {
     	int[] dates = new int[25];
@@ -247,7 +298,12 @@ public class Utils {
     	return dates;
     }
 
-	// 获取ApiKey
+	/**
+	 * 获取ApiKey
+	 * @param context
+	 * @param metaKey
+	 * @return
+	 */
 	public static String getMetaValue(Context context, String metaKey) {
 		Bundle metaData = null;
 		String apiKey = null;
@@ -268,7 +324,11 @@ public class Utils {
 		return apiKey;
 	}
 
-	// 用share preference来实现是否绑定的开关。在ionBind且成功时设置true，unBind且成功时设置false
+	/**
+	 * 用share preference来实现是否绑定的开关。在ionBind且成功时设置true，unBind且成功时设置false
+	 * @param context
+	 * @return
+	 */
 	public static boolean hasBind(Context context) {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 		String flag = sp.getString("bind_flag", "");
@@ -277,7 +337,12 @@ public class Utils {
 		}
 		return false;
 	}
-
+	
+	/**
+	 * 设置绑定
+	 * @param context
+	 * @param flag
+	 */
 	public static void setBind(Context context, boolean flag) {
 		String flagStr = "not";
 		if (flag) {
@@ -299,37 +364,6 @@ public class Utils {
 		TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 		String imei = telephonyManager.getDeviceId();
 		return imei;
-	}
-
-	public static List<String> getTagsList(String originalText) {
-		if (originalText == null || originalText.equals("")) {
-			return null;
-		}
-		List<String> tags = new ArrayList<String>();
-		int indexOfComma = originalText.indexOf(',');
-		String tag;
-		while (indexOfComma != -1) {
-			tag = originalText.substring(0, indexOfComma);
-			tags.add(tag);
-
-			originalText = originalText.substring(indexOfComma + 1);
-			indexOfComma = originalText.indexOf(',');
-		}
-
-		tags.add(originalText);
-		return tags;
-	}
-
-	public static String getLogText(Context context) {
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-		return sp.getString("log_text", "");
-	}
-
-	public static void setLogText(Context context, String text) {
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-		Editor editor = sp.edit();
-		editor.putString("log_text", text);
-		editor.commit();
 	}
 
 	/**
@@ -384,85 +418,7 @@ public class Utils {
 		return false;
 	}
 	
-	public static File getOutputFile(Context context) {
-		File file = null;
-		if (isExternalStorageWritable()) {
-			file = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-		} else {
-			file = getOutputInternalFile(context, MEDIA_TYPE_IMAGE);
-		}
-		return file;
-	}
-
-	private static File getOutputInternalFile(Context context, int mediaType) {
-		FileOutputStream openFileOutput = null;
-		try {
-			String mediaFileName = getMediaFileName(mediaType);
-			openFileOutput = context.openFileOutput(mediaFileName, Context.MODE_WORLD_WRITEABLE);
-			File fileStreamPath = context.getFileStreamPath(mediaFileName);
-			return fileStreamPath;
-		} catch (Exception e) {
-			e.printStackTrace();
-			File fileDir = context.getCacheDir();
-			File mediaFile = getMediaFile(mediaType, fileDir.getAbsolutePath());
-			return mediaFile;
-		} finally {
-			close(openFileOutput);
-		}
-	}
 	
-	public static void close(Closeable closeable) {
-		if (closeable != null) {
-			try {
-				closeable.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	private static File getOutputMediaFile(int mediaType) {
-		String fileDir = getExternalStoragePublicDirectory("dailysee");
-		File mediaFile = getMediaFile(mediaType, fileDir);
-		return mediaFile;
-	}
-
-	public static File getMediaFile(int mediaType, String fileDir) {
-		File mediaFile = new File(fileDir + File.separator + getMediaFileName(mediaType));
-		return mediaFile;
-	}
-
-	public static String getMediaFileName(int mediaType) {
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-		if (mediaType == MEDIA_TYPE_IMAGE) {
-			return "IMG_" + timeStamp + ".jpg";
-		} else if (mediaType == MEDIA_TYPE_VIDEO) {
-			return "VID_" + timeStamp + ".mp4";
-		}
-		throw new RuntimeException("媒体类型错误");
-	}
-
-	@TargetApi(Build.VERSION_CODES.FROYO)
-	private static String getExternalStoragePublicDirectory(String dirName) {
-		// To be safe, you should check that the SDCard is mounted
-		// using Environment.getExternalStorageState() before doing this.
-
-		File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), dirName);
-		// This location works best if you want the created images to be shared
-		// between applications and persist after your app has been uninstalled.
-
-		// Create the storage directory if it does not exist
-		if (!mediaStorageDir.exists()) {
-			if (!mediaStorageDir.mkdirs()) {
-				Log.d("MyCameraApp", "failed to create directory");
-				return null;
-			}
-		}
-
-		// Create a media file name
-		String fileDir = mediaStorageDir.getPath();
-		return fileDir;
-	}
 
 	/**
 	 * 根据uri获取图片的真实路径.
@@ -529,33 +485,12 @@ public class Utils {
 		}
 	}
 	
-	public static String getFileName(String filePath) {
-		String fileName = null;
-		if (!TextUtils.isEmpty(filePath)) {
-			int lastBackslashIndex = filePath.lastIndexOf("/");
-			if (lastBackslashIndex >= 0) {
-				fileName = filePath.substring(lastBackslashIndex);
-			}
-		}
-		if (!TextUtils.isEmpty(filePath)) {
-			fileName = System.currentTimeMillis() + ".jpg";
-		}
-		return fileName;
-	}
-	
-	public static void hideSoft(Context context) {
-		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);  
-		imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-	}
-	
+	/**
+	 * 保留2位小数
+	 * @param d
+	 * @return
+	 */
 	public static String formatTwoFractionDigits(double d) {
-		return formatFractionDigits(d, 2);
+		return formatFractionDigits((float)d, 2);
 	}
-	
-	public static String formatFractionDigits(double d, int count) {
-		NumberFormat nf=NumberFormat.getNumberInstance() ;
-		nf.setMaximumFractionDigits(count);
-		return nf.format(d);
-	}
-
 }
